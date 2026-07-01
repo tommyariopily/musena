@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontak | SMP Muhammadiyah 9 Nagreg</title>
+    <link rel="icon" type="image/x-icon" href="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm">
+    <meta name="description" content="Hubungi SMP Muhammadiyah 9 Nagreg: alamat, telepon, email, dan lokasi sekolah.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 50:'#eef2f6', 100:'#d0dbe7', 200:'#a7bdd4', 300:'#7d8ea5', 700:'#16324f', 800:'#1e3a5f', 900:'#0f172a', DEFAULT:'#1e293b' },
+                        gold: { 50:'#fefbea', 100:'#fdf3c7', 300:'#fde047', 400:'#facc15', 500:'#eab308', 600:'#ca8a04', 700:'#a16207', DEFAULT:'#eab308' },
+                        sage: { 50:'#f0f7f5', 100:'#d7ece5', 500:'#0f766e', 600:'#0d5f58', 700:'#0a4a44' },
+                        cream: { 50:'#fbf8f2', 100:'#f5efe1' }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+        .glass-card { background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .islamic-pattern {
+            background-image:
+                linear-gradient(45deg, rgba(234,179,8,0.07) 25%, transparent 25%, transparent 75%, rgba(234,179,8,0.07) 75%),
+                linear-gradient(45deg, rgba(234,179,8,0.07) 25%, transparent 25%, transparent 75%, rgba(234,179,8,0.07) 75%);
+            background-size: 46px 46px;
+            background-position: 0 0, 23px 23px;
+        }
+        .hero-dots { background-color:#0f172a; background-image: radial-gradient(#2a4a6f 0.5px, transparent 0.5px); background-size: 24px 24px; }
+        .shimmer { position: relative; overflow: hidden; }
+        .shimmer::after {
+            content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.12), transparent);
+            transform: rotate(45deg); animation: shimmer 3.2s infinite;
+        }
+        @keyframes shimmer { 0%{transform:translateX(-100%) rotate(45deg);} 100%{transform:translateX(100%) rotate(45deg);} }
+        .mobile-menu { transition: all .35s cubic-bezier(.4,0,.2,1); transform: translateY(-12px); opacity:0; pointer-events:none; }
+        .mobile-menu.active { transform: translateY(0); opacity:1; pointer-events:auto; }
+        .fade-up { opacity:0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+        .fade-up.in-view { opacity:1; transform: translateY(0); }
+        ::selection { background: #eab308; color: #0f172a; }
+        .star-bullet::before { content:'✦'; color:#eab308; margin-right:.5rem; }
+        nav.solid { background:#0f172a; box-shadow: 0 10px 30px -10px rgba(0,0,0,.4); }
+        .nav-link { position:relative; }
+        .nav-link::after { content:''; position:absolute; left:0; bottom:-6px; width:0; height:2px; background:#eab308; transition:width .25s ease; }
+        .nav-link:hover::after, .nav-link.active::after { width:100%; }
+        @media (prefers-reduced-motion: reduce) {
+          .fade-up { opacity:1 !important; transform:none !important; transition:none !important; }
+          .shimmer::after { animation:none; }
+        }
+    </style>
+
+</head>
+<body class="bg-slate-50 font-sans text-navy-900">
+
+    <nav id="mainNav" class="fixed top-0 w-full z-50 transition-all duration-300 ">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm" alt="Logo SMP Muhammadiyah 9 Nagreg" class="h-11 w-11 object-contain">
+                    <div class="leading-tight">
+                        <p class="text-white font-display font-extrabold text-sm sm:text-base tracking-wide">SMP MUHAMMADIYAH 9 NAGREG</p>
+                        <p class="text-gold-400 font-semibold text-[11px] sm:text-xs tracking-[0.25em]">Sekolah Islam Berkemajuan</p>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center gap-9">
+                    <a href="index.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Beranda</a>
+<a href="profil.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Profil</a>
+<a href="program.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Program</a>
+<a href="ppdb.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">PPDB</a>
+<a href="berita.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Berita</a>
+<a href="galeri.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Galeri</a>
+<a href="kontak.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors active text-white">Kontak</a>
+
+                </div>
+                <div class="hidden md:block">
+                    <a href="ppdb.html" class="bg-gold-500 hover:bg-gold-600 text-navy-900 px-6 py-3 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-gold-500/20 hover:-translate-y-0.5">
+                        Daftar PPDB
+                    </a>
+                </div>
+                <button onclick="toggleMenu()" class="md:hidden text-white p-2" aria-label="Buka menu">
+                    <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu absolute top-20 left-0 w-full bg-navy-900 border-t border-white/10 md:hidden z-40 px-6 py-8 flex flex-col space-y-6 shadow-2xl">
+            <a href="index.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Beranda</a>
+<a href="profil.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Profil</a>
+<a href="program.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Program</a>
+<a href="ppdb.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">PPDB</a>
+<a href="berita.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Berita</a>
+<a href="galeri.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Galeri</a>
+<a href="kontak.html" onclick="toggleMenu()" class="text-white text-lg font-semibold text-gold-400">Kontak</a>
+
+            <a href="ppdb.html" onclick="toggleMenu()" class="bg-gold-500 text-navy-900 text-center py-4 rounded-xl font-bold text-lg">Daftar Sekarang</a>
+        </div>
+    </nav>
+
+
+    <section class="relative pt-40 pb-24 bg-navy-900 islamic-pattern-dark overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-gold-500/10 rounded-full filter blur-3xl"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <span class="text-gold-400 font-bold text-sm tracking-widest uppercase star-bullet">Kami Siap Membantu</span>
+            <h1 class="text-white font-display font-extrabold text-4xl md:text-6xl mt-4 mb-6">Hubungi Kami</h1>
+            <p class="text-slate-300 text-lg max-w-2xl mx-auto">Ada pertanyaan seputar PPDB atau sekolah? Jangan ragu untuk menghubungi kami.</p>
+        </div>
+    </section>
+
+    <section id="kontak" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="fade-up">
+                    <h2 class="text-navy-900 font-display font-extrabold text-4xl mb-8">Informasi Kontak</h2>
+                    <div class="space-y-8">
+                        <a href="https://wa.me/6285891456332" class="flex items-center gap-6 group">
+                            <div class="w-14 h-14 bg-navy-50 group-hover:bg-gold-500/10 rounded-2xl flex items-center justify-center transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gold-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold uppercase tracking-wider">Telepon / WhatsApp</p>
+                                <p class="text-navy-900 font-bold text-xl">0858-9145-6332</p>
+                            </div>
+                        </a>
+                        <a href="mailto:smpmuhciaro@gmail.com" class="flex items-center gap-6 group">
+                            <div class="w-14 h-14 bg-navy-50 group-hover:bg-gold-500/10 rounded-2xl flex items-center justify-center transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gold-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold uppercase tracking-wider">Alamat Email</p>
+                                <p class="text-navy-900 font-bold text-xl">smpmuhciaro@gmail.com</p>
+                            </div>
+                        </a>
+                        <div class="flex items-center gap-6 group">
+                            <div class="w-14 h-14 bg-navy-50 group-hover:bg-gold-500/10 rounded-2xl flex items-center justify-center transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gold-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold uppercase tracking-wider">Alamat Sekolah</p>
+                                <p class="text-navy-900 font-bold text-xl">Kp. Cipaku Hilir RT 001 RW 010 Desa Ciaro, Kec. Nagreg, Kab. Bandung</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 group">
+                            <div class="w-14 h-14 bg-navy-50 group-hover:bg-gold-500/10 rounded-2xl flex items-center justify-center transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gold-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold uppercase tracking-wider">Jam Layanan</p>
+                                <p class="text-navy-900 font-bold text-xl">Senin - Sabtu, 08.00 - 14.00 WIB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 flex gap-4">
+                        <a href="https://www.instagram.com/smp_muh9nagreg/" class="w-12 h-12 bg-navy-900 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="https://www.facebook.com/muhammadiyah.ciaro.5" class="w-12 h-12 bg-navy-900 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+                        </a>
+                        <a href="https://www.youtube.com/@hw.smpm9nagreg/videos" class="w-12 h-12 bg-navy-900 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.872.505 9.377.505 9.377.505s7.505 0 9.377-.505a3.017 3.017 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="fade-up h-[400px] lg:h-auto bg-slate-100 rounded-[2.5rem] overflow-hidden border-4 border-navy-50 shadow-inner relative group">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d494.96373855098807!2d107.92931602577892!3d-7.043337245474189!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68c9530cdd7fd5%3A0xacc286cc4cb9c511!2sSMP%20Muhammadiyah%209%20Nagreg!5e0!3m2!1sid!2sid!4v1779100209255!5m2!1sid!2sid"
+                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-full h-full min-h-[400px]">
+                    </iframe>
+                    <a href="https://maps.google.com/?q=-7.043415714271516, 107.92921926679315" target="_blank" rel="noopener noreferrer" class="absolute inset-0 bg-transparent cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-center">
+                        <span class="opacity-0 group-hover:opacity-100 bg-black/60 text-white px-4 py-2 rounded-full text-sm font-medium transition-opacity duration-300">Buka di Google Maps</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick contact form (visual only, mailto submit) -->
+    <section class="py-24 bg-slate-100">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="fade-up bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-slate-100">
+                <h2 class="text-navy-900 font-display font-extrabold text-3xl mb-3 text-center">Kirim Pesan</h2>
+                <p class="text-slate-500 text-center mb-10">Isi form berikut, kami akan segera menghubungi Anda kembali melalui email.</p>
+                <form action="mailto:smpmuhciaro@gmail.com" method="post" enctype="text/plain" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-navy-900 font-semibold text-sm mb-2">Nama Lengkap</label>
+                            <input type="text" name="nama" required class="w-full px-5 py-4 rounded-xl border border-slate-200 focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-navy-900 font-semibold text-sm mb-2">Nomor WhatsApp</label>
+                            <input type="tel" name="whatsapp" required class="w-full px-5 py-4 rounded-xl border border-slate-200 focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none transition-all">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-navy-900 font-semibold text-sm mb-2">Pesan</label>
+                        <textarea name="pesan" rows="5" required class="w-full px-5 py-4 rounded-xl border border-slate-200 focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none transition-all resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-gold-500 hover:bg-gold-600 text-navy-900 py-5 rounded-xl font-bold text-lg transition-all shadow-lg shadow-gold-500/30">Kirim Pesan</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="bg-navy-900 relative overflow-hidden">
+        <div class="islamic-pattern-dark absolute inset-0"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-14 border-b border-white/10">
+                <div>
+                    <div class="flex items-center gap-3 mb-5">
+                        <img src="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm" alt="Logo" class="h-11 w-11 object-contain">
+                        <p class="text-white font-display font-bold text-sm leading-snug">SMP MUHAMMADIYAH<br>9 NAGREG</p>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Mencetak generasi Qur'ani, berprestasi, dan berbakti melalui pendidikan Al-Islam yang kokoh dan pembelajaran modern.</p>
+                    <div class="flex gap-3">
+                        <a href="https://www.instagram.com/smp_muh9nagreg/" class="w-11 h-11 bg-white/5 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="https://www.facebook.com/muhammadiyah.ciaro.5" class="w-11 h-11 bg-white/5 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+                        </a>
+                        <a href="https://www.youtube.com/@hw.smpm9nagreg/videos" class="w-11 h-11 bg-white/5 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.872.505 9.377.505 9.377.505s7.505 0 9.377-.505a3.017 3.017 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-display font-bold text-sm tracking-widest uppercase mb-6">Navigasi</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html" class="text-slate-400 hover:text-gold-400 transition-colors">Beranda</a></li>
+                        <li><a href="profil.html" class="text-slate-400 hover:text-gold-400 transition-colors">Profil Sekolah</a></li>
+                        <li><a href="program.html" class="text-slate-400 hover:text-gold-400 transition-colors">Program Unggulan</a></li>
+                        <li><a href="berita.html" class="text-slate-400 hover:text-gold-400 transition-colors">Berita &amp; Kegiatan</a></li>
+                        <li><a href="galeri.html" class="text-slate-400 hover:text-gold-400 transition-colors">Galeri</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-display font-bold text-sm tracking-widest uppercase mb-6">Penerimaan Siswa</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="ppdb.html" class="text-slate-400 hover:text-gold-400 transition-colors">Syarat Pendaftaran</a></li>
+                        <li><a href="ppdb.html#alur" class="text-slate-400 hover:text-gold-400 transition-colors">Alur Pendaftaran</a></li>
+                        <li><a href="ppdb.html#faq" class="text-slate-400 hover:text-gold-400 transition-colors">Tanya Jawab</a></li>
+                        <li><a href="https://sites.google.com/view/ujicobatommy/spmb" class="text-slate-400 hover:text-gold-400 transition-colors">Formulir Online</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-display font-bold text-sm tracking-widest uppercase mb-6">Kontak</h4>
+                    <ul class="space-y-4 text-sm text-slate-400">
+                        <li>Kp. Cipaku Hilir RT 001 RW 010, Desa Ciaro, Kec. Nagreg, Kab. Bandung</li>
+                        <li>0858-9145-6332</li>
+                        <li>smpmuhciaro@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-slate-500 text-sm tracking-wide text-center sm:text-left">&copy; 2026 SMP Muhammadiyah 9 Nagreg. Mencetak Generasi Qur'ani, Berprestasi, dan Berbakti.</p>
+                <p class="text-slate-600 text-xs tracking-widest uppercase">Berkemajuan · Berakhlak · Berprestasi</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.getElementById('menuIcon');
+            menu.classList.toggle('active');
+            if (menu.classList.contains('active')) {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+            } else {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />';
+            }
+        }
+        window.addEventListener('scroll', function () {
+            const nav = document.getElementById('mainNav');
+            if (!nav) return;
+            if (window.scrollY > 40) { nav.classList.add('solid'); }
+            else if (!nav.classList.contains('always-solid')) { nav.classList.remove('solid'); }
+        });
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+    </script>
+
+</body>
+</html>

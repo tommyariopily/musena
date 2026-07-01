@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPDB 2026/2027 | SMP Muhammadiyah 9 Nagreg</title>
+    <link rel="icon" type="image/x-icon" href="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm">
+    <meta name="description" content="Informasi lengkap PPDB SMP Muhammadiyah 9 Nagreg: alur pendaftaran, jalur, syarat dokumen, dan tanya jawab.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 50:'#eef2f6', 100:'#d0dbe7', 200:'#a7bdd4', 300:'#7d8ea5', 700:'#16324f', 800:'#1e3a5f', 900:'#0f172a', DEFAULT:'#1e293b' },
+                        gold: { 50:'#fefbea', 100:'#fdf3c7', 300:'#fde047', 400:'#facc15', 500:'#eab308', 600:'#ca8a04', 700:'#a16207', DEFAULT:'#eab308' },
+                        sage: { 50:'#f0f7f5', 100:'#d7ece5', 500:'#0f766e', 600:'#0d5f58', 700:'#0a4a44' },
+                        cream: { 50:'#fbf8f2', 100:'#f5efe1' }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+        .glass-card { background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .islamic-pattern {
+            background-image:
+                linear-gradient(45deg, rgba(234,179,8,0.07) 25%, transparent 25%, transparent 75%, rgba(234,179,8,0.07) 75%),
+                linear-gradient(45deg, rgba(234,179,8,0.07) 25%, transparent 25%, transparent 75%, rgba(234,179,8,0.07) 75%);
+            background-size: 46px 46px;
+            background-position: 0 0, 23px 23px;
+        }
+        .hero-dots { background-color:#0f172a; background-image: radial-gradient(#2a4a6f 0.5px, transparent 0.5px); background-size: 24px 24px; }
+        .shimmer { position: relative; overflow: hidden; }
+        .shimmer::after {
+            content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.12), transparent);
+            transform: rotate(45deg); animation: shimmer 3.2s infinite;
+        }
+        @keyframes shimmer { 0%{transform:translateX(-100%) rotate(45deg);} 100%{transform:translateX(100%) rotate(45deg);} }
+        .mobile-menu { transition: all .35s cubic-bezier(.4,0,.2,1); transform: translateY(-12px); opacity:0; pointer-events:none; }
+        .mobile-menu.active { transform: translateY(0); opacity:1; pointer-events:auto; }
+        .fade-up { opacity:0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+        .fade-up.in-view { opacity:1; transform: translateY(0); }
+        ::selection { background: #eab308; color: #0f172a; }
+        .star-bullet::before { content:'✦'; color:#eab308; margin-right:.5rem; }
+        nav.solid { background:#0f172a; box-shadow: 0 10px 30px -10px rgba(0,0,0,.4); }
+        .nav-link { position:relative; }
+        .nav-link::after { content:''; position:absolute; left:0; bottom:-6px; width:0; height:2px; background:#eab308; transition:width .25s ease; }
+        .nav-link:hover::after, .nav-link.active::after { width:100%; }
+        @media (prefers-reduced-motion: reduce) {
+          .fade-up { opacity:1 !important; transform:none !important; transition:none !important; }
+          .shimmer::after { animation:none; }
+        }
+    </style>
+
+</head>
+<body class="bg-slate-50 font-sans text-navy-900">
+
+    <nav id="mainNav" class="fixed top-0 w-full z-50 transition-all duration-300 ">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm" alt="Logo SMP Muhammadiyah 9 Nagreg" class="h-11 w-11 object-contain">
+                    <div class="leading-tight">
+                        <p class="text-white font-display font-extrabold text-sm sm:text-base tracking-wide">SMP MUHAMMADIYAH 9 NAGREG</p>
+                        <p class="text-gold-400 font-semibold text-[11px] sm:text-xs tracking-[0.25em]">Sekolah Islam Berkemajuan</p>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center gap-9">
+                    <a href="index.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Beranda</a>
+<a href="profil.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Profil</a>
+<a href="program.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Program</a>
+<a href="ppdb.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors active text-white">PPDB</a>
+<a href="berita.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Berita</a>
+<a href="galeri.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Galeri</a>
+<a href="kontak.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Kontak</a>
+
+                </div>
+                <div class="hidden md:block">
+                    <a href="ppdb.html" class="bg-gold-500 hover:bg-gold-600 text-navy-900 px-6 py-3 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-gold-500/20 hover:-translate-y-0.5">
+                        Daftar PPDB
+                    </a>
+                </div>
+                <button onclick="toggleMenu()" class="md:hidden text-white p-2" aria-label="Buka menu">
+                    <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu absolute top-20 left-0 w-full bg-navy-900 border-t border-white/10 md:hidden z-40 px-6 py-8 flex flex-col space-y-6 shadow-2xl">
+            <a href="index.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Beranda</a>
+<a href="profil.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Profil</a>
+<a href="program.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Program</a>
+<a href="ppdb.html" onclick="toggleMenu()" class="text-white text-lg font-semibold text-gold-400">PPDB</a>
+<a href="berita.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Berita</a>
+<a href="galeri.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Galeri</a>
+<a href="kontak.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Kontak</a>
+
+            <a href="ppdb.html" onclick="toggleMenu()" class="bg-gold-500 text-navy-900 text-center py-4 rounded-xl font-bold text-lg">Daftar Sekarang</a>
+        </div>
+    </nav>
+
+
+    <section class="relative pt-40 pb-24 bg-navy-900 islamic-pattern-dark overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-gold-500/10 rounded-full filter blur-3xl"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 bg-gold-500/15 border border-gold-500/30 rounded-full px-4 py-1.5 mb-6 backdrop-blur-md">
+                <span class="flex h-2 w-2 rounded-full bg-gold-500 animate-pulse"></span>
+                <span class="text-gold-400 font-bold text-sm tracking-wide uppercase">PPDB Tahun Ajaran 2026/2027</span>
+            </div>
+            <h1 class="text-white font-display font-extrabold text-4xl md:text-6xl mb-6">Penerimaan Siswa Baru</h1>
+            <p class="text-slate-300 text-lg max-w-2xl mx-auto mb-10">Bergabunglah dengan keluarga besar SMP Muhammadiyah 9 Nagreg. Kuota terbatas, daftar sekarang!</p>
+            <a href="https://sites.google.com/view/ujicobatommy/spmb" class="shimmer inline-block bg-gold-500 hover:bg-gold-600 text-navy-900 px-10 py-5 rounded-2xl font-bold text-lg transition-all shadow-2xl shadow-gold-500/30">
+                Daftar Online Sekarang
+            </a>
+        </div>
+    </section>
+
+    <!-- Alur Pendaftaran -->
+    <section id="alur" class="py-24 bg-white scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 fade-up">
+                <span class="text-gold-600 font-bold text-sm tracking-widest uppercase star-bullet">Langkah Demi Langkah</span>
+                <h2 class="text-navy-900 font-display font-extrabold text-4xl md:text-5xl mt-3">Alur Pendaftaran</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                <div class="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-slate-200"></div>
+
+                <div class="fade-up relative bg-white text-center" style="transition-delay:0.00s">
+                    <div class="w-16 h-16 bg-gold-500 text-navy-900 font-display font-extrabold text-2xl rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-lg shadow-gold-500/30 border-4 border-white">1</div>
+                    <h3 class="text-navy-900 font-bold text-xl mb-3">Isi Formulir</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Isi formulir pendaftaran online melalui tautan resmi atau datang langsung ke sekretariat.</p>
+                </div>
+
+                <div class="fade-up relative bg-white text-center" style="transition-delay:0.08s">
+                    <div class="w-16 h-16 bg-gold-500 text-navy-900 font-display font-extrabold text-2xl rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-lg shadow-gold-500/30 border-4 border-white">2</div>
+                    <h3 class="text-navy-900 font-bold text-xl mb-3">Lengkapi Berkas</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Unggah atau serahkan berkas persyaratan yang telah disiapkan sesuai ketentuan.</p>
+                </div>
+
+                <div class="fade-up relative bg-white text-center" style="transition-delay:0.16s">
+                    <div class="w-16 h-16 bg-gold-500 text-navy-900 font-display font-extrabold text-2xl rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-lg shadow-gold-500/30 border-4 border-white">3</div>
+                    <h3 class="text-navy-900 font-bold text-xl mb-3">Verifikasi</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Panitia PPDB memverifikasi kelengkapan dan keabsahan data calon siswa.</p>
+                </div>
+
+                <div class="fade-up relative bg-white text-center" style="transition-delay:0.24s">
+                    <div class="w-16 h-16 bg-gold-500 text-navy-900 font-display font-extrabold text-2xl rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-lg shadow-gold-500/30 border-4 border-white">4</div>
+                    <h3 class="text-navy-900 font-bold text-xl mb-3">Daftar Ulang</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Calon siswa yang dinyatakan diterima melakukan daftar ulang sesuai jadwal.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Jalur -->
+    <section class="py-24 bg-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-up">
+                <span class="text-gold-600 font-bold text-sm tracking-widest uppercase star-bullet">Pilihan Jalur</span>
+                <h2 class="text-navy-900 font-display font-extrabold text-4xl md:text-5xl mt-3">Jalur Pendaftaran</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="fade-up bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
+                    <h3 class="text-navy-900 font-display font-bold text-xl mb-3">Jalur Reguler</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Terbuka untuk seluruh calon siswa lulusan SD/MI yang memenuhi persyaratan administrasi umum.</p>
+                </div>
+                <div class="fade-up bg-navy-800 islamic-pattern-dark rounded-3xl p-8 shadow-xl border border-navy-700 relative" style="transition-delay:.08s">
+                    <span class="absolute top-4 right-4 bg-gold-500 text-navy-900 text-[10px] font-bold px-3 py-1 rounded-full uppercase">Populer</span>
+                    <h3 class="text-white font-display font-bold text-xl mb-3">Jalur Prestasi</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">Bagi calon siswa dengan prestasi akademik atau non-akademik, berhak atas potongan biaya pendidikan.</p>
+                </div>
+                <div class="fade-up bg-white rounded-3xl p-8 shadow-xl border border-slate-100" style="transition-delay:.16s">
+                    <h3 class="text-navy-900 font-display font-bold text-xl mb-3">Jalur Kader Muhammadiyah</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Diperuntukkan bagi putra-putri anggota/kader Muhammadiyah-Aisyiyah dengan skema pembiayaan khusus.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admission Requirements -->
+    <section id="syarat" class="py-24 bg-navy-800 relative overflow-hidden scroll-mt-20">
+        <div class="islamic-pattern-dark absolute inset-0"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 fade-up">
+                <span class="text-gold-400 font-bold text-sm tracking-widest uppercase star-bullet">Dokumen</span>
+                <h2 class="text-white font-display font-extrabold text-4xl md:text-5xl mt-3 mb-4">Persyaratan Pendaftaran</h2>
+                <p class="text-slate-300 text-lg max-w-2xl mx-auto">Siapkan dokumen-dokumen berikut untuk bergabung menjadi bagian dari keluarga besar kami.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="fade-up glass-card p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300">
+                    <div class="w-14 h-14 bg-gold-500 text-navy-900 flex items-center justify-center rounded-2xl mb-6 shadow-lg shadow-gold-500/20 font-bold text-2xl">01</div>
+                    <h3 class="text-navy-900 font-bold text-xl mb-4">Formulir Utama</h3>
+                    <ul class="text-slate-600 space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><span class="text-gold-500 mt-1 font-bold">•</span>Mengisi formulir resmi PPDB.</li>
+                    </ul>
+                </div>
+                <div class="fade-up glass-card p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300" style="transition-delay:.06s">
+                    <div class="w-14 h-14 bg-gold-500 text-navy-900 flex items-center justify-center rounded-2xl mb-6 shadow-lg shadow-gold-500/20 font-bold text-2xl">02</div>
+                    <h3 class="text-navy-900 font-bold text-xl mb-4">Data Akademik</h3>
+                    <ul class="text-slate-600 space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><span class="text-gold-500 mt-1 font-bold">•</span>Fotokopi Ijazah SD/MI (2 lembar dilegalisir).</li>
+                        <li class="flex items-start gap-2 italic"><span class="text-gold-500 mt-1 font-bold">•</span>Bisa gunakan SKL asli jika ijazah belum terbit.</li>
+                        <li class="flex items-start gap-2"><span class="text-gold-500 mt-1 font-bold">•</span>Fotokopi Kartu NISN.</li>
+                    </ul>
+                </div>
+                <div class="fade-up glass-card p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300" style="transition-delay:.12s">
+                    <div class="w-14 h-14 bg-gold-500 text-navy-900 flex items-center justify-center rounded-2xl mb-6 shadow-lg shadow-gold-500/20 font-bold text-2xl">03</div>
+                    <h3 class="text-navy-900 font-bold text-xl mb-4">Identitas Diri</h3>
+                    <ul class="text-slate-600 space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><span class="text-gold-500 mt-1 font-bold">•</span>Fotokopi Akta Kelahiran (2 lembar).</li>
+                        <li class="flex items-start gap-2"><span class="text-gold-500 mt-1 font-bold">•</span>Fotokopi Kartu Keluarga (2 lembar).</li>
+                        <li class="flex items-start gap-2"><span class="text-gold-500 mt-1 font-bold">•</span>Fotokopi KTP Orang Tua (1 lembar).</li>
+                    </ul>
+                </div>
+                <div class="fade-up glass-card p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300" style="transition-delay:.18s">
+                    <div class="w-14 h-14 bg-gold-500 text-navy-900 flex items-center justify-center rounded-2xl mb-6 shadow-lg shadow-gold-500/20 font-bold text-2xl">04</div>
+                    <h3 class="text-navy-900 font-bold text-xl mb-4">Berkas Tambahan</h3>
+                    <ul class="text-slate-600 space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><span class="text-gold-500 mt-1 font-bold">•</span>Pas foto 3x4 (4 lembar, latar merah).</li>
+                        <li class="flex items-start gap-2"><span class="text-gold-500 mt-1 font-bold">•</span>FC KIP/KPS/PKH (jika ada).</li>
+                        <li class="flex items-start gap-2"><span class="text-gold-500 mt-1 font-bold">•</span>Sertifikat prestasi (jika ada).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration CTA -->
+    <section id="daftar" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="fade-up bg-navy-800 rounded-[3rem] p-8 md:p-16 relative overflow-hidden islamic-pattern-dark">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gold-500/10 rounded-full -mr-32 -mt-32"></div>
+                <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12">
+                    <div class="lg:w-1/2 text-center lg:text-left">
+                        <h2 class="text-3xl md:text-5xl font-display font-extrabold text-white mb-6">Wujudkan Masa Depan Gemilang Bersama Kami!</h2>
+                        <p class="text-slate-300 text-lg mb-8 leading-relaxed">Jangan lewatkan kesempatan. Kuota pendaftaran terbatas setiap tahunnya untuk menjaga kualitas pembelajaran yang kondusif.</p>
+                        <a href="https://sites.google.com/view/ujicobatommy/spmb" class="inline-block bg-gold-500 hover:bg-gold-600 text-navy-900 px-10 py-5 rounded-2xl font-bold text-xl transition-all shadow-xl shadow-gold-500/40 hover:scale-105 active:scale-95">
+                            DAFTAR SEKARANG - LINK FORMULIR
+                        </a>
+                    </div>
+                    <div class="lg:w-1/2 bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-sm">
+                        <h4 class="text-gold-400 font-bold text-xl mb-6">Pendaftaran Offline:</h4>
+                        <p class="text-white mb-4 italic">Bagi Bapak/Ibu yang ingin mendaftar langsung:</p>
+                        <div class="flex items-start gap-4 mb-6">
+                            <div class="w-10 h-10 bg-navy-800 rounded-lg flex items-center justify-center shrink-0 border border-white/10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-white font-semibold">Senin - Sabtu</p>
+                                <p class="text-slate-400">08.00 - 14.00 WIB</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-navy-800 rounded-lg flex items-center justify-center shrink-0 border border-white/10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-white font-semibold">Lokasi Kampus</p>
+                                <p class="text-slate-400">Sekretariat PPDB SMP Muhammadiyah 9 Nagreg, Kampung Cipaku Hilir, Desa Ciaro</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-24 bg-white scroll-mt-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-up">
+                <span class="text-gold-600 font-bold text-sm tracking-widest uppercase star-bullet">Pertanyaan Umum</span>
+                <h2 class="text-navy-900 font-display font-extrabold text-4xl md:text-5xl mt-3">Tanya Jawab PPDB</h2>
+            </div>
+            <div class="space-y-4">
+
+                <div class="fade-up border border-slate-200 rounded-2xl overflow-hidden" style="transition-delay:0.00s">
+                    <button type="button" onclick="const c=this.nextElementSibling;const i=this.querySelector('svg');c.classList.toggle('hidden');i.classList.toggle('rotate-45');" class="w-full flex items-center justify-between gap-4 p-6 text-left bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <span class="text-navy-900 font-bold">Kapan pendaftaran PPDB dibuka?</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold-600 shrink-0 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    </button>
+                    <div class="hidden p-6 pt-0 text-slate-600 leading-relaxed bg-slate-50">Pendaftaran PPDB Tahun Ajaran 2026/2027 dibuka mulai sekarang hingga kuota terpenuhi. Pantau pengumuman resmi melalui media sosial dan website sekolah.</div>
+                </div>
+
+                <div class="fade-up border border-slate-200 rounded-2xl overflow-hidden" style="transition-delay:0.05s">
+                    <button type="button" onclick="const c=this.nextElementSibling;const i=this.querySelector('svg');c.classList.toggle('hidden');i.classList.toggle('rotate-45');" class="w-full flex items-center justify-between gap-4 p-6 text-left bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <span class="text-navy-900 font-bold">Apakah ada biaya pendaftaran?</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold-600 shrink-0 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    </button>
+                    <div class="hidden p-6 pt-0 text-slate-600 leading-relaxed bg-slate-50">Untuk informasi rincian biaya pendaftaran dan pembiayaan pendidikan, silakan hubungi panitia PPDB melalui WhatsApp atau datang langsung ke sekolah.</div>
+                </div>
+
+                <div class="fade-up border border-slate-200 rounded-2xl overflow-hidden" style="transition-delay:0.10s">
+                    <button type="button" onclick="const c=this.nextElementSibling;const i=this.querySelector('svg');c.classList.toggle('hidden');i.classList.toggle('rotate-45');" class="w-full flex items-center justify-between gap-4 p-6 text-left bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <span class="text-navy-900 font-bold">Apakah tersedia beasiswa atau potongan biaya?</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold-600 shrink-0 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    </button>
+                    <div class="hidden p-6 pt-0 text-slate-600 leading-relaxed bg-slate-50">Ya, tersedia jalur prestasi dan jalur kader Muhammadiyah dengan skema potongan pembiayaan khusus bagi yang memenuhi kriteria.</div>
+                </div>
+
+                <div class="fade-up border border-slate-200 rounded-2xl overflow-hidden" style="transition-delay:0.00s">
+                    <button type="button" onclick="const c=this.nextElementSibling;const i=this.querySelector('svg');c.classList.toggle('hidden');i.classList.toggle('rotate-45');" class="w-full flex items-center justify-between gap-4 p-6 text-left bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <span class="text-navy-900 font-bold">Bagaimana jika ijazah SD/MI belum terbit?</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold-600 shrink-0 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    </button>
+                    <div class="hidden p-6 pt-0 text-slate-600 leading-relaxed bg-slate-50">Calon siswa dapat menggunakan Surat Keterangan Lulus (SKL) asli sebagai pengganti sementara sebelum ijazah terbit.</div>
+                </div>
+
+                <div class="fade-up border border-slate-200 rounded-2xl overflow-hidden" style="transition-delay:0.05s">
+                    <button type="button" onclick="const c=this.nextElementSibling;const i=this.querySelector('svg');c.classList.toggle('hidden');i.classList.toggle('rotate-45');" class="w-full flex items-center justify-between gap-4 p-6 text-left bg-slate-50 hover:bg-slate-100 transition-colors">
+                        <span class="text-navy-900 font-bold">Bagaimana cara mendaftar secara online?</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold-600 shrink-0 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    </button>
+                    <div class="hidden p-6 pt-0 text-slate-600 leading-relaxed bg-slate-50">Klik tombol 'Daftar Sekarang' pada halaman ini untuk mengisi formulir pendaftaran online resmi sekolah.</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="bg-navy-900 relative overflow-hidden">
+        <div class="islamic-pattern-dark absolute inset-0"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-14 border-b border-white/10">
+                <div>
+                    <div class="flex items-center gap-3 mb-5">
+                        <img src="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm" alt="Logo" class="h-11 w-11 object-contain">
+                        <p class="text-white font-display font-bold text-sm leading-snug">SMP MUHAMMADIYAH<br>9 NAGREG</p>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Mencetak generasi Qur'ani, berprestasi, dan berbakti melalui pendidikan Al-Islam yang kokoh dan pembelajaran modern.</p>
+                    <div class="flex gap-3">
+                        <a href="https://www.instagram.com/smp_muh9nagreg/" class="w-11 h-11 bg-white/5 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="https://www.facebook.com/muhammadiyah.ciaro.5" class="w-11 h-11 bg-white/5 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+                        </a>
+                        <a href="https://www.youtube.com/@hw.smpm9nagreg/videos" class="w-11 h-11 bg-white/5 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.872.505 9.377.505 9.377.505s7.505 0 9.377-.505a3.017 3.017 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-display font-bold text-sm tracking-widest uppercase mb-6">Navigasi</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html" class="text-slate-400 hover:text-gold-400 transition-colors">Beranda</a></li>
+                        <li><a href="profil.html" class="text-slate-400 hover:text-gold-400 transition-colors">Profil Sekolah</a></li>
+                        <li><a href="program.html" class="text-slate-400 hover:text-gold-400 transition-colors">Program Unggulan</a></li>
+                        <li><a href="berita.html" class="text-slate-400 hover:text-gold-400 transition-colors">Berita &amp; Kegiatan</a></li>
+                        <li><a href="galeri.html" class="text-slate-400 hover:text-gold-400 transition-colors">Galeri</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-display font-bold text-sm tracking-widest uppercase mb-6">Penerimaan Siswa</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="ppdb.html" class="text-slate-400 hover:text-gold-400 transition-colors">Syarat Pendaftaran</a></li>
+                        <li><a href="ppdb.html#alur" class="text-slate-400 hover:text-gold-400 transition-colors">Alur Pendaftaran</a></li>
+                        <li><a href="ppdb.html#faq" class="text-slate-400 hover:text-gold-400 transition-colors">Tanya Jawab</a></li>
+                        <li><a href="https://sites.google.com/view/ujicobatommy/spmb" class="text-slate-400 hover:text-gold-400 transition-colors">Formulir Online</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-display font-bold text-sm tracking-widest uppercase mb-6">Kontak</h4>
+                    <ul class="space-y-4 text-sm text-slate-400">
+                        <li>Kp. Cipaku Hilir RT 001 RW 010, Desa Ciaro, Kec. Nagreg, Kab. Bandung</li>
+                        <li>0858-9145-6332</li>
+                        <li>smpmuhciaro@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-slate-500 text-sm tracking-wide text-center sm:text-left">&copy; 2026 SMP Muhammadiyah 9 Nagreg. Mencetak Generasi Qur'ani, Berprestasi, dan Berbakti.</p>
+                <p class="text-slate-600 text-xs tracking-widest uppercase">Berkemajuan · Berakhlak · Berprestasi</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.getElementById('menuIcon');
+            menu.classList.toggle('active');
+            if (menu.classList.contains('active')) {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+            } else {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />';
+            }
+        }
+        window.addEventListener('scroll', function () {
+            const nav = document.getElementById('mainNav');
+            if (!nav) return;
+            if (window.scrollY > 40) { nav.classList.add('solid'); }
+            else if (!nav.classList.contains('always-solid')) { nav.classList.remove('solid'); }
+        });
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+    </script>
+
+</body>
+</html>

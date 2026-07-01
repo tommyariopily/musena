@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda | SMP Muhammadiyah 9 Nagreg</title>
+    <link rel="icon" type="image/x-icon" href="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm">
+    <meta name="description" content="Website resmi SMP Muhammadiyah 9 Nagreg — PPDB 2026/2027, program unggulan Tahfidz, Tahsin, dan pembelajaran berbasis IT.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 50:'#eef2f6', 100:'#d0dbe7', 200:'#a7bdd4', 300:'#7d8ea5', 700:'#16324f', 800:'#1e3a5f', 900:'#0f172a', DEFAULT:'#1e293b' },
+                        gold: { 50:'#fefbea', 100:'#fdf3c7', 300:'#fde047', 400:'#facc15', 500:'#eab308', 600:'#ca8a04', 700:'#a16207', DEFAULT:'#eab308' },
+                        sage: { 50:'#f0f7f5', 100:'#d7ece5', 500:'#0f766e', 600:'#0d5f58', 700:'#0a4a44' },
+                        cream: { 50:'#fbf8f2', 100:'#f5efe1' }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+        .glass-card { background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .islamic-pattern {
+            background-image:
+                linear-gradient(45deg, rgba(234,179,8,0.07) 25%, transparent 25%, transparent 75%, rgba(234,179,8,0.07) 75%),
+                linear-gradient(45deg, rgba(234,179,8,0.07) 25%, transparent 25%, transparent 75%, rgba(234,179,8,0.07) 75%);
+            background-size: 46px 46px;
+            background-position: 0 0, 23px 23px;
+        }
+        .hero-dots { background-color:#0f172a; background-image: radial-gradient(#2a4a6f 0.5px, transparent 0.5px); background-size: 24px 24px; }
+        .shimmer { position: relative; overflow: hidden; }
+        .shimmer::after {
+            content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.12), transparent);
+            transform: rotate(45deg); animation: shimmer 3.2s infinite;
+        }
+        @keyframes shimmer { 0%{transform:translateX(-100%) rotate(45deg);} 100%{transform:translateX(100%) rotate(45deg);} }
+        .mobile-menu { transition: all .35s cubic-bezier(.4,0,.2,1); transform: translateY(-12px); opacity:0; pointer-events:none; }
+        .mobile-menu.active { transform: translateY(0); opacity:1; pointer-events:auto; }
+        .fade-up { opacity:0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+        .fade-up.in-view { opacity:1; transform: translateY(0); }
+        ::selection { background: #eab308; color: #0f172a; }
+        .star-bullet::before { content:'✦'; color:#eab308; margin-right:.5rem; }
+        nav.solid { background:#0f172a; box-shadow: 0 10px 30px -10px rgba(0,0,0,.4); }
+        .nav-link { position:relative; }
+        .nav-link::after { content:''; position:absolute; left:0; bottom:-6px; width:0; height:2px; background:#eab308; transition:width .25s ease; }
+        .nav-link:hover::after, .nav-link.active::after { width:100%; }
+        @media (prefers-reduced-motion: reduce) {
+          .fade-up { opacity:1 !important; transform:none !important; transition:none !important; }
+          .shimmer::after { animation:none; }
+        }
+    </style>
+
+</head>
+<body class="bg-slate-50 font-sans text-navy-900">
+
+    <nav id="mainNav" class="fixed top-0 w-full z-50 transition-all duration-300 ">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm" alt="Logo SMP Muhammadiyah 9 Nagreg" class="h-11 w-11 object-contain">
+                    <div class="leading-tight">
+                        <p class="text-white font-display font-extrabold text-sm sm:text-base tracking-wide">SMP MUHAMMADIYAH 9 NAGREG</p>
+                        <p class="text-gold-400 font-semibold text-[11px] sm:text-xs tracking-[0.25em]">Sekolah Islam Berkemajuan</p>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center gap-9">
+                    <a href="index.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors active text-white">Beranda</a>
+<a href="profil.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Profil</a>
+<a href="program.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Program</a>
+<a href="ppdb.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">PPDB</a>
+<a href="berita.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Berita</a>
+<a href="galeri.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Galeri</a>
+<a href="kontak.html" class="nav-link text-white/90 hover:text-white font-medium text-[15px] tracking-wide transition-colors">Kontak</a>
+
+                </div>
+                <div class="hidden md:block">
+                    <a href="ppdb.html" class="bg-gold-500 hover:bg-gold-600 text-navy-900 px-6 py-3 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-gold-500/20 hover:-translate-y-0.5">
+                        Daftar PPDB
+                    </a>
+                </div>
+                <button onclick="toggleMenu()" class="md:hidden text-white p-2" aria-label="Buka menu">
+                    <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu absolute top-20 left-0 w-full bg-navy-900 border-t border-white/10 md:hidden z-40 px-6 py-8 flex flex-col space-y-6 shadow-2xl">
+            <a href="index.html" onclick="toggleMenu()" class="text-white text-lg font-semibold text-gold-400">Beranda</a>
+<a href="profil.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Profil</a>
+<a href="program.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Program</a>
+<a href="ppdb.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">PPDB</a>
+<a href="berita.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Berita</a>
+<a href="galeri.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Galeri</a>
+<a href="kontak.html" onclick="toggleMenu()" class="text-white text-lg font-semibold">Kontak</a>
+
+            <a href="ppdb.html" onclick="toggleMenu()" class="bg-gold-500 text-navy-900 text-center py-4 rounded-xl font-bold text-lg">Daftar Sekarang</a>
+        </div>
+    </nav>
+
+
+    <!-- HERO / CAROUSEL -->
+    <section id="beranda" class="relative w-full h-[600px] md:h-[680px] overflow-hidden bg-navy-900 pt-20">
+
+        <div id="carouselWrapper" class="relative w-full h-full">
+            <!-- Slide 1: SPMB -->
+            <div class="carousel-item absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out opacity-100 z-10">
+                <div class="absolute inset-0 bg-gradient-to-r from-navy-900/90 via-navy-900/70 to-transparent z-10"></div>
+                <img src="https://lh3.googleusercontent.com/d/1k0cHv5lbhd6Igb769yz-0mk1epzy5lgR" class="w-full h-full object-cover" alt="Gedung SMP Muhammadiyah 9 Nagreg">
+
+                <div class="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-20 z-20 text-white max-w-4xl">
+                    <span class="inline-flex items-center gap-2 bg-gold-500/15 border border-gold-500/30 rounded-full px-4 py-1.5 text-xs uppercase tracking-widest w-max mb-5 backdrop-blur-md font-display">
+                        <span class="flex h-2 w-2 rounded-full bg-gold-500 animate-pulse"></span>
+                        <span class="text-gold-400 font-bold">Penerimaan Siswa Baru TA 2026/2027</span>
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-[1.08] mb-5">
+                        Mewujudkan Generasi <br>
+                        <span class="text-gold-400 italic">Cerdas &amp; Berakhlak</span>
+                    </h1>
+                    <p class="text-sm sm:text-base md:text-lg text-slate-200 mb-8 max-w-2xl font-light leading-relaxed">
+                        Selamat datang di <span class="text-white font-semibold">SMP Muhammadiyah 9 Nagreg</span> — sekolah menengah yang memadukan nilai Al-Islam yang kokoh, prestasi akademik, dan pembelajaran berbasis teknologi.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="ppdb.html" class="shimmer bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-gold-500/20 transition-all transform hover:-translate-y-0.5">
+                            Daftar Sekarang
+                        </a>
+                        <a href="ppdb.html" class="border-2 border-white/80 hover:border-white hover:bg-white/10 text-white font-semibold px-6 py-3.5 rounded-xl transition-all">
+                            Lihat Persyaratan
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Fasilitas & KBM -->
+            <div class="carousel-item absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out opacity-0 z-0">
+                <div class="absolute inset-0 bg-gradient-to-r from-navy-900/90 via-navy-900/70 to-transparent z-10"></div>
+                <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=1920" class="w-full h-full object-cover" alt="Kegiatan Belajar Mengajar">
+
+                <div class="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-20 z-20 text-white max-w-4xl">
+                    <span class="bg-navy-800 text-gold-400 border border-navy-100/20 font-bold px-3 py-1 text-xs uppercase tracking-widest rounded-full w-max mb-5 font-display">
+                        Fasilitas &amp; KBM
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-[1.08] mb-5">
+                        Lingkungan Belajar yang <br><span class="text-gold-400">Nyaman &amp; Representatif</span>
+                    </h2>
+                    <p class="text-sm sm:text-base md:text-lg text-slate-200 mb-8 max-w-2xl font-light leading-relaxed">
+                        Didukung oleh tenaga pendidik yang kompeten, laboratorium komputer, perpustakaan digital, serta suasana belajar yang asri dan kondusif.
+                    </p>
+                    <div>
+                        <a href="profil.html" class="bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold px-6 py-3.5 rounded-xl shadow-lg transition-all inline-block">
+                            Lihat Fasilitas
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Ekstrakurikuler -->
+            <div class="carousel-item absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out opacity-0 z-0">
+                <div class="absolute inset-0 bg-gradient-to-r from-navy-900/90 via-navy-900/70 to-transparent z-10"></div>
+                <img src="https://lh3.googleusercontent.com/d/1JVS49bc3iK0H623LMO818dv7Oa7SWPh-" class="w-full h-full object-cover" alt="Ekstrakurikuler Siswa">
+
+                <div class="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-20 z-20 text-white max-w-4xl">
+                    <span class="bg-gold-500 text-navy-900 font-bold px-3 py-1 text-xs uppercase tracking-widest rounded-full w-max mb-5 font-display">
+                        Ekstrakurikuler
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-[1.08] mb-5">
+                        Asah Bakat Terbaik <br><span class="text-gold-400">Bersama Kami</span>
+                    </h2>
+                    <p class="text-sm sm:text-base md:text-lg text-slate-200 mb-8 max-w-2xl font-light leading-relaxed">
+                        Mulai dari Ikatan Pelajar Muhammadiyah (IPM), Kepanduan Hizbul Wathan, seni beladiri Tapak Suci, hingga klub minat dan bakat lainnya.
+                    </p>
+                    <div>
+                        <a href="program.html" class="bg-transparent border-2 border-gold-400 hover:bg-gold-400 hover:text-navy-900 text-gold-400 font-bold px-6 py-3.5 rounded-xl transition-all inline-block">
+                            Jelajahi Ekstrakurikuler
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Prestasi -->
+            <div class="carousel-item absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out opacity-0 z-0">
+                <div class="absolute inset-0 bg-gradient-to-r from-navy-900/90 via-navy-900/70 to-transparent z-10"></div>
+                <img src="https://lh3.googleusercontent.com/d/1k0cHv5lbhd6Igb769yz-0mk1epzy5lgR" class="w-full h-full object-cover" alt="Prestasi Siswa">
+
+                <div class="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-20 z-20 text-white max-w-4xl">
+                    <span class="bg-red-600 text-white font-bold px-3 py-1 text-xs uppercase tracking-widest rounded-full w-max mb-5 font-display">
+                        Prestasi
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-[1.08] mb-5">
+                        Sekolah <br><span class="text-gold-400">Para Juara</span>
+                    </h2>
+                    <p class="text-sm sm:text-base md:text-lg text-slate-200 mb-8 max-w-2xl font-light leading-relaxed">
+                        Tempat lahirnya generasi unggul yang siap menjadi pemenang dalam menghadapi perkembangan zaman dengan adab yang baik, ilmu, dan kreativitas.
+                    </p>
+                    <div>
+                        <a href="berita.html" class="bg-transparent border-2 border-gold-400 hover:bg-gold-400 hover:text-navy-900 text-gold-400 font-bold px-6 py-3.5 rounded-xl transition-all inline-block">
+                            Lihat Prestasi
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="prevBtn" aria-label="Slide sebelumnya" class="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-navy-900/30 hover:bg-gold-500 hover:text-navy-900 border border-white/20 text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all focus:outline-none backdrop-blur-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+        </button>
+        <button id="nextBtn" aria-label="Slide berikutnya" class="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-navy-900/30 hover:bg-gold-500 hover:text-navy-900 border border-white/20 text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all focus:outline-none backdrop-blur-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+        </button>
+
+        <div class="absolute bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+            <button class="dot-btn w-3 h-3 rounded-full bg-white/40 transition-all duration-300" onclick="goToSlide(0)" aria-label="Ke slide 1"></button>
+            <button class="dot-btn w-3 h-3 rounded-full bg-white/40 transition-all duration-300" onclick="goToSlide(1)" aria-label="Ke slide 2"></button>
+            <button class="dot-btn w-3 h-3 rounded-full bg-white/40 transition-all duration-300" onclick="goToSlide(2)" aria-label="Ke slide 3"></button>
+            <button class="dot-btn w-3 h-3 rounded-full bg-white/40 transition-all duration-300" onclick="goToSlide(3)" aria-label="Ke slide 4"></button>
+        </div>
+    </section>
+
+    <script>
+        const slides = document.querySelectorAll('.carousel-item');
+        const dots = document.querySelectorAll('.dot-btn');
+        let currentSlide = 0;
+        const slideInterval = 5000; // Bergeser otomatis setiap 5 detik
+        let autoPlay;
+
+        function updateCarousel() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.remove('opacity-0', 'z-0');
+                    slide.classList.add('opacity-100', 'z-10');
+                    dots[index].classList.remove('bg-white/40', 'w-3');
+                    dots[index].classList.add('bg-gold-500', 'w-8');
+                } else {
+                    slide.classList.remove('opacity-100', 'z-10');
+                    slide.classList.add('opacity-0', 'z-0');
+                    dots[index].classList.remove('bg-gold-500', 'w-8');
+                    dots[index].classList.add('bg-white/40', 'w-3');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+            resetTimer();
+        }
+
+        function startTimer() {
+            autoPlay = setInterval(nextSlide, slideInterval);
+        }
+
+        function resetTimer() {
+            clearInterval(autoPlay);
+            startTimer();
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            nextSlide();
+            resetTimer();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            prevSlide();
+            resetTimer();
+        });
+
+        updateCarousel();
+        startTimer();
+    </script>
+
+    <!-- Program Unggulan -->
+    <section class="py-24 bg-slate-100 relative overflow-hidden">
+        <div class="absolute -top-16 -left-16 w-48 h-48 bg-gold-500 rounded-full opacity-20 filter blur-3xl"></div>
+        <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-navy-900 rounded-full opacity-10 filter blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-20 fade-up">
+                <span class="text-gold-600 font-bold text-sm tracking-widest uppercase star-bullet">Keunggulan Kami</span>
+                <h2 class="text-navy-900 font-display font-extrabold text-4xl md:text-5xl mt-3 mb-5 tracking-tight">
+                    Program Unggulan
+                </h2>
+                <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+                    SMP Muhammadiyah 9 Nagreg menghadirkan pengalaman belajar holistik melalui ragam program unggulan.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-y-20 gap-x-10 items-stretch">
+                <div class="fade-up relative bg-white pt-10 p-8 rounded-[3rem] shadow-2xl shadow-slate-500/30 flex flex-col justify-between group border border-slate-100">
+                    <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] h-56 rounded-[2.5rem] overflow-hidden shadow-lg border-4 border-white">
+                        <img src="https://lh3.googleusercontent.com/d/135cgZgrF2XkU2zflIgAH4Z-OkTI_uNZT" alt="Tahfidz Al-Qur'an" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="mt-40 mb-6">
+                        <h3 class="text-navy-900 font-display font-bold text-2xl mb-4 group-hover:text-gold-600 transition-colors">Tahfidz</h3>
+                        <p class="text-slate-600 leading-relaxed text-base">Program Tahfidz Al-Qur'an menjadi salah satu unggulan utama dalam mencetak generasi Qur'ani yang hafal dan memahami makna Al-Qur'an.</p>
+                    </div>
+                    <a href="program.html#tahfidz" class="text-gold-600 font-semibold text-base flex items-center gap-2 group-hover:gap-3 transition-all mt-auto border-t border-slate-100 pt-4">SELENGKAPNYA <span class="text-xl">→</span></a>
+                </div>
+
+                <div class="fade-up relative bg-white pt-10 p-8 rounded-[3rem] shadow-2xl shadow-slate-500/30 flex flex-col justify-between group border border-slate-100" style="transition-delay:.08s">
+                    <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] h-56 rounded-[2.5rem] overflow-hidden shadow-lg border-4 border-white">
+                        <img src="https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?auto=format&fit=crop&w=600&q=80" alt="Tahsin Al-Qur'an" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="mt-40 mb-6">
+                        <h3 class="text-navy-900 font-display font-bold text-2xl mb-4 group-hover:text-gold-600 transition-colors">Tahsin</h3>
+                        <p class="text-slate-600 leading-relaxed text-base">Membantu siswa meningkatkan kemampuan membaca Al-Qur'an dengan benar, sesuai tajwid, makhraj, dan intonasi yang tepat.</p>
+                    </div>
+                    <a href="program.html#tahsin" class="text-gold-600 font-semibold text-base flex items-center gap-2 group-hover:gap-3 transition-all mt-auto border-t border-slate-100 pt-4">SELENGKAPNYA <span class="text-xl">→</span></a>
+                </div>
+
+                <div class="fade-up relative bg-white pt-10 p-8 rounded-[3rem] shadow-2xl shadow-slate-500/30 flex flex-col justify-between group border border-slate-100" style="transition-delay:.16s">
+                    <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] h-56 rounded-[2.5rem] overflow-hidden shadow-lg border-4 border-white">
+                        <img src="https://lh3.googleusercontent.com/d/1pMDwmvFPDhU97WUfmcmn_KnJiqdquZTt" alt="Pembelajaran Berbasis IT" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="mt-40 mb-6">
+                        <h3 class="text-navy-900 font-display font-bold text-2xl mb-4 group-hover:text-gold-600 transition-colors">Berbasis IT</h3>
+                        <p class="text-slate-600 leading-relaxed text-base">Pendekatan pembelajaran modern menggunakan TIK untuk mendukung proses belajar mengajar yang interaktif, adaptif, dan inovatif.</p>
+                    </div>
+                    <a href="program.html#it" class="text-gold-600 font-semibold text-base flex items-center gap-2 group-hover:gap-3 transition-all mt-auto border-t border-slate-100 pt-4">SELENGKAPNYA <span class="text-xl">→</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Misi -->
+    <section class="py-24 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <div class="lg:col-span-5 relative group min-h-[400px] fade-up">
+                    <div class="absolute inset-0 bg-navy-800 rounded-3xl overflow-hidden shadow-2xl islamic-pattern-dark">
+                        <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-navy-800/90 to-navy-900/95">
+                            <div class="text-center p-8">
+                                <img src="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm" alt="Logo Sekolah" class="w-20 h-20 mx-auto mb-6 object-contain">
+                                <h3 class="text-white text-2xl font-bold font-display">Kampus Berkemajuan</h3>
+                                <p class="text-slate-400 mt-2">Fasilitas modern di tengah lingkungan yang asri dan islami.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-gold-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+                </div>
+
+                <div class="lg:col-span-7 flex flex-col justify-center space-y-8 fade-up">
+                    <div>
+                        <span class="text-gold-600 font-bold text-sm tracking-widest uppercase star-bullet">Mengapa Kami</span>
+                        <h2 class="text-navy-900 font-display font-extrabold text-4xl mt-3 mb-6">Misi Pendidikan Kami</h2>
+                        <div class="w-20 h-1.5 bg-gold-500 rounded-full mb-8"></div>
+                        <div class="space-y-6 text-slate-600 text-lg leading-relaxed">
+                            <p>Berpijak pada nilai-nilai <span class="text-navy-800 font-bold italic">Al-Islam dan Kemuhammadiyahan</span>, kami berkomitmen menyelenggarakan pendidikan yang tidak hanya unggul secara akademis, tetapi juga kokoh dalam karakter dan spiritualitas.</p>
+                            <p>Kami percaya bahwa setiap karakter anak tumbuh dari lingkungan sekitar. Melalui lingkungan belajar yang islami serta inovatif, kami membimbing mereka menjadi pribadi yang santun dan siap menghadapi tantangan zaman.</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-navy-50 p-6 rounded-2xl border-l-4 border-gold-500">
+                            <h4 class="text-navy-900 font-bold mb-1">Kurikulum Terpadu</h4>
+                            <p class="text-sm text-slate-500">Akademik &amp; Karakter Islami</p>
+                        </div>
+                        <div class="bg-navy-50 p-6 rounded-2xl border-l-4 border-gold-500">
+                            <h4 class="text-navy-900 font-bold mb-1">Ekskul Beragam</h4>
+                            <p class="text-sm text-slate-500">Bakat &amp; Minat Terarah</p>
+                        </div>
+                    </div>
+                    <a href="profil.html" class="inline-flex items-center gap-2 text-navy-800 hover:text-gold-600 font-bold transition-colors group w-fit">
+                        Kenali profil sekolah kami <span class="transform group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimoni -->
+    <section class="py-24 bg-cream-50 relative overflow-hidden">
+        <div class="islamic-pattern absolute opacity-95"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 fade-up">
+                <span class="text-gold-600 font-bold text-sm tracking-widest uppercase star-bullet">Kata Mereka</span>
+                <h2 class="text-navy-900 font-display font-extrabold text-4xl md:text-5xl mt-3">Testimoni Orang Tua &amp; Siswa</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="fade-up bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/60 border border-slate-100">
+                    <div class="flex gap-1 text-gold-500 mb-4">★★★★★</div>
+                    <p class="text-slate-600 leading-relaxed mb-6">"Anak saya jadi lebih rajin mengaji dan percaya diri sejak sekolah di sini. Guru-gurunya sabar dan perhatian."</p>
+                    <p class="text-navy-900 font-bold">Ibu Yeni</p>
+                    <p class="text-slate-400 text-sm">Wali Murid Kelas VIII</p>
+                </div>
+                <div class="fade-up bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/60 border border-slate-100" style="transition-delay:.08s">
+                    <div class="flex gap-1 text-gold-500 mb-4">★★★★★</div>
+                    <p class="text-slate-600 leading-relaxed mb-6">"Fasilitas belajarnya lengkap dan program tahfidznya benar-benar membantu saya menghafal Al-Qur'an dengan lebih mudah."</p>
+                    <p class="text-navy-900 font-bold">Ahmad Fauzan</p>
+                    <p class="text-slate-400 text-sm">Siswa Kelas IX</p>
+                </div>
+                <div class="fade-up bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/60 border border-slate-100" style="transition-delay:.16s">
+                    <div class="flex gap-1 text-gold-500 mb-4">★★★★★</div>
+                    <p class="text-slate-600 leading-relaxed mb-6">"Lingkungan sekolahnya islami dan hangat. Komunikasi dengan wali kelas juga sangat mudah dan responsif."</p>
+                    <p class="text-navy-900 font-bold">Bapak Dedi Supriadi</p>
+                    <p class="text-slate-400 text-sm">Wali Murid Kelas VII</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="fade-up bg-navy-800 rounded-[3rem] p-8 md:p-16 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gold-500/10 rounded-full -mr-32 -mt-32"></div>
+                <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 text-center lg:text-left">
+                    <div>
+                        <h2 class="text-3xl md:text-5xl font-display font-extrabold text-white mb-4">Wujudkan Masa Depan Gemilang Bersama Kami!</h2>
+                        <p class="text-slate-300 text-lg leading-relaxed max-w-xl">Kuota pendaftaran terbatas setiap tahunnya untuk menjaga kualitas pembelajaran yang kondusif.</p>
+                    </div>
+                    <a href="ppdb.html" class="shrink-0 inline-block bg-gold-500 hover:bg-gold-600 text-navy-900 px-10 py-5 rounded-2xl font-bold text-xl transition-all shadow-xl shadow-gold-500/30 hover:scale-105 active:scale-95">
+                        DAFTAR SEKARANG
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- News preview -->
+     <section id="berita" class="py-24 bg-white relative overflow-hidden">
+        <div class="absolute top-1/4 right-0 w-96 h-96 bg-brandOrange/5 rounded-full filter blur-3xl"></div>
+        <div class="absolute bottom-1/4 left-0 w-96 h-96 bg-navy-800/5 rounded-full filter blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div>
+                    <span class="text-brandOrange font-bold text-sm tracking-wider uppercase block mb-3">Informasi Terbaru</span>
+                    <h2 class="text-navy-900 font-display font-extrabold text-4xl md:text-5xl tracking-tight uppercase">
+                        Kabar & Kegiatan Sekolah
+                    </h2>
+                    <div class="w-24 h-1.5 bg-brandOrange rounded-full mt-4"></div>
+                </div>
+                <a href="berita.html" class="inline-flex items-center gap-2 text-navy-800 hover:text-brandOrange font-bold text-lg transition-colors group">
+                    Lihat Semua Berita 
+                    <span class="transform group-hover:translate-x-1 transition-transform">→</span>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+ 
+<!--Pengumuman Qurban-->
+                <article class="bg-white rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col group hover:transform hover:-translate-y-2 transition-all duration-300">
+                    <div class="relative h-60 overflow-hidden shrink-0">
+                        <img src="https://lh3.googleusercontent.com/d/1Hzuy0stEPvJTeDJ2iWiBsEd7awL_2-uD" alt="Kegiatan Santri Tahfidz" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-wide uppercase">
+                            Pengumuman
+                        </span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <div class="flex items-center gap-4 text-slate-400 text-sm mb-4">
+                            <span class="flex items-center gap-1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 00-2 2z" />
+                                </svg>
+                                18 Mei 2026
+                            </span>
+                        </div>
+                        <h3 class="text-navy-900 font-display font-bold text-xl mb-4 line-clamp-2 group-hover:text-brandOrange transition-colors">
+                            Qurban Kolaboratif Muhammadiyah–Aisyiyah Nagreg Digelar di SMP Muhammadiyah 9 Nagreg
+                        </h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3">
+                            PR Aisyiyah Cijagra bersama PC Muhammadiyah–Aisyiyah Nagreg akan melaksanakan kegiatan Qurban Kolaboratif.
+                        </p>
+                        <div class="flex items-center justify-between gap-3 mt-auto pt-4 border-t border-slate-100">
+                            <a href="https://sites.google.com/view/ujicobatommy/news/qurban-kolaboratif-180526" class="text-navy-800 group-hover:text-brandOrange font-bold text-sm tracking-wider uppercase flex items-center gap-2">
+                                Baca Selengkapnya <span>→</span>
+                            </a>
+                            <button type="button" onclick="shareNews(this, 'Qurban Kolaboratif Muhammadiyah–Aisyiyah Nagreg Digelar di SMP Muhammadiyah 9 Nagreg', 'PR Aisyiyah Cijagra bersama PC Muhammadiyah–Aisyiyah Nagreg akan melaksanakan kegiatan Qurban Kolaboratif.', 'https://sites.google.com/view/ujicobatommy/news/qurban-kolaboratif-180526')" aria-label="Bagikan berita" class="shrink-0 w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-brandOrange hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <circle cx="18" cy="5" r="3" stroke-width="2"/>
+                                    <circle cx="6" cy="12" r="3" stroke-width="2"/>
+                                    <circle cx="18" cy="19" r="3" stroke-width="2"/>
+                                    <line x1="8.6" y1="10.6" x2="15.4" y2="6.4" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="8.6" y1="13.4" x2="15.4" y2="17.6" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+<!--Pengumuman PPDB-->
+                <article class="bg-white rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col group hover:transform hover:-translate-y-2 transition-all duration-300">
+                    <div class="relative h-60 overflow-hidden shrink-0">
+                        <img src="https://lh3.googleusercontent.com/d/17x9HqJYaFqqRYSJSQcCSQyIT0iKr1M5Q" alt="Pengumuman PPDB" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-wide uppercase">
+                            Pengumuman
+                        </span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <div class="flex items-center gap-4 text-slate-400 text-sm mb-4">
+                            <span class="flex items-center gap-1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 00-2 2z" />
+                                </svg>
+                                16 Mei 2026
+                            </span>
+                        </div>
+                        <h3 class="text-navy-900 font-display font-bold text-xl mb-4 line-clamp-2 group-hover:text-brandOrange transition-colors">
+                            Informasi Alur dan Jalur Beasiswa PPDB Tahun Ajaran 2026/2027
+                        </h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3">
+                            Jangan lewatkan kesempatan kuota terbatas dan potongan pembiayaan khusus bagi pendaftar jalur prestasi serta kader Muhammadiyah.
+                        </p>
+                        <div class="flex items-center justify-between gap-3 mt-auto pt-4 border-t border-slate-100">
+                            <a href="#" class="text-navy-800 group-hover:text-brandOrange font-bold text-sm tracking-wider uppercase flex items-center gap-2">
+                                Baca Selengkapnya <span>→</span>
+                            </a>
+                            <button type="button" onclick="shareNews(this, 'Informasi Alur dan Jalur Beasiswa PPDB Tahun Ajaran 2026/2027', 'Jangan lewatkan kesempatan kuota terbatas dan potongan pembiayaan khusus bagi pendaftar jalur prestasi serta kader Muhammadiyah.', window.location.href)" aria-label="Bagikan berita" class="shrink-0 w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-brandOrange hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <circle cx="18" cy="5" r="3" stroke-width="2"/>
+                                    <circle cx="6" cy="12" r="3" stroke-width="2"/>
+                                    <circle cx="18" cy="19" r="3" stroke-width="2"/>
+                                    <line x1="8.6" y1="10.6" x2="15.4" y2="6.4" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="8.6" y1="13.4" x2="15.4" y2="17.6" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+<!--Kegiatan Dauroh Tahfidz-->                
+                <article class="bg-white rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col group hover:transform hover:-translate-y-2 transition-all duration-300">
+                    <div class="relative h-60 overflow-hidden shrink-0">
+                        <img src="https://lh3.googleusercontent.com/d/1qaiynbOc2xi8Y_c6U30QsA2Bk64bi8le" alt="Kegiatan Santri Tahfidz" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-wide uppercase">
+                            Kegiatan
+                        </span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <div class="flex items-center gap-4 text-slate-400 text-sm mb-4">
+                            <span class="flex items-center gap-1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 00-2 2z" />
+                                </svg>
+                                15 Mei 2026
+                            </span>
+                        </div>
+                        <h3 class="text-navy-900 font-display font-bold text-xl mb-4 line-clamp-2 group-hover:text-brandOrange transition-colors">
+                            Meningkatkan Kecintaan Al-Qur'an melalui Dauroh Tahfidz Ramadhan
+                        </h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3">
+                            SMP Muhammadiyah 9 Nagreg sukses menyelenggarakan Dauroh Tahfidz intensif guna memotivasi para siswa agar mampu menghafal Al-Qur'an dengan metode cepat dan menyenangkan.
+                        </p>
+                        <div class="flex items-center justify-between gap-3 mt-auto pt-4 border-t border-slate-100">
+                            <a href="#" class="text-navy-800 group-hover:text-brandOrange font-bold text-sm tracking-wider uppercase flex items-center gap-2">
+                                Baca Selengkapnya <span>→</span>
+                            </a>
+                            <button type="button" onclick="shareNews(this, 'Meningkatkan Kecintaan Al-Qur\'an melalui Dauroh Tahfidz Ramadhan', 'SMP Muhammadiyah 9 Nagreg sukses menyelenggarakan Dauroh Tahfidz intensif guna memotivasi para siswa agar mampu menghafal Al-Qur\'an dengan metode cepat dan menyenangkan.', window.location.href)" aria-label="Bagikan berita" class="shrink-0 w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-brandOrange hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <circle cx="18" cy="5" r="3" stroke-width="2"/>
+                                    <circle cx="6" cy="12" r="3" stroke-width="2"/>
+                                    <circle cx="18" cy="19" r="3" stroke-width="2"/>
+                                    <line x1="8.6" y1="10.6" x2="15.4" y2="6.4" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="8.6" y1="13.4" x2="15.4" y2="17.6" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+<!--Prestasi Olimpiade-->                  
+                <article class="bg-white rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col group hover:transform hover:-translate-y-2 transition-all duration-300">
+                    <div class="relative h-60 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80" alt="Pembelajaran IT" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-wide uppercase">
+                            Prestasi
+                        </span>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <div class="flex items-center gap-4 text-slate-400 text-sm mb-4">
+                            <span class="flex items-center gap-1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 00-2 2z" />
+                                </svg>
+                                10 Mei 2026
+                            </span>
+                        </div>
+                        <h3 class="text-navy-900 font-display font-bold text-xl mb-4 line-clamp-2 group-hover:text-brandOrange transition-colors">
+                            Siswa SMPM 9 Nagreg Raih Medali Emas di Olimpiade IT Nasional
+                        </h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3">
+                            Implementasi program unggulan berbasis IT kembali membuahkan hasil manis di kancah nasional dalam ajang adu bakat teknologi interaktif.
+                        </p>
+                        <div class="flex items-center justify-between gap-3 mt-auto pt-4 border-t border-slate-100">
+                            <a href="#" class="text-navy-800 group-hover:text-brandOrange font-bold text-sm tracking-wider uppercase flex items-center gap-2">
+                                Baca Selengkapnya <span>→</span>
+                            </a>
+                            <button type="button" onclick="shareNews(this, 'Siswa SMPM 9 Nagreg Raih Medali Emas di Olimpiade IT Nasional', 'Implementasi program unggulan berbasis IT kembali membuahkan hasil manis di kancah nasional dalam ajang adu bakat teknologi interaktif.', window.location.href)" aria-label="Bagikan berita" class="shrink-0 w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-brandOrange hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <circle cx="18" cy="5" r="3" stroke-width="2"/>
+                                    <circle cx="6" cy="12" r="3" stroke-width="2"/>
+                                    <circle cx="18" cy="19" r="3" stroke-width="2"/>
+                                    <line x1="8.6" y1="10.6" x2="15.4" y2="6.4" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="8.6" y1="13.4" x2="15.4" y2="17.6" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+
+        <!-- Toast notifikasi share -->
+        <div id="share-toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 translate-y-20 opacity-0 bg-navy-900 text-white text-sm font-semibold px-6 py-3 rounded-full shadow-xl z-50 transition-all duration-300 pointer-events-none">
+            Tautan berita disalin!
+        </div>
+
+        <script>
+            async function shareNews(btn, title, text, url) {
+                const shareData = { title: title, text: text, url: url };
+                if (navigator.share) {
+                    try {
+                        await navigator.share(shareData);
+                        return;
+                    } catch (err) {
+                        if (err.name === 'AbortError') return; // user batal share
+                    }
+                }
+                // Fallback: salin tautan ke clipboard
+                try {
+                    await navigator.clipboard.writeText(url);
+                    showShareToast('Tautan berita disalin!');
+                } catch (err) {
+                    showShareToast('Gagal menyalin tautan');
+                }
+            }
+
+            function showShareToast(message) {
+                const toast = document.getElementById('share-toast');
+                toast.textContent = message;
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                clearTimeout(window.__shareToastTimer);
+                window.__shareToastTimer = setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 2500);
+            }
+        </script>
+    </section>
+
+
+    <footer class="bg-navy-900 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-14 border-b border-white/10">
+                <div>
+                    <div class="flex items-center gap-3 mb-5">
+                        <img src="https://lh3.googleusercontent.com/d/1DNWvjoXve4czyaSfNGXv_r1AvBtcPthm" alt="Logo" class="h-11 w-11 object-contain">
+                        <p class="text-white font-display font-bold text-sm leading-snug">SMP MUHAMMADIYAH<br>9 NAGREG</p>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Mencetak generasi Qur'ani, berprestasi, dan berbakti melalui pendidikan Al-Islam yang kokoh dan pembelajaran modern.</p>
+                    <div class="flex gap-3">
+                        <a href="https://www.instagram.com/smp_muh9nagreg/" class="w-11 h-11 bg-white/5 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="https://www.facebook.com/muhammadiyah.ciaro.5" class="w-11 h-11 bg-white/5 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+                        </a>
+                        <a href="https://www.youtube.com/@hw.smpm9nagreg/videos" class="w-11 h-11 bg-white/5 text-white rounded-xl flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.872.505 9.377.505 9.377.505s7.505 0 9.377-.505a3.017 3.017 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-display font-bold text-sm tracking-widest uppercase mb-6">Navigasi</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html" class="text-slate-400 hover:text-gold-400 transition-colors">Beranda</a></li>
+                        <li><a href="profil.html" class="text-slate-400 hover:text-gold-400 transition-colors">Profil Sekolah</a></li>
+                        <li><a href="program.html" class="text-slate-400 hover:text-gold-400 transition-colors">Program Unggulan</a></li>
+                        <li><a href="berita.html" class="text-slate-400 hover:text-gold-400 transition-colors">Berita &amp; Kegiatan</a></li>
+                        <li><a href="galeri.html" class="text-slate-400 hover:text-gold-400 transition-colors">Galeri</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-display font-bold text-sm tracking-widest uppercase mb-6">Penerimaan Siswa</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="ppdb.html" class="text-slate-400 hover:text-gold-400 transition-colors">Syarat Pendaftaran</a></li>
+                        <li><a href="ppdb.html#alur" class="text-slate-400 hover:text-gold-400 transition-colors">Alur Pendaftaran</a></li>
+                        <li><a href="ppdb.html#faq" class="text-slate-400 hover:text-gold-400 transition-colors">Tanya Jawab</a></li>
+                        <li><a href="https://sites.google.com/view/ujicobatommy/spmb" class="text-slate-400 hover:text-gold-400 transition-colors">Formulir Online</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-display font-bold text-sm tracking-widest uppercase mb-6">Kontak</h4>
+                    <ul class="space-y-4 text-sm text-slate-400">
+                        <li>Kp. Cipaku Hilir RT 001 RW 010, Desa Ciaro, Kec. Nagreg, Kab. Bandung</li>
+                        <li>0858-9145-6332</li>
+                        <li>smpmuhciaro@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-slate-500 text-sm tracking-wide text-center sm:text-left">&copy; 2026 SMP Muhammadiyah 9 Nagreg. Mencetak Generasi Qur'ani, Berprestasi, dan Berbakti.</p>
+                <p class="text-slate-600 text-xs tracking-widest uppercase">Berkemajuan · Berakhlak · Berprestasi</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.getElementById('menuIcon');
+            menu.classList.toggle('active');
+            if (menu.classList.contains('active')) {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+            } else {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />';
+            }
+        }
+        window.addEventListener('scroll', function () {
+            const nav = document.getElementById('mainNav');
+            if (!nav) return;
+            if (window.scrollY > 40) { nav.classList.add('solid'); }
+            else if (!nav.classList.contains('always-solid')) { nav.classList.remove('solid'); }
+        });
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+    </script>
+
+</body>
+</html>
