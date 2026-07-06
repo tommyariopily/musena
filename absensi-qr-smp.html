@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
   /* ===== DESIGN TOKENS ===== */
   :root{
@@ -107,7 +109,7 @@
     text-transform:uppercase;
     letter-spacing:.04em;
   }
-  .field input{
+  .field input, .field select{
     width:100%;
     padding:12px 14px;
     border:1.5px solid var(--garis);
@@ -117,7 +119,7 @@
     transition:border-color .15s;
     background:var(--krem);
   }
-  .field input:focus{border-color:var(--hijau);}
+  .field input:focus, .field select:focus{border-color:var(--hijau);}
   .btn{
     width:100%;
     padding:13px 16px;
@@ -168,19 +170,20 @@
   }
 
   nav.tabs{
-    display:flex;gap:6px;
+    display:flex;gap:5px;
     background:var(--putih);
     margin:14px auto 0;
     padding:5px;
     border-radius:12px;
     box-shadow:var(--bayang);
     max-width:640px;
+    overflow-x:auto;
   }
   nav.tabs button{
     flex:1;background:transparent;border:none;
-    padding:10px 6px;border-radius:9px;
-    font-size:12.5px;font-weight:600;color:var(--teks-muda);
-    transition:.15s;
+    padding:10px 4px;border-radius:9px;
+    font-size:11.5px;font-weight:600;color:var(--teks-muda);
+    transition:.15s;white-space:nowrap;
   }
   nav.tabs button.aktif{background:var(--hijau-tua);color:#fff;}
 
@@ -212,7 +215,6 @@
     border:2.5px solid rgba(201,154,46,0.85);
     border-radius:14px;pointer-events:none;
     box-shadow:0 0 0 2000px rgba(0,0,0,0.28) inset;
-    animation:none;
   }
   .scan-frame.aktif::after{animation:pulse-cincin 2s ease-in-out infinite;}
   @keyframes pulse-cincin{
@@ -225,21 +227,33 @@
 
   .hasil-scan{
     margin-top:16px;border-radius:12px;padding:16px;
-    display:none;
+    display:none;gap:14px;align-items:center;
     animation:masuk .2s ease-out;
   }
   @keyframes masuk{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
   .hasil-scan.sukses{background:var(--hijau-muda);border:1.5px solid var(--hijau);}
   .hasil-scan.gagal{background:var(--merah-muda);border:1.5px solid var(--merah);}
+  .foto-siswa{
+    width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;
+    background:var(--emas-terang);display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-judul);font-weight:700;color:var(--hijau-tua);font-size:20px;
+  }
+  .hasil-scan .teks-hasil{flex:1;min-width:0;}
   .hasil-scan .nama-siswa{font-family:var(--font-judul);font-weight:700;font-size:16px;color:var(--hijau-tua);}
   .hasil-scan.gagal .nama-siswa{color:var(--merah);}
   .hasil-scan .detail{font-size:12.5px;color:var(--teks-muda);margin-top:4px;font-family:var(--font-data);}
+  .tipe-scan{
+    display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.05em;padding:2px 8px;border-radius:20px;margin-bottom:4px;
+    background:var(--hijau-tua);color:#fff;
+  }
   .badge{
     display:inline-block;padding:2px 9px;border-radius:20px;
     font-size:11px;font-weight:700;margin-left:6px;
   }
   .badge.hadir{background:var(--hijau);color:#fff;}
   .badge.terlambat{background:var(--emas);color:#3a2c07;}
+  .badge.alpa{background:var(--merah);color:#fff;}
 
   .manual-toggle{
     text-align:center;margin-top:14px;
@@ -250,9 +264,12 @@
   .manual-input button{padding:0 16px;border-radius:9px;border:none;background:var(--hijau-tua);color:#fff;font-weight:600;font-size:13px;}
 
   /* ===== REKAP ===== */
-  .filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
   .filter-row input, .filter-row select{
     padding:9px 11px;border:1.5px solid var(--garis);border-radius:9px;font-size:13px;background:var(--krem);
+  }
+  .filter-row .btn-kecil{
+    width:auto;padding:9px 13px;font-size:12.5px;border-radius:9px;
   }
   .ringkasan{display:flex;gap:10px;margin-bottom:14px;}
   .ringkasan .item{
@@ -272,6 +289,19 @@
   table.ledger tbody tr:last-child td{border-bottom:none;}
   .kosong{text-align:center;padding:24px 10px;color:var(--teks-muda);font-size:13px;}
 
+  .persentase-bar{
+    display:inline-block;width:52px;height:6px;border-radius:4px;background:var(--garis);
+    overflow:hidden;vertical-align:middle;margin-right:6px;
+  }
+  .persentase-bar span{display:block;height:100%;background:var(--hijau);}
+
+  .preset-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+  .preset-row button{
+    background:var(--krem);border:1px solid var(--garis);color:var(--hijau-tua);
+    padding:6px 11px;border-radius:20px;font-size:11.5px;font-weight:600;
+  }
+  .preset-row button.aktif{background:var(--hijau-tua);color:#fff;border-color:var(--hijau-tua);}
+
   /* ===== SISWA ===== */
   .cari-box{margin-bottom:14px;}
   .cari-box input{width:100%;padding:11px 14px;border:1.5px solid var(--garis);border-radius:10px;font-size:13.5px;background:var(--krem);}
@@ -280,16 +310,23 @@
     padding:11px 4px;border-bottom:1px solid var(--garis);
   }
   .daftar-siswa .baris:last-child{border-bottom:none;}
+  .daftar-siswa .avatar{
+    width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0;
+    background:var(--hijau-muda);display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-judul);font-weight:700;color:var(--hijau-tua);font-size:14px;
+  }
+  .daftar-siswa .info-siswa{min-width:0;}
   .daftar-siswa .info-siswa .n{font-weight:600;font-size:13.5px;}
   .daftar-siswa .info-siswa .k{font-size:11.5px;color:var(--teks-muda);font-family:var(--font-data);}
   .daftar-siswa .hapus{
-    margin-left:auto;background:none;border:none;color:var(--merah);font-size:12px;font-weight:600;padding:6px 8px;
+    margin-left:auto;background:none;border:none;color:var(--merah);font-size:12px;font-weight:600;padding:6px 8px;flex-shrink:0;
   }
   .form-tambah{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--garis);}
   .form-tambah .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .form-tambah .field input, .form-tambah .field select{
     width:100%;padding:10px 12px;border:1.5px solid var(--garis);border-radius:9px;font-size:13.5px;
   }
+  .form-tambah .catatan{font-size:11px;color:var(--teks-muda);margin:-8px 0 14px;line-height:1.5;}
   .aksi-baris{display:flex;gap:10px;margin-top:10px;}
   .aksi-baris .btn{width:auto;flex:1;padding:11px;font-size:13px;}
 
@@ -313,6 +350,7 @@
     background:var(--teks);color:#fff;padding:11px 18px;border-radius:30px;
     font-size:13px;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,0.25);
     opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;
+    max-width:90%;text-align:center;
   }
   .toast.tampil{opacity:1;transform:translateX(-50%) translateY(-6px);}
 
@@ -354,7 +392,8 @@
 
   <nav class="tabs container">
     <button class="aktif" data-tab="scan">📷 Scan</button>
-    <button data-tab="rekap">📋 Rekap</button>
+    <button data-tab="rekap">📋 Rekap Harian</button>
+    <button data-tab="periode">📈 Rekap Periode</button>
     <button data-tab="siswa">🎓 Siswa</button>
   </nav>
 
@@ -363,14 +402,18 @@
     <!-- TAB: SCAN -->
     <section class="tab-panel" id="tab-scan">
       <div class="kartu">
-        <span class="eyebrow">Absensi Masuk</span>
+        <span class="eyebrow">Absensi Masuk / Pulang</span>
         <h2>Pindai Kartu QR Siswa</h2>
         <div class="scan-frame" id="scan-frame">
           <div id="qr-reader"></div>
         </div>
         <div class="hasil-scan" id="hasil-scan">
-          <div class="nama-siswa" id="hasil-nama">—</div>
-          <div class="detail" id="hasil-detail">—</div>
+          <div class="foto-siswa" id="foto-siswa">?</div>
+          <div class="teks-hasil">
+            <span class="tipe-scan hidden" id="tipe-scan-label">Absen</span>
+            <div class="nama-siswa" id="hasil-nama">—</div>
+            <div class="detail" id="hasil-detail">—</div>
+          </div>
         </div>
         <div class="manual-toggle">
           <a id="toggle-manual">Kamera bermasalah? Input NIS manual</a>
@@ -382,7 +425,7 @@
       </div>
     </section>
 
-    <!-- TAB: REKAP -->
+    <!-- TAB: REKAP HARIAN -->
     <section class="tab-panel hidden" id="tab-rekap">
       <div class="kartu">
         <span class="eyebrow">Rekap Harian</span>
@@ -390,7 +433,8 @@
         <div class="filter-row">
           <input type="date" id="filter-tanggal">
           <select id="filter-kelas"><option value="">Semua Kelas</option></select>
-          <button class="btn btn-ghost" style="width:auto;padding:9px 14px;" id="btn-unduh-csv">⬇ Unduh CSV</button>
+          <button class="btn btn-ghost btn-kecil" id="btn-unduh-csv">⬇ CSV</button>
+          <button class="btn btn-ghost btn-kecil" id="btn-unduh-pdf">⬇ PDF</button>
         </div>
         <div class="ringkasan">
           <div class="item"><div class="angka" id="ringkasan-hadir">0</div><div class="label">Hadir</div></div>
@@ -399,6 +443,32 @@
         </div>
         <div id="rekap-wadah">
           <div class="kosong">Memuat data...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: REKAP PERIODE -->
+    <section class="tab-panel hidden" id="tab-periode">
+      <div class="kartu">
+        <span class="eyebrow">Bulanan / Semester</span>
+        <h2>Persentase Kehadiran per Siswa</h2>
+        <div class="preset-row">
+          <button data-preset="bulan-ini" class="aktif">Bulan Ini</button>
+          <button data-preset="bulan-lalu">Bulan Lalu</button>
+          <button data-preset="tahun-ini">Tahun Ajaran Ini</button>
+        </div>
+        <div class="filter-row">
+          <input type="date" id="periode-awal">
+          <input type="date" id="periode-akhir">
+          <select id="periode-kelas"><option value="">Semua Kelas</option></select>
+        </div>
+        <div class="filter-row">
+          <button class="btn btn-primer btn-kecil" id="btn-tampilkan-periode">Tampilkan</button>
+          <button class="btn btn-ghost btn-kecil" id="btn-periode-csv">⬇ CSV</button>
+          <button class="btn btn-ghost btn-kecil" id="btn-periode-pdf">⬇ PDF</button>
+        </div>
+        <div id="periode-wadah">
+          <div class="kosong">Pilih rentang tanggal lalu klik Tampilkan.</div>
         </div>
       </div>
     </section>
@@ -431,6 +501,15 @@
               <option value="P">Perempuan</option>
             </select>
           </div>
+          <div class="field"><label>URL Foto (opsional)</label><input type="text" id="tambah-foto" placeholder="https://..."></div>
+          <div class="grid2">
+            <div class="field"><label>No. HP Orang Tua (WA)</label><input type="text" id="tambah-nohp" placeholder="62812xxxxxxx"></div>
+            <div class="field"><label>Telegram Chat ID</label><input type="text" id="tambah-telegram" placeholder="opsional"></div>
+          </div>
+          <div class="catatan">
+            No. HP dan Telegram Chat ID dipakai untuk notifikasi otomatis ke orang tua (terlambat/tidak hadir).
+            Notifikasi hanya aktif jika sudah diatur di sheet Settings pada Google Sheets.
+          </div>
           <button class="btn btn-primer" id="btn-simpan-siswa">Simpan Siswa</button>
         </div>
       </div>
@@ -459,6 +538,8 @@ let TOKEN = sessionStorage.getItem('absensi_token') || null;
 let daftarSiswaCache = [];
 let html5QrCode = null;
 let sedangMemproses = false;
+let rekapCache = [];
+let periodeCache = [];
 
 const el = (id) => document.getElementById(id);
 
@@ -467,6 +548,12 @@ function tampilkanToast(pesan){
   t.textContent = pesan;
   t.classList.add('tampil');
   setTimeout(()=>t.classList.remove('tampil'), 2600);
+}
+
+function inisial(nama){
+  if (!nama) return '?';
+  const parts = String(nama).trim().split(/\s+/);
+  return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
 }
 
 async function apiPost(action, payload){
@@ -484,6 +571,17 @@ async function apiPost(action, payload){
     tampilkanToast('Sesi berakhir, silakan login kembali.');
   }
   return data;
+}
+
+async function apiPostTanpaToken(action, payload){
+  payload = payload || {};
+  payload.action = action;
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
 }
 
 /* ================= LOGIN ================= */
@@ -504,17 +602,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (cek.success) { masukKeAplikasi(); }
   }
 });
-
-async function apiPostTanpaToken(action, payload){
-  payload = payload || {};
-  payload.action = action;
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload)
-  });
-  return res.json();
-}
 
 el('btn-login').addEventListener('click', login);
 el('input-password').addEventListener('keydown', (e)=>{ if(e.key==='Enter') login(); });
@@ -549,6 +636,7 @@ function keluarAplikasi(){
   TOKEN = null;
   sessionStorage.removeItem('absensi_token');
   if (html5QrCode) { try{ html5QrCode.stop(); }catch(e){} }
+  html5QrCode = null;
   el('app-screen').classList.add('hidden');
   el('login-screen').classList.remove('hidden');
   el('input-password').value = '';
@@ -560,6 +648,7 @@ function masukKeAplikasi(){
   const now = new Date();
   el('app-tanggal').textContent = now.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   el('filter-tanggal').value = now.toISOString().slice(0,10);
+  aturPresetPeriode('bulan-ini');
   mulaiScanner();
   muatRekap();
   muatSiswa();
@@ -612,17 +701,39 @@ async function handleHasilScan(nis){
 async function prosesAbsen(nis){
   const kotak = el('hasil-scan');
   const res = await apiPost('scan', { nis: nis });
-  kotak.style.display = 'block';
+  kotak.style.display = 'flex';
+  const labelTipe = el('tipe-scan-label');
+  const fotoBox = el('foto-siswa');
+
   if (res.success) {
     kotak.className = 'hasil-scan sukses';
-    const badgeClass = res.data.status === 'Terlambat' ? 'terlambat' : 'hadir';
+    const badgeClass = res.data.status === 'Terlambat' ? 'terlambat' : (res.data.status === 'Alpa' ? 'alpa' : 'hadir');
+    labelTipe.classList.remove('hidden');
+    labelTipe.textContent = res.tipe === 'pulang' ? 'Absen Pulang' : 'Absen Masuk';
     el('hasil-nama').innerHTML = res.data.nama + '<span class="badge '+badgeClass+'">'+res.data.status+'</span>';
-    el('hasil-detail').textContent = res.data.kelas + ' · Absen pukul ' + res.data.jam;
+    el('hasil-detail').textContent = res.data.kelas + ' · Pukul ' + res.data.jam;
+
+    if (res.data.foto) {
+      fotoBox.innerHTML = '';
+      fotoBox.style.background = 'transparent';
+      const img = document.createElement('img');
+      img.src = res.data.foto;
+      img.style.width = '100%'; img.style.height = '100%';
+      img.style.borderRadius = '50%'; img.style.objectFit = 'cover';
+      img.onerror = () => { fotoBox.textContent = inisial(res.data.nama); fotoBox.style.background = 'var(--emas-terang)'; };
+      fotoBox.appendChild(img);
+    } else {
+      fotoBox.textContent = inisial(res.data.nama);
+      fotoBox.style.background = 'var(--emas-terang)';
+    }
     muatRekap();
   } else {
     kotak.className = 'hasil-scan gagal';
+    labelTipe.classList.add('hidden');
     el('hasil-nama').textContent = 'Absen Gagal';
     el('hasil-detail').textContent = res.message;
+    fotoBox.textContent = '!';
+    fotoBox.style.background = 'var(--merah-muda)';
   }
 }
 
@@ -637,10 +748,9 @@ el('btn-absen-manual').addEventListener('click', async ()=>{
   el('input-nis-manual').value = '';
 });
 
-/* ================= REKAP ================= */
+/* ================= REKAP HARIAN ================= */
 el('filter-tanggal').addEventListener('change', muatRekap);
 el('filter-kelas').addEventListener('change', renderRekapDenganFilter);
-let rekapCache = [];
 
 async function muatRekap(){
   const tanggal = el('filter-tanggal').value;
@@ -665,10 +775,10 @@ function renderRekapDenganFilter(){
     el('rekap-wadah').innerHTML = '<div class="kosong">Belum ada absensi pada tanggal ini.</div>';
     return;
   }
-  let html = '<table class="ledger"><thead><tr><th>Jam</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Status</th></tr></thead><tbody>';
+  let html = '<table class="ledger"><thead><tr><th>Masuk</th><th>Pulang</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Status</th></tr></thead><tbody>';
   data.forEach(r=>{
-    const badgeClass = r.status === 'Terlambat' ? 'terlambat' : 'hadir';
-    html += '<tr><td class="jam">'+r.jam+'</td><td class="jam">'+r.nis+'</td><td>'+r.nama+'</td><td>'+r.kelas+'</td><td><span class="badge '+badgeClass+'">'+r.status+'</span></td></tr>';
+    const badgeClass = r.status === 'Terlambat' ? 'terlambat' : (r.status === 'Alpa' ? 'alpa' : 'hadir');
+    html += '<tr><td class="jam">'+(r.jam||'-')+'</td><td class="jam">'+(r.jamPulang||'-')+'</td><td class="jam">'+r.nis+'</td><td>'+r.nama+'</td><td>'+r.kelas+'</td><td><span class="badge '+badgeClass+'">'+r.status+'</span></td></tr>';
   });
   html += '</tbody></table>';
   el('rekap-wadah').innerHTML = html;
@@ -678,15 +788,119 @@ el('btn-unduh-csv').addEventListener('click', ()=>{
   const kelasFilter = el('filter-kelas').value;
   const data = kelasFilter ? rekapCache.filter(r=>r.kelas===kelasFilter) : rekapCache;
   if (!data.length) { tampilkanToast('Tidak ada data untuk diunduh.'); return; }
-  let csv = 'Jam,NIS,Nama,Kelas,Status\n';
-  data.forEach(r=>{ csv += `${r.jam},${r.nis},"${r.nama}",${r.kelas},${r.status}\n`; });
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  let csv = 'Jam Masuk,Jam Pulang,NIS,Nama,Kelas,Status\n';
+  data.forEach(r=>{ csv += `${r.jam||''},${r.jamPulang||''},${r.nis},"${r.nama}",${r.kelas},${r.status}\n`; });
+  unduhBlob(csv, 'rekap-absensi-' + el('filter-tanggal').value + '.csv', 'text/csv;charset=utf-8;');
+});
+
+el('btn-unduh-pdf').addEventListener('click', ()=>{
+  const kelasFilter = el('filter-kelas').value;
+  const data = kelasFilter ? rekapCache.filter(r=>r.kelas===kelasFilter) : rekapCache;
+  if (!data.length) { tampilkanToast('Tidak ada data untuk diunduh.'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFontSize(13);
+  doc.text('Rekap Absensi Harian — ' + el('filter-tanggal').value, 14, 15);
+  doc.setFontSize(9);
+  doc.text('SMP Muhammadiyah 9 Nagreg', 14, 21);
+  doc.autoTable({
+    head: [['Masuk','Pulang','NIS','Nama','Kelas','Status']],
+    body: data.map(r=>[r.jam||'-', r.jamPulang||'-', r.nis, r.nama, r.kelas, r.status]),
+    startY: 26, styles: { fontSize: 8.5 }, headStyles: { fillColor: [15,76,51] }
+  });
+  doc.save('rekap-absensi-' + el('filter-tanggal').value + '.pdf');
+});
+
+function unduhBlob(isi, namaFile, tipe){
+  const blob = new Blob([isi], { type: tipe });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'rekap-absensi-' + el('filter-tanggal').value + '.csv';
-  a.click();
+  a.href = url; a.download = namaFile; a.click();
   URL.revokeObjectURL(url);
+}
+
+/* ================= REKAP PERIODE ================= */
+function tanggalKeString(d){ return d.toISOString().slice(0,10); }
+
+function aturPresetPeriode(preset){
+  document.querySelectorAll('.preset-row button').forEach(b=>b.classList.toggle('aktif', b.dataset.preset===preset));
+  const sekarang = new Date();
+  let awal, akhir;
+  if (preset === 'bulan-ini') {
+    awal = new Date(sekarang.getFullYear(), sekarang.getMonth(), 1);
+    akhir = sekarang;
+  } else if (preset === 'bulan-lalu') {
+    awal = new Date(sekarang.getFullYear(), sekarang.getMonth()-1, 1);
+    akhir = new Date(sekarang.getFullYear(), sekarang.getMonth(), 0);
+  } else if (preset === 'tahun-ini') {
+    const bulanMulaiTapel = sekarang.getMonth() >= 6 ? 6 : 6; // Juli sebagai awal tahun ajaran
+    const tahunMulai = sekarang.getMonth() >= 6 ? sekarang.getFullYear() : sekarang.getFullYear()-1;
+    awal = new Date(tahunMulai, 6, 1);
+    akhir = sekarang;
+  }
+  el('periode-awal').value = tanggalKeString(awal);
+  el('periode-akhir').value = tanggalKeString(akhir);
+}
+
+document.querySelectorAll('.preset-row button').forEach(btn=>{
+  btn.addEventListener('click', ()=>aturPresetPeriode(btn.dataset.preset));
+});
+
+el('btn-tampilkan-periode').addEventListener('click', muatRekapPeriode);
+el('periode-kelas').addEventListener('change', renderPeriodeDenganFilter);
+
+async function muatRekapPeriode(){
+  const awal = el('periode-awal').value;
+  const akhir = el('periode-akhir').value;
+  if (!awal || !akhir) { tampilkanToast('Isi rentang tanggal dulu.'); return; }
+  el('periode-wadah').innerHTML = '<div class="kosong">Memuat data...</div>';
+  const res = await apiPost('getRekapPeriode', { awal, akhir });
+  if (!res.success) { el('periode-wadah').innerHTML = '<div class="kosong">'+res.message+'</div>'; return; }
+  periodeCache = res.data;
+  renderPeriodeDenganFilter();
+}
+
+function renderPeriodeDenganFilter(){
+  const kelasFilter = el('periode-kelas').value;
+  const data = kelasFilter ? periodeCache.filter(r=>r.kelas===kelasFilter) : periodeCache;
+  if (!data.length) {
+    el('periode-wadah').innerHTML = '<div class="kosong">Belum ada data pada rentang ini.</div>';
+    return;
+  }
+  let html = '<table class="ledger"><thead><tr><th>Nama</th><th>Kelas</th><th>Hadir</th><th>Terlambat</th><th>Alpa</th><th>Persentase</th></tr></thead><tbody>';
+  data.forEach(r=>{
+    html += '<tr><td>'+r.nama+'</td><td>'+r.kelas+'</td><td class="jam">'+r.hadir+'</td><td class="jam">'+r.terlambat+'</td><td class="jam">'+r.alpa+'</td>'+
+      '<td><span class="persentase-bar"><span style="width:'+r.persentase+'%"></span></span>'+r.persentase+'%</td></tr>';
+  });
+  html += '</tbody></table>';
+  el('periode-wadah').innerHTML = html;
+}
+
+el('btn-periode-csv').addEventListener('click', ()=>{
+  const kelasFilter = el('periode-kelas').value;
+  const data = kelasFilter ? periodeCache.filter(r=>r.kelas===kelasFilter) : periodeCache;
+  if (!data.length) { tampilkanToast('Tidak ada data untuk diunduh.'); return; }
+  let csv = 'Nama,Kelas,Hadir,Terlambat,Alpa,Persentase\n';
+  data.forEach(r=>{ csv += `"${r.nama}",${r.kelas},${r.hadir},${r.terlambat},${r.alpa},${r.persentase}%\n`; });
+  unduhBlob(csv, 'rekap-periode-' + el('periode-awal').value + '_' + el('periode-akhir').value + '.csv', 'text/csv;charset=utf-8;');
+});
+
+el('btn-periode-pdf').addEventListener('click', ()=>{
+  const kelasFilter = el('periode-kelas').value;
+  const data = kelasFilter ? periodeCache.filter(r=>r.kelas===kelasFilter) : periodeCache;
+  if (!data.length) { tampilkanToast('Tidak ada data untuk diunduh.'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFontSize(13);
+  doc.text('Rekap Kehadiran Periode', 14, 15);
+  doc.setFontSize(9);
+  doc.text('SMP Muhammadiyah 9 Nagreg · ' + el('periode-awal').value + ' s/d ' + el('periode-akhir').value, 14, 21);
+  doc.autoTable({
+    head: [['Nama','Kelas','Hadir','Terlambat','Alpa','Persentase']],
+    body: data.map(r=>[r.nama, r.kelas, r.hadir, r.terlambat, r.alpa, r.persentase+'%']),
+    startY: 26, styles: { fontSize: 8.5 }, headStyles: { fillColor: [15,76,51] }
+  });
+  doc.save('rekap-periode-' + el('periode-awal').value + '_' + el('periode-akhir').value + '.pdf');
 });
 
 /* ================= DATA SISWA ================= */
@@ -700,17 +914,22 @@ async function muatSiswa(){
 
 function perbaruiFilterKelas(){
   const kelasUnik = [...new Set(daftarSiswaCache.map(s=>s.kelas).filter(Boolean))].sort();
-  const sel = el('filter-kelas');
-  const nilaiSaatIni = sel.value;
-  sel.innerHTML = '<option value="">Semua Kelas</option>' + kelasUnik.map(k=>`<option value="${k}">${k}</option>`).join('');
-  sel.value = nilaiSaatIni;
+  [el('filter-kelas'), el('periode-kelas')].forEach(sel=>{
+    const nilaiSaatIni = sel.value;
+    sel.innerHTML = '<option value="">Semua Kelas</option>' + kelasUnik.map(k=>`<option value="${k}">${k}</option>`).join('');
+    sel.value = nilaiSaatIni;
+  });
 }
 
 function renderDaftarSiswa(list){
   if (!list.length) { el('daftar-siswa').innerHTML = '<div class="kosong">Belum ada data siswa.</div>'; return; }
   let html = '';
   list.forEach(s=>{
+    const avatarHtml = s.foto
+      ? `<img class="avatar" src="${s.foto}" onerror="this.outerHTML='<div class=avatar>${inisial(s.nama)}</div>'">`
+      : `<div class="avatar">${inisial(s.nama)}</div>`;
     html += `<div class="baris">
+      ${avatarHtml}
       <div class="info-siswa">
         <div class="n">${s.nama}</div>
         <div class="k">${s.nis} · ${s.kelas || '-'}</div>
@@ -749,13 +968,14 @@ el('btn-simpan-siswa').addEventListener('click', async ()=>{
   const nama = el('tambah-nama').value.trim();
   const kelas = el('tambah-kelas').value.trim();
   const jk = el('tambah-jk').value;
+  const foto = el('tambah-foto').value.trim();
+  const noHpOrtu = el('tambah-nohp').value.trim();
+  const telegramChatId = el('tambah-telegram').value.trim();
   if (!nis || !nama) { tampilkanToast('NIS dan Nama wajib diisi.'); return; }
-  const res = await apiPost('addSiswa', { nis, nama, kelas, jk });
+  const res = await apiPost('addSiswa', { nis, nama, kelas, jk, foto, noHpOrtu, telegramChatId });
   tampilkanToast(res.message);
   if (res.success) {
-    el('tambah-nis').value = '';
-    el('tambah-nama').value = '';
-    el('tambah-kelas').value = '';
+    ['tambah-nis','tambah-nama','tambah-kelas','tambah-foto','tambah-nohp','tambah-telegram'].forEach(id=>el(id).value='');
     el('form-tambah').style.display = 'none';
     muatSiswa();
   }
