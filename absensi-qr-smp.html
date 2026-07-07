@@ -261,8 +261,22 @@
     0%,100%{border-color:rgba(201,154,46,0.55);}
     50%{border-color:rgba(201,154,46,1);}
   }
-  #qr-reader{width:100%;}
-  #qr-reader video{border-radius:18px;}
+  #qr-reader{
+    position:absolute;inset:0;width:100% !important;height:100% !important;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #qr-reader__scan_region{
+    position:absolute !important;inset:0;
+    width:100% !important;height:100% !important;
+    display:flex !important;align-items:center;justify-content:center;
+  }
+  #qr-reader video{
+    position:absolute !important;top:0 !important;left:0 !important;
+    width:100% !important;height:100% !important;
+    object-fit:cover !important;
+    border-radius:18px;
+  }
+  #qr-reader__dashboard{display:none !important;}
   #qr-reader img{display:none !important;}
 
   .hasil-scan{
@@ -330,6 +344,47 @@
   table.ledger tbody td.jam{font-family:var(--font-data);color:var(--teks-muda);}
   table.ledger tbody tr:last-child td{border-bottom:none;}
   .kosong{text-align:center;padding:24px 10px;color:var(--teks-muda);font-size:13px;}
+
+  /* ===== TABEL RESPONSIF -> KARTU DI LAYAR SEMPIT ===== */
+  @media (max-width:640px){
+    table.ledger thead{display:none;}
+    table.ledger, table.ledger tbody{display:block;width:100%;}
+    table.ledger tr{
+      display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;
+      background:var(--krem);border:1px solid var(--garis);border-radius:12px;
+      padding:12px 14px 10px;margin-bottom:10px;
+    }
+    table.ledger tbody tr:last-child{margin-bottom:0;}
+    table.ledger td{
+      display:flex;flex-direction:column;gap:2px;
+      padding:5px 0;border:none;font-size:12.5px;
+    }
+    table.ledger td::before{
+      content:attr(data-label);
+      font-size:9px;font-weight:700;text-transform:uppercase;
+      letter-spacing:.05em;color:var(--teks-muda);
+    }
+    /* Nama jadi judul kartu, penuh 1 baris */
+    table.ledger-harian td[data-label="Nama"],
+    table.ledger-periode td[data-label="Nama"]{
+      grid-column:1 / -1;padding-top:0;padding-bottom:6px;
+      border-bottom:1px dashed var(--garis);margin-bottom:4px;
+    }
+    table.ledger-harian td[data-label="Nama"]::before,
+    table.ledger-periode td[data-label="Nama"]::before{content:none;}
+    table.ledger-harian td[data-label="Nama"],
+    table.ledger-periode td[data-label="Nama"]{
+      font-family:var(--font-judul);font-weight:700;font-size:14.5px;color:var(--hijau-tua);
+    }
+    /* Status / Persentase jadi baris penuh di bawah, menonjol */
+    table.ledger-harian td[data-label="Status"],
+    table.ledger-periode td[data-label="Persentase"]{
+      grid-column:1 / -1;padding-top:8px;margin-top:2px;
+      border-top:1px dashed var(--garis);
+    }
+    table.ledger-periode td[data-label="Persentase"]{display:flex;flex-direction:row;align-items:center;gap:6px;}
+    table.ledger-periode td[data-label="Persentase"]::before{align-self:center;margin-right:2px;}
+  }
 
   .persentase-bar{
     display:inline-block;width:52px;height:6px;border-radius:4px;background:var(--garis);
@@ -800,7 +855,14 @@ function mulaiScanner(){
     const cameraId = cameras.find(c=>/back|belakang|rear/i.test(c.label))?.id || cameras[cameras.length-1].id;
     html5QrCode.start(
       cameraId,
-      { fps: 10, qrbox: { width: 230, height: 230 } },
+      {
+        fps: 10,
+        qrbox: function(viewfinderWidth, viewfinderHeight){
+          const sisiTerkecil = Math.min(viewfinderWidth, viewfinderHeight);
+          const ukuran = Math.floor(sisiTerkecil * 0.72);
+          return { width: ukuran, height: ukuran };
+        }
+      },
       (decodedText) => handleHasilScan(decodedText),
       () => {}
     );
@@ -903,10 +965,17 @@ function renderRekapDenganFilter(){
     el('rekap-wadah').innerHTML = '<div class="kosong">Belum ada absensi pada tanggal ini.</div>';
     return;
   }
-  let html = '<table class="ledger"><thead><tr><th>Masuk</th><th>Pulang</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Status</th></tr></thead><tbody>';
+  let html = '<table class="ledger ledger-harian"><thead><tr><th>Masuk</th><th>Pulang</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Status</th></tr></thead><tbody>';
   data.forEach(r=>{
     const badgeClass = kelasBadge(r.status);
-    html += '<tr><td class="jam">'+(r.jam||'-')+'</td><td class="jam">'+(r.jamPulang||'-')+'</td><td class="jam">'+r.nis+'</td><td>'+r.nama+'</td><td>'+r.kelas+'</td><td><span class="badge '+badgeClass+'">'+r.status+'</span></td></tr>';
+    html += '<tr>'
+      + '<td data-label="Masuk" class="jam">'+(r.jam||'-')+'</td>'
+      + '<td data-label="Pulang" class="jam">'+(r.jamPulang||'-')+'</td>'
+      + '<td data-label="NIS" class="jam">'+r.nis+'</td>'
+      + '<td data-label="Nama">'+r.nama+'</td>'
+      + '<td data-label="Kelas">'+r.kelas+'</td>'
+      + '<td data-label="Status"><span class="badge '+badgeClass+'">'+r.status+'</span></td>'
+      + '</tr>';
   });
   html += '</tbody></table>';
   el('rekap-wadah').innerHTML = html;
@@ -1027,10 +1096,18 @@ function renderPeriodeDenganFilter(){
     el('periode-wadah').innerHTML = '<div class="kosong">Belum ada data pada rentang ini.</div>';
     return;
   }
-  let html = '<table class="ledger"><thead><tr><th>Nama</th><th>Kelas</th><th>Hadir</th><th>Terlambat</th><th>Sakit</th><th>Izin</th><th>Alpa</th><th>Persentase</th></tr></thead><tbody>';
+  let html = '<table class="ledger ledger-periode"><thead><tr><th>Nama</th><th>Kelas</th><th>Hadir</th><th>Terlambat</th><th>Sakit</th><th>Izin</th><th>Alpa</th><th>Persentase</th></tr></thead><tbody>';
   data.forEach(r=>{
-    html += '<tr><td>'+r.nama+'</td><td>'+r.kelas+'</td><td class="jam">'+r.hadir+'</td><td class="jam">'+r.terlambat+'</td><td class="jam">'+r.sakit+'</td><td class="jam">'+r.izin+'</td><td class="jam">'+r.alpa+'</td>'+
-      '<td><span class="persentase-bar"><span style="width:'+r.persentase+'%"></span></span>'+r.persentase+'%</td></tr>';
+    html += '<tr>'
+      + '<td data-label="Nama">'+r.nama+'</td>'
+      + '<td data-label="Kelas">'+r.kelas+'</td>'
+      + '<td data-label="Hadir" class="jam">'+r.hadir+'</td>'
+      + '<td data-label="Terlambat" class="jam">'+r.terlambat+'</td>'
+      + '<td data-label="Sakit" class="jam">'+r.sakit+'</td>'
+      + '<td data-label="Izin" class="jam">'+r.izin+'</td>'
+      + '<td data-label="Alpa" class="jam">'+r.alpa+'</td>'
+      + '<td data-label="Persentase"><span class="persentase-bar"><span style="width:'+r.persentase+'%"></span></span>'+r.persentase+'%</td>'
+      + '</tr>';
   });
   html += '</tbody></table>';
   el('periode-wadah').innerHTML = html;
