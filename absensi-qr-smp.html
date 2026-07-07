@@ -538,6 +538,26 @@
           <button class="btn btn-primer" id="btn-simpan-siswa">Simpan Siswa</button>
         </div>
       </div>
+
+      <div class="kartu">
+        <span class="eyebrow">Kalender Sekolah</span>
+        <h2>Hari Libur</h2>
+        <div class="catatan" style="margin-top:-6px;">
+          Libur mingguan otomatis saat ini: <b id="info-libur-mingguan">—</b> (ubah lewat sheet Settings, key <code>HARI_LIBUR_MINGGUAN</code>).
+          Siswa tidak akan ditandai Alpa pada hari-hari ini.
+        </div>
+        <div class="daftar-siswa" id="daftar-libur" style="margin-top:10px;">
+          <div class="kosong">Memuat data...</div>
+        </div>
+        <div class="aksi-baris">
+          <button class="btn btn-ghost" id="toggle-form-libur">+ Tambah Hari Libur</button>
+        </div>
+        <div class="form-tambah" id="form-libur">
+          <div class="field"><label>Tanggal</label><input type="date" id="libur-tanggal"></div>
+          <div class="field"><label>Keterangan</label><input type="text" id="libur-keterangan" placeholder="Contoh: Libur Idul Fitri"></div>
+          <button class="btn btn-primer" id="btn-simpan-libur">Simpan Hari Libur</button>
+        </div>
+      </div>
     </section>
 
   </div>
@@ -685,6 +705,7 @@ function masukKeAplikasi(){
   mulaiScanner();
   muatRekap();
   muatSiswa();
+  muatHariLibur();
 }
 
 /* ================= NAVIGASI TAB ================= */
@@ -1048,6 +1069,58 @@ el('btn-simpan-siswa').addEventListener('click', async ()=>{
     ['tambah-nis','tambah-nama','tambah-kelas','tambah-foto','tambah-nohp','tambah-telegram'].forEach(id=>el(id).value='');
     el('form-tambah').style.display = 'none';
     muatSiswa();
+  }
+});
+
+/* ================= HARI LIBUR ================= */
+el('toggle-form-libur').addEventListener('click', ()=>{
+  const f = el('form-libur');
+  f.style.display = f.style.display === 'block' ? 'none' : 'block';
+});
+
+async function muatHariLibur(){
+  el('daftar-libur').innerHTML = '<div class="kosong">Memuat data...</div>';
+  const res = await apiPost('getHariLibur');
+  if (!res.success) { el('daftar-libur').innerHTML = '<div class="kosong">'+res.message+'</div>'; return; }
+  el('info-libur-mingguan').textContent = res.hariLiburMingguan || 'Minggu';
+  renderDaftarLibur(res.data);
+}
+
+function renderDaftarLibur(list){
+  if (!list.length) { el('daftar-libur').innerHTML = '<div class="kosong">Belum ada hari libur khusus yang didaftarkan.</div>'; return; }
+  let html = '';
+  list.forEach(l=>{
+    const tglTampil = new Date(l.tanggal + 'T00:00:00').toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+    html += `<div class="baris">
+      <div class="info-siswa">
+        <div class="n">${tglTampil}</div>
+        <div class="k">${l.keterangan || '-'}</div>
+      </div>
+      <button class="hapus" data-tanggal="${l.tanggal}">Hapus</button>
+    </div>`;
+  });
+  el('daftar-libur').innerHTML = html;
+  document.querySelectorAll('#daftar-libur .hapus').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      if (!confirm('Hapus hari libur ini?')) return;
+      const res = await apiPost('deleteHariLibur', { tanggal: btn.dataset.tanggal });
+      tampilkanToast(res.message);
+      if (res.success) muatHariLibur();
+    });
+  });
+}
+
+el('btn-simpan-libur').addEventListener('click', async ()=>{
+  const tanggal = el('libur-tanggal').value;
+  const keterangan = el('libur-keterangan').value.trim();
+  if (!tanggal) { tampilkanToast('Pilih tanggal dulu.'); return; }
+  const res = await apiPost('addHariLibur', { tanggal, keterangan });
+  tampilkanToast(res.message);
+  if (res.success) {
+    el('libur-tanggal').value = '';
+    el('libur-keterangan').value = '';
+    el('form-libur').style.display = 'none';
+    muatHariLibur();
   }
 });
 
