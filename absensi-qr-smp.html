@@ -33,12 +33,13 @@
     --font-data:'Roboto Mono',monospace;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;overflow-x:hidden;}
   body{
     font-family:var(--font-teks);
     background:var(--krem);
     color:var(--teks);
     min-height:100vh;
+    width:100%;
     -webkit-font-smoothing:antialiased;
   }
   button{font-family:inherit;cursor:pointer;}
@@ -327,13 +328,16 @@
   .filter-row .btn-kecil{
     width:auto;padding:9px 13px;font-size:12.5px;border-radius:9px;
   }
-  .ringkasan{display:flex;gap:10px;margin-bottom:14px;}
+  .ringkasan{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:14px;}
   .ringkasan .item{
-    flex:1;background:var(--krem);border:1px solid var(--garis);border-radius:10px;
-    padding:10px;text-align:center;
+    min-width:0;background:var(--krem);border:1px solid var(--garis);border-radius:10px;
+    padding:9px 3px;text-align:center;
   }
-  .ringkasan .item .angka{font-family:var(--font-data);font-weight:700;font-size:19px;color:var(--hijau-tua);}
-  .ringkasan .item .label{font-size:10.5px;color:var(--teks-muda);text-transform:uppercase;letter-spacing:.03em;}
+  .ringkasan .item .angka{font-family:var(--font-data);font-weight:700;font-size:17px;color:var(--hijau-tua);}
+  .ringkasan .item .label{
+    font-size:8.8px;color:var(--teks-muda);text-transform:uppercase;letter-spacing:.02em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
 
   table.ledger{width:100%;border-collapse:collapse;font-size:12.5px;}
   table.ledger thead th{
@@ -350,40 +354,45 @@
     table.ledger thead{display:none;}
     table.ledger, table.ledger tbody{display:block;width:100%;}
     table.ledger tr{
-      display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;
+      display:grid;grid-template-columns:1fr 1fr;gap:0 14px;
       background:var(--krem);border:1px solid var(--garis);border-radius:12px;
-      padding:12px 14px 10px;margin-bottom:10px;
+      padding:10px 14px 8px;margin-bottom:8px;
     }
     table.ledger tbody tr:last-child{margin-bottom:0;}
     table.ledger td{
-      display:flex;flex-direction:column;gap:2px;
-      padding:5px 0;border:none;font-size:12.5px;
+      display:flex;flex-direction:column;gap:1px;
+      padding:6px 0;border-bottom:1px solid var(--garis);font-size:12px;
     }
     table.ledger td::before{
       content:attr(data-label);
-      font-size:9px;font-weight:700;text-transform:uppercase;
+      font-size:8.5px;font-weight:700;text-transform:uppercase;
       letter-spacing:.05em;color:var(--teks-muda);
     }
-    /* Nama jadi judul kartu, penuh 1 baris */
+    /* Nama jadi judul kartu paling atas, penuh 1 baris, tanpa label */
     table.ledger-harian td[data-label="Nama"],
     table.ledger-periode td[data-label="Nama"]{
-      grid-column:1 / -1;padding-top:0;padding-bottom:6px;
-      border-bottom:1px dashed var(--garis);margin-bottom:4px;
+      order:-1;grid-column:1 / -1;
+      font-family:var(--font-judul);font-weight:700;font-size:14px;color:var(--hijau-tua);
+      padding:0 0 7px;border-bottom:1.5px solid var(--garis);
+      margin-bottom:2px;
     }
     table.ledger-harian td[data-label="Nama"]::before,
     table.ledger-periode td[data-label="Nama"]::before{content:none;}
-    table.ledger-harian td[data-label="Nama"],
-    table.ledger-periode td[data-label="Nama"]{
-      font-family:var(--font-judul);font-weight:700;font-size:14.5px;color:var(--hijau-tua);
-    }
-    /* Status / Persentase jadi baris penuh di bawah, menonjol */
+
+    /* Status / Persentase jadi baris penuh paling bawah, menonjol, tanpa garis bawah */
     table.ledger-harian td[data-label="Status"],
     table.ledger-periode td[data-label="Persentase"]{
-      grid-column:1 / -1;padding-top:8px;margin-top:2px;
-      border-top:1px dashed var(--garis);
+      order:1;grid-column:1 / -1;
+      padding:7px 0 0;border-bottom:none;
     }
     table.ledger-periode td[data-label="Persentase"]{display:flex;flex-direction:row;align-items:center;gap:6px;}
     table.ledger-periode td[data-label="Persentase"]::before{align-self:center;margin-right:2px;}
+
+    /* baris terakhir sebelum Status/Persentase tidak perlu garis bawah */
+    table.ledger-harian td[data-label="NIS"], table.ledger-harian td[data-label="Kelas"],
+    table.ledger-periode td[data-label="Izin"], table.ledger-periode td[data-label="Alpa"]{
+      border-bottom:none;
+    }
   }
 
   .persentase-bar{
