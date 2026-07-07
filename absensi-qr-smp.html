@@ -254,6 +254,8 @@
   .badge.hadir{background:var(--hijau);color:#fff;}
   .badge.terlambat{background:var(--emas);color:#3a2c07;}
   .badge.alpa{background:var(--merah);color:#fff;}
+  .badge.sakit{background:#2F6690;color:#fff;}
+  .badge.izin{background:#6B4FA0;color:#fff;}
 
   .manual-toggle{
     text-align:center;margin-top:14px;
@@ -439,10 +441,33 @@
         <div class="ringkasan">
           <div class="item"><div class="angka" id="ringkasan-hadir">0</div><div class="label">Hadir</div></div>
           <div class="item"><div class="angka" id="ringkasan-terlambat">0</div><div class="label">Terlambat</div></div>
+          <div class="item"><div class="angka" id="ringkasan-sakit">0</div><div class="label">Sakit</div></div>
+          <div class="item"><div class="angka" id="ringkasan-izin">0</div><div class="label">Izin</div></div>
           <div class="item"><div class="angka" id="ringkasan-total">0</div><div class="label">Total</div></div>
         </div>
         <div id="rekap-wadah">
           <div class="kosong">Memuat data...</div>
+        </div>
+        <div class="aksi-baris">
+          <button class="btn btn-ghost" id="toggle-form-keterangan">+ Tandai Sakit / Izin</button>
+        </div>
+        <div class="form-tambah" id="form-keterangan">
+          <div class="field">
+            <label>Siswa</label>
+            <select id="keterangan-siswa"><option value="">Pilih siswa...</option></select>
+          </div>
+          <div class="grid2">
+            <div class="field"><label>Tanggal</label><input type="date" id="keterangan-tanggal"></div>
+            <div class="field">
+              <label>Keterangan</label>
+              <select id="keterangan-jenis">
+                <option value="Sakit">Sakit</option>
+                <option value="Izin">Izin</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Catatan (opsional)</label><input type="text" id="keterangan-catatan" placeholder="Contoh: demam, ada surat dokter"></div>
+          <button class="btn btn-primer" id="btn-simpan-keterangan">Simpan Keterangan</button>
         </div>
       </div>
     </section>
@@ -548,6 +573,14 @@ function tampilkanToast(pesan){
   t.textContent = pesan;
   t.classList.add('tampil');
   setTimeout(()=>t.classList.remove('tampil'), 2600);
+}
+
+function kelasBadge(status){
+  if (status === 'Terlambat') return 'terlambat';
+  if (status === 'Alpa') return 'alpa';
+  if (status === 'Sakit') return 'sakit';
+  if (status === 'Izin') return 'izin';
+  return 'hadir';
 }
 
 function inisial(nama){
@@ -707,7 +740,7 @@ async function prosesAbsen(nis){
 
   if (res.success) {
     kotak.className = 'hasil-scan sukses';
-    const badgeClass = res.data.status === 'Terlambat' ? 'terlambat' : (res.data.status === 'Alpa' ? 'alpa' : 'hadir');
+    const badgeClass = kelasBadge(res.data.status);
     labelTipe.classList.remove('hidden');
     labelTipe.textContent = res.tipe === 'pulang' ? 'Absen Pulang' : 'Absen Masuk';
     el('hasil-nama').innerHTML = res.data.nama + '<span class="badge '+badgeClass+'">'+res.data.status+'</span>';
@@ -767,8 +800,12 @@ function renderRekapDenganFilter(){
 
   const hadir = data.filter(r=>r.status==='Hadir').length;
   const terlambat = data.filter(r=>r.status==='Terlambat').length;
+  const sakit = data.filter(r=>r.status==='Sakit').length;
+  const izin = data.filter(r=>r.status==='Izin').length;
   el('ringkasan-hadir').textContent = hadir;
   el('ringkasan-terlambat').textContent = terlambat;
+  el('ringkasan-sakit').textContent = sakit;
+  el('ringkasan-izin').textContent = izin;
   el('ringkasan-total').textContent = data.length;
 
   if (!data.length) {
@@ -777,7 +814,7 @@ function renderRekapDenganFilter(){
   }
   let html = '<table class="ledger"><thead><tr><th>Masuk</th><th>Pulang</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Status</th></tr></thead><tbody>';
   data.forEach(r=>{
-    const badgeClass = r.status === 'Terlambat' ? 'terlambat' : (r.status === 'Alpa' ? 'alpa' : 'hadir');
+    const badgeClass = kelasBadge(r.status);
     html += '<tr><td class="jam">'+(r.jam||'-')+'</td><td class="jam">'+(r.jamPulang||'-')+'</td><td class="jam">'+r.nis+'</td><td>'+r.nama+'</td><td>'+r.kelas+'</td><td><span class="badge '+badgeClass+'">'+r.status+'</span></td></tr>';
   });
   html += '</tbody></table>';
@@ -818,6 +855,38 @@ function unduhBlob(isi, namaFile, tipe){
   a.href = url; a.download = namaFile; a.click();
   URL.revokeObjectURL(url);
 }
+
+/* ================= TANDAI SAKIT / IZIN ================= */
+el('toggle-form-keterangan').addEventListener('click', ()=>{
+  const f = el('form-keterangan');
+  const buka = f.style.display !== 'block';
+  f.style.display = buka ? 'block' : 'none';
+  if (buka) el('keterangan-tanggal').value = el('filter-tanggal').value;
+});
+
+function perbaruiSelectKeterangan(){
+  const sel = el('keterangan-siswa');
+  const daftarUrut = [...daftarSiswaCache].sort((a,b)=>(String(a.kelas)+a.nama).localeCompare(String(b.kelas)+b.nama));
+  sel.innerHTML = '<option value="">Pilih siswa...</option>' +
+    daftarUrut.map(s=>`<option value="${s.nis}">${s.nama} — ${s.kelas || '-'} (${s.nis})</option>`).join('');
+}
+
+el('btn-simpan-keterangan').addEventListener('click', async ()=>{
+  const nis = el('keterangan-siswa').value;
+  const tanggal = el('keterangan-tanggal').value;
+  const keterangan = el('keterangan-jenis').value;
+  const catatan = el('keterangan-catatan').value.trim();
+  if (!nis) { tampilkanToast('Pilih siswa dulu.'); return; }
+  if (!tanggal) { tampilkanToast('Pilih tanggal dulu.'); return; }
+  const res = await apiPost('tandaiKeterangan', { nis, tanggal, keterangan, catatan });
+  tampilkanToast(res.message);
+  if (res.success) {
+    el('keterangan-catatan').value = '';
+    el('keterangan-siswa').value = '';
+    el('form-keterangan').style.display = 'none';
+    if (tanggal === el('filter-tanggal').value) muatRekap();
+  }
+});
 
 /* ================= REKAP PERIODE ================= */
 function tanggalKeString(d){ return d.toISOString().slice(0,10); }
@@ -867,9 +936,9 @@ function renderPeriodeDenganFilter(){
     el('periode-wadah').innerHTML = '<div class="kosong">Belum ada data pada rentang ini.</div>';
     return;
   }
-  let html = '<table class="ledger"><thead><tr><th>Nama</th><th>Kelas</th><th>Hadir</th><th>Terlambat</th><th>Alpa</th><th>Persentase</th></tr></thead><tbody>';
+  let html = '<table class="ledger"><thead><tr><th>Nama</th><th>Kelas</th><th>Hadir</th><th>Terlambat</th><th>Sakit</th><th>Izin</th><th>Alpa</th><th>Persentase</th></tr></thead><tbody>';
   data.forEach(r=>{
-    html += '<tr><td>'+r.nama+'</td><td>'+r.kelas+'</td><td class="jam">'+r.hadir+'</td><td class="jam">'+r.terlambat+'</td><td class="jam">'+r.alpa+'</td>'+
+    html += '<tr><td>'+r.nama+'</td><td>'+r.kelas+'</td><td class="jam">'+r.hadir+'</td><td class="jam">'+r.terlambat+'</td><td class="jam">'+r.sakit+'</td><td class="jam">'+r.izin+'</td><td class="jam">'+r.alpa+'</td>'+
       '<td><span class="persentase-bar"><span style="width:'+r.persentase+'%"></span></span>'+r.persentase+'%</td></tr>';
   });
   html += '</tbody></table>';
@@ -880,8 +949,8 @@ el('btn-periode-csv').addEventListener('click', ()=>{
   const kelasFilter = el('periode-kelas').value;
   const data = kelasFilter ? periodeCache.filter(r=>r.kelas===kelasFilter) : periodeCache;
   if (!data.length) { tampilkanToast('Tidak ada data untuk diunduh.'); return; }
-  let csv = 'Nama,Kelas,Hadir,Terlambat,Alpa,Persentase\n';
-  data.forEach(r=>{ csv += `"${r.nama}",${r.kelas},${r.hadir},${r.terlambat},${r.alpa},${r.persentase}%\n`; });
+  let csv = 'Nama,Kelas,Hadir,Terlambat,Sakit,Izin,Alpa,Persentase\n';
+  data.forEach(r=>{ csv += `"${r.nama}",${r.kelas},${r.hadir},${r.terlambat},${r.sakit},${r.izin},${r.alpa},${r.persentase}%\n`; });
   unduhBlob(csv, 'rekap-periode-' + el('periode-awal').value + '_' + el('periode-akhir').value + '.csv', 'text/csv;charset=utf-8;');
 });
 
@@ -896,8 +965,8 @@ el('btn-periode-pdf').addEventListener('click', ()=>{
   doc.setFontSize(9);
   doc.text('SMP Muhammadiyah 9 Nagreg · ' + el('periode-awal').value + ' s/d ' + el('periode-akhir').value, 14, 21);
   doc.autoTable({
-    head: [['Nama','Kelas','Hadir','Terlambat','Alpa','Persentase']],
-    body: data.map(r=>[r.nama, r.kelas, r.hadir, r.terlambat, r.alpa, r.persentase+'%']),
+    head: [['Nama','Kelas','Hadir','Terlambat','Sakit','Izin','Alpa','Persentase']],
+    body: data.map(r=>[r.nama, r.kelas, r.hadir, r.terlambat, r.sakit, r.izin, r.alpa, r.persentase+'%']),
     startY: 26, styles: { fontSize: 8.5 }, headStyles: { fillColor: [15,76,51] }
   });
   doc.save('rekap-periode-' + el('periode-awal').value + '_' + el('periode-akhir').value + '.pdf');
@@ -909,6 +978,7 @@ async function muatSiswa(){
   if (!res.success) { el('daftar-siswa').innerHTML = '<div class="kosong">'+res.message+'</div>'; return; }
   daftarSiswaCache = res.data;
   perbaruiFilterKelas();
+  perbaruiSelectKeterangan();
   renderDaftarSiswa(daftarSiswaCache);
 }
 
