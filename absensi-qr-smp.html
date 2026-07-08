@@ -885,12 +885,8 @@ function mulaiScanner(){
 async function handleHasilScan(nis){
   if (sedangMemproses) return;
   sedangMemproses = true;
-  html5QrCode.pause(true);
   await prosesAbsen(nis);
-  setTimeout(()=>{
-    sedangMemproses = false;
-    try{ html5QrCode.resume(); }catch(e){}
-  }, 1800);
+  setTimeout(()=>{ sedangMemproses = false; }, 1800);
 }
 
 async function prosesAbsen(nis){
@@ -921,7 +917,6 @@ async function prosesAbsen(nis){
       fotoBox.textContent = inisial(res.data.nama);
       fotoBox.style.background = 'var(--emas-terang)';
     }
-    muatRekap();
   } else {
     kotak.className = 'hasil-scan gagal';
     labelTipe.classList.add('hidden');
