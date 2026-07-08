@@ -885,16 +885,34 @@ function mulaiScanner(){
 async function handleHasilScan(nis){
   if (sedangMemproses) return;
   sedangMemproses = true;
-  await prosesAbsen(nis);
-  setTimeout(()=>{ sedangMemproses = false; }, 1800);
+  try {
+    await prosesAbsen(nis);
+  } finally {
+    setTimeout(()=>{ sedangMemproses = false; }, 1800);
+  }
 }
 
 async function prosesAbsen(nis){
   const kotak = el('hasil-scan');
-  const res = await apiPost('scan', { nis: nis });
-  kotak.style.display = 'flex';
   const labelTipe = el('tipe-scan-label');
   const fotoBox = el('foto-siswa');
+  let res;
+  try {
+    res = await apiPost('scan', { nis: nis });
+  } catch (e) {
+    // Kalau koneksi terputus / server tidak merespons, kartu tetap harus diperbarui (jangan
+    // dibiarkan menampilkan hasil scan sebelumnya) supaya admin tahu scan ini gagal dan bisa
+    // mencoba lagi, bukannya mengira absen sudah tercatat padahal belum.
+    kotak.style.display = 'flex';
+    kotak.className = 'hasil-scan gagal';
+    labelTipe.classList.add('hidden');
+    el('hasil-nama').textContent = 'Absen Gagal';
+    el('hasil-detail').textContent = 'Tidak bisa terhubung ke server. Periksa koneksi internet lalu coba lagi.';
+    fotoBox.textContent = '!';
+    fotoBox.style.background = 'var(--merah-muda)';
+    return;
+  }
+  kotak.style.display = 'flex';
 
   if (res.success) {
     kotak.className = 'hasil-scan sukses';
