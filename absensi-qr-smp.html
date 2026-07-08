@@ -33,12 +33,13 @@
     --font-data:'Roboto Mono',monospace;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;overflow-x:hidden;}
   body{
     font-family:var(--font-teks);
     background:var(--krem);
     color:var(--teks);
     min-height:100vh;
+    width:100%;
     -webkit-font-smoothing:antialiased;
   }
   button{font-family:inherit;cursor:pointer;}
@@ -148,7 +149,7 @@
   }
 
   /* ===== APP SHELL ===== */
-  #app-screen{min-height:100vh;padding-bottom:40px;}
+  #app-screen{min-height:100vh;padding-bottom:120px;}
   header.top{
     background:var(--hijau-tua);
     color:#fff;
@@ -169,23 +170,63 @@
     border:none;padding:8px 12px;border-radius:8px;font-size:12.5px;font-weight:600;
   }
 
+  /* ===== BOTTOM TAB BAR ===== */
   nav.tabs{
-    display:flex;gap:5px;
-    background:var(--putih);
-    margin:14px auto 0;
-    padding:5px;
-    border-radius:12px;
-    box-shadow:var(--bayang);
+    position:fixed;left:0;right:0;bottom:0;
+    margin:0 auto;
     max-width:640px;
-    overflow-x:auto;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:2px;
+    background:var(--putih);
+    padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -6px 24px rgba(15,76,51,0.16);
+    z-index:50;
   }
   nav.tabs button{
-    flex:1;background:transparent;border:none;
-    padding:10px 4px;border-radius:9px;
-    font-size:11.5px;font-weight:600;color:var(--teks-muda);
-    transition:.15s;white-space:nowrap;
+    flex:1;min-width:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+    gap:3px;
+    background:transparent;border:none;
+    padding:6px 2px 4px;
+    border-radius:12px;
+    font-size:10.2px;font-weight:600;color:var(--teks-muda);
+    transition:color .15s, transform .1s;
+    white-space:nowrap;
   }
-  nav.tabs button.aktif{background:var(--hijau-tua);color:#fff;}
+  nav.tabs button .ikon{font-size:19px;line-height:1;transition:transform .15s;display:flex;align-items:center;justify-content:center;}
+  nav.tabs button .ikon svg{width:21px;height:21px;display:block;}
+  nav.tabs button.aktif{color:var(--hijau-tua);}
+  nav.tabs button.aktif .ikon{transform:translateY(-1px) scale(1.06);}
+  nav.tabs button:active{transform:scale(0.94);}
+
+  /* tombol Scan — jadi point of view, ditinggikan di tengah */
+  nav.tabs button.scan-btn{
+    flex:0 0 auto;width:70px;
+  }
+  nav.tabs button.scan-btn .ikon{
+    width:56px;height:56px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg, var(--hijau) 0%, var(--hijau-tua) 100%);
+    color:#fff;
+    margin-top:-32px;
+    box-shadow:0 8px 20px rgba(15,76,51,0.38), 0 0 0 6px var(--putih);
+    transition:transform .15s, background .2s, box-shadow .2s;
+  }
+  nav.tabs button.scan-btn .ikon svg{width:26px;height:26px;}
+  nav.tabs button.scan-btn.aktif .ikon{
+    background:linear-gradient(135deg, var(--emas) 0%, #a97f1f 100%);
+    box-shadow:0 8px 22px rgba(201,154,46,0.48), 0 0 0 6px var(--putih);
+    transform:translateY(-2px) scale(1.04);
+  }
+  nav.tabs button.scan-btn span.txt{color:var(--hijau-tua);font-weight:700;}
+  nav.tabs button.scan-btn.aktif span.txt{color:var(--hijau-tua);}
+
+  @media (min-width:641px){
+    nav.tabs{ bottom:20px; border-radius:22px; box-shadow:0 12px 36px rgba(15,76,51,0.2); }
+  }
 
   section.tab-panel{padding-top:18px;}
   .kartu{
@@ -221,8 +262,22 @@
     0%,100%{border-color:rgba(201,154,46,0.55);}
     50%{border-color:rgba(201,154,46,1);}
   }
-  #qr-reader{width:100%;}
-  #qr-reader video{border-radius:18px;}
+  #qr-reader{
+    position:absolute;inset:0;width:100% !important;height:100% !important;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #qr-reader__scan_region{
+    position:absolute !important;inset:0;
+    width:100% !important;height:100% !important;
+    display:flex !important;align-items:center;justify-content:center;
+  }
+  #qr-reader video{
+    position:absolute !important;top:0 !important;left:0 !important;
+    width:100% !important;height:100% !important;
+    object-fit:cover !important;
+    border-radius:18px;
+  }
+  #qr-reader__dashboard{display:none !important;}
   #qr-reader img{display:none !important;}
 
   .hasil-scan{
@@ -273,13 +328,16 @@
   .filter-row .btn-kecil{
     width:auto;padding:9px 13px;font-size:12.5px;border-radius:9px;
   }
-  .ringkasan{display:flex;gap:10px;margin-bottom:14px;}
+  .ringkasan{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:14px;}
   .ringkasan .item{
-    flex:1;background:var(--krem);border:1px solid var(--garis);border-radius:10px;
-    padding:10px;text-align:center;
+    min-width:0;background:var(--krem);border:1px solid var(--garis);border-radius:10px;
+    padding:9px 3px;text-align:center;
   }
-  .ringkasan .item .angka{font-family:var(--font-data);font-weight:700;font-size:19px;color:var(--hijau-tua);}
-  .ringkasan .item .label{font-size:10.5px;color:var(--teks-muda);text-transform:uppercase;letter-spacing:.03em;}
+  .ringkasan .item .angka{font-family:var(--font-data);font-weight:700;font-size:17px;color:var(--hijau-tua);}
+  .ringkasan .item .label{
+    font-size:8.8px;color:var(--teks-muda);text-transform:uppercase;letter-spacing:.02em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
 
   table.ledger{width:100%;border-collapse:collapse;font-size:12.5px;}
   table.ledger thead th{
@@ -290,6 +348,52 @@
   table.ledger tbody td.jam{font-family:var(--font-data);color:var(--teks-muda);}
   table.ledger tbody tr:last-child td{border-bottom:none;}
   .kosong{text-align:center;padding:24px 10px;color:var(--teks-muda);font-size:13px;}
+
+  /* ===== TABEL RESPONSIF -> KARTU DI LAYAR SEMPIT ===== */
+  @media (max-width:640px){
+    table.ledger thead{display:none;}
+    table.ledger, table.ledger tbody{display:block;width:100%;}
+    table.ledger tr{
+      display:grid;grid-template-columns:1fr 1fr;gap:0 14px;
+      background:var(--krem);border:1px solid var(--garis);border-radius:12px;
+      padding:10px 14px 8px;margin-bottom:8px;
+    }
+    table.ledger tbody tr:last-child{margin-bottom:0;}
+    table.ledger td{
+      display:flex;flex-direction:column;gap:1px;
+      padding:6px 0;border-bottom:1px solid var(--garis);font-size:12px;
+    }
+    table.ledger td::before{
+      content:attr(data-label);
+      font-size:8.5px;font-weight:700;text-transform:uppercase;
+      letter-spacing:.05em;color:var(--teks-muda);
+    }
+    /* Nama jadi judul kartu paling atas, penuh 1 baris, tanpa label */
+    table.ledger-harian td[data-label="Nama"],
+    table.ledger-periode td[data-label="Nama"]{
+      order:-1;grid-column:1 / -1;
+      font-family:var(--font-judul);font-weight:700;font-size:14px;color:var(--hijau-tua);
+      padding:0 0 7px;border-bottom:1.5px solid var(--garis);
+      margin-bottom:2px;
+    }
+    table.ledger-harian td[data-label="Nama"]::before,
+    table.ledger-periode td[data-label="Nama"]::before{content:none;}
+
+    /* Status / Persentase jadi baris penuh paling bawah, menonjol, tanpa garis bawah */
+    table.ledger-harian td[data-label="Status"],
+    table.ledger-periode td[data-label="Persentase"]{
+      order:1;grid-column:1 / -1;
+      padding:7px 0 0;border-bottom:none;
+    }
+    table.ledger-periode td[data-label="Persentase"]{display:flex;flex-direction:row;align-items:center;gap:6px;}
+    table.ledger-periode td[data-label="Persentase"]::before{align-self:center;margin-right:2px;}
+
+    /* baris terakhir sebelum Status/Persentase tidak perlu garis bawah */
+    table.ledger-harian td[data-label="NIS"], table.ledger-harian td[data-label="Kelas"],
+    table.ledger-periode td[data-label="Izin"], table.ledger-periode td[data-label="Alpa"]{
+      border-bottom:none;
+    }
+  }
 
   .persentase-bar{
     display:inline-block;width:52px;height:6px;border-radius:4px;background:var(--garis);
@@ -392,11 +496,37 @@
     </div>
   </header>
 
-  <nav class="tabs container">
-    <button class="aktif" data-tab="scan">📷 Scan</button>
-    <button data-tab="rekap">📋 Rekap Harian</button>
-    <button data-tab="periode">📈 Rekap Periode</button>
-    <button data-tab="siswa">🎓 Siswa</button>
+  <nav class="tabs">
+    <button data-tab="rekap">
+      <span class="ikon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><line x1="9" y1="8" x2="15" y2="8"></line><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="13" y2="16"></line></svg>
+      </span>
+      <span class="txt">Rekap Harian</span>
+    </button>
+    <button data-tab="periode">
+      <span class="ikon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,17 10,11 14,15 20,7"></polyline><polyline points="14,7 20,7 20,13"></polyline></svg>
+      </span>
+      <span class="txt">Rekap Periode</span>
+    </button>
+    <button class="aktif scan-btn" data-tab="scan">
+      <span class="ikon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2"></path><path d="M16 4h2a2 2 0 0 1 2 2v2"></path><path d="M20 16v2a2 2 0 0 1-2 2h-2"></path><path d="M8 20H6a2 2 0 0 1-2-2v-2"></path><line x1="7" y1="12" x2="17" y2="12"></line></svg>
+      </span>
+      <span class="txt">Scan</span>
+    </button>
+    <button data-tab="siswa">
+      <span class="ikon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9 12 4l10 5-10 5L2 9Z"></path><path d="M6 11v4c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-4"></path><path d="M22 9v6"></path></svg>
+      </span>
+      <span class="txt">Siswa</span>
+    </button>
+    <button data-tab="kalender">
+      <span class="ikon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="16" y1="3" x2="16" y2="7"></line></svg>
+      </span>
+      <span class="txt">Kalender</span>
+    </button>
   </nav>
 
   <div class="container">
@@ -538,7 +668,10 @@
           <button class="btn btn-primer" id="btn-simpan-siswa">Simpan Siswa</button>
         </div>
       </div>
+    </section>
 
+    <!-- TAB: KALENDER SEKOLAH (HARI LIBUR) -->
+    <section class="tab-panel hidden" id="tab-kalender">
       <div class="kartu">
         <span class="eyebrow">Kalender Sekolah</span>
         <h2>Hari Libur</h2>
@@ -716,6 +849,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     document.querySelectorAll('.tab-panel').forEach(p=>p.classList.add('hidden'));
     el('tab-' + btn.dataset.tab).classList.remove('hidden');
     if (btn.dataset.tab === 'rekap') muatRekap();
+    if (btn.dataset.tab === 'kalender') muatHariLibur();
     if (btn.dataset.tab === 'scan' && !html5QrCode) mulaiScanner();
   });
 });
@@ -730,7 +864,27 @@ function mulaiScanner(){
     const cameraId = cameras.find(c=>/back|belakang|rear/i.test(c.label))?.id || cameras[cameras.length-1].id;
     html5QrCode.start(
       cameraId,
-      { fps: 10, qrbox: { width: 230, height: 230 } },
+      {
+        fps: 15,
+        qrbox: function(viewfinderWidth, viewfinderHeight){
+          const sisiTerkecil = Math.min(viewfinderWidth, viewfinderHeight);
+          const ukuran = Math.floor(sisiTerkecil * 0.72);
+          return { width: ukuran, height: ukuran };
+        },
+        // Kode QR kartu siswa tidak pernah "dicerminkan", jadi percobaan decode versi flip
+        // (mirror) tiap frame cuma buang-buang waktu — matikan supaya tiap frame lebih cepat.
+        disableFlip: true,
+        // Kalau browser/HP mendukung BarcodeDetector bawaan (Chrome Android umumnya iya), ini
+        // dipakai otomatis — jauh lebih cepat karena decode-nya pakai mesin native, bukan JS.
+        experimentalFeatures: { useBarCodeDetectorIfSupported: true },
+        // Batasi resolusi kamera secukupnya: resolusi terlalu tinggi bikin tiap frame lebih
+        // berat untuk diproses/di-decode, padahal untuk QR kartu (bukan objek kecil dari jauh)
+        // resolusi segini sudah lebih dari cukup.
+        videoConstraints: {
+          width: { ideal: 720 },
+          height: { ideal: 720 }
+        }
+      },
       (decodedText) => handleHasilScan(decodedText),
       () => {}
     );
@@ -744,20 +898,34 @@ function mulaiScanner(){
 async function handleHasilScan(nis){
   if (sedangMemproses) return;
   sedangMemproses = true;
-  html5QrCode.pause(true);
-  await prosesAbsen(nis);
-  setTimeout(()=>{
-    sedangMemproses = false;
-    try{ html5QrCode.resume(); }catch(e){}
-  }, 1800);
+  try {
+    await prosesAbsen(nis);
+  } finally {
+    setTimeout(()=>{ sedangMemproses = false; }, 1800);
+  }
 }
 
 async function prosesAbsen(nis){
   const kotak = el('hasil-scan');
-  const res = await apiPost('scan', { nis: nis });
-  kotak.style.display = 'flex';
   const labelTipe = el('tipe-scan-label');
   const fotoBox = el('foto-siswa');
+  let res;
+  try {
+    res = await apiPost('scan', { nis: nis });
+  } catch (e) {
+    // Kalau koneksi terputus / server tidak merespons, kartu tetap harus diperbarui (jangan
+    // dibiarkan menampilkan hasil scan sebelumnya) supaya admin tahu scan ini gagal dan bisa
+    // mencoba lagi, bukannya mengira absen sudah tercatat padahal belum.
+    kotak.style.display = 'flex';
+    kotak.className = 'hasil-scan gagal';
+    labelTipe.classList.add('hidden');
+    el('hasil-nama').textContent = 'Absen Gagal';
+    el('hasil-detail').textContent = 'Tidak bisa terhubung ke server. Periksa koneksi internet lalu coba lagi.';
+    fotoBox.textContent = '!';
+    fotoBox.style.background = 'var(--merah-muda)';
+    return;
+  }
+  kotak.style.display = 'flex';
 
   if (res.success) {
     kotak.className = 'hasil-scan sukses';
@@ -780,7 +948,6 @@ async function prosesAbsen(nis){
       fotoBox.textContent = inisial(res.data.nama);
       fotoBox.style.background = 'var(--emas-terang)';
     }
-    muatRekap();
   } else {
     kotak.className = 'hasil-scan gagal';
     labelTipe.classList.add('hidden');
@@ -833,10 +1000,17 @@ function renderRekapDenganFilter(){
     el('rekap-wadah').innerHTML = '<div class="kosong">Belum ada absensi pada tanggal ini.</div>';
     return;
   }
-  let html = '<table class="ledger"><thead><tr><th>Masuk</th><th>Pulang</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Status</th></tr></thead><tbody>';
+  let html = '<table class="ledger ledger-harian"><thead><tr><th>Masuk</th><th>Pulang</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Status</th></tr></thead><tbody>';
   data.forEach(r=>{
     const badgeClass = kelasBadge(r.status);
-    html += '<tr><td class="jam">'+(r.jam||'-')+'</td><td class="jam">'+(r.jamPulang||'-')+'</td><td class="jam">'+r.nis+'</td><td>'+r.nama+'</td><td>'+r.kelas+'</td><td><span class="badge '+badgeClass+'">'+r.status+'</span></td></tr>';
+    html += '<tr>'
+      + '<td data-label="Masuk" class="jam">'+(r.jam||'-')+'</td>'
+      + '<td data-label="Pulang" class="jam">'+(r.jamPulang||'-')+'</td>'
+      + '<td data-label="NIS" class="jam">'+r.nis+'</td>'
+      + '<td data-label="Nama">'+r.nama+'</td>'
+      + '<td data-label="Kelas">'+r.kelas+'</td>'
+      + '<td data-label="Status"><span class="badge '+badgeClass+'">'+r.status+'</span></td>'
+      + '</tr>';
   });
   html += '</tbody></table>';
   el('rekap-wadah').innerHTML = html;
@@ -957,10 +1131,18 @@ function renderPeriodeDenganFilter(){
     el('periode-wadah').innerHTML = '<div class="kosong">Belum ada data pada rentang ini.</div>';
     return;
   }
-  let html = '<table class="ledger"><thead><tr><th>Nama</th><th>Kelas</th><th>Hadir</th><th>Terlambat</th><th>Sakit</th><th>Izin</th><th>Alpa</th><th>Persentase</th></tr></thead><tbody>';
+  let html = '<table class="ledger ledger-periode"><thead><tr><th>Nama</th><th>Kelas</th><th>Hadir</th><th>Terlambat</th><th>Sakit</th><th>Izin</th><th>Alpa</th><th>Persentase</th></tr></thead><tbody>';
   data.forEach(r=>{
-    html += '<tr><td>'+r.nama+'</td><td>'+r.kelas+'</td><td class="jam">'+r.hadir+'</td><td class="jam">'+r.terlambat+'</td><td class="jam">'+r.sakit+'</td><td class="jam">'+r.izin+'</td><td class="jam">'+r.alpa+'</td>'+
-      '<td><span class="persentase-bar"><span style="width:'+r.persentase+'%"></span></span>'+r.persentase+'%</td></tr>';
+    html += '<tr>'
+      + '<td data-label="Nama">'+r.nama+'</td>'
+      + '<td data-label="Kelas">'+r.kelas+'</td>'
+      + '<td data-label="Hadir" class="jam">'+r.hadir+'</td>'
+      + '<td data-label="Terlambat" class="jam">'+r.terlambat+'</td>'
+      + '<td data-label="Sakit" class="jam">'+r.sakit+'</td>'
+      + '<td data-label="Izin" class="jam">'+r.izin+'</td>'
+      + '<td data-label="Alpa" class="jam">'+r.alpa+'</td>'
+      + '<td data-label="Persentase"><span class="persentase-bar"><span style="width:'+r.persentase+'%"></span></span>'+r.persentase+'%</td>'
+      + '</tr>';
   });
   html += '</tbody></table>';
   el('periode-wadah').innerHTML = html;
