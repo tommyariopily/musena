@@ -865,24 +865,11 @@ function mulaiScanner(){
     html5QrCode.start(
       cameraId,
       {
-        fps: 15,
+        fps: 10,
         qrbox: function(viewfinderWidth, viewfinderHeight){
           const sisiTerkecil = Math.min(viewfinderWidth, viewfinderHeight);
           const ukuran = Math.floor(sisiTerkecil * 0.72);
           return { width: ukuran, height: ukuran };
-        },
-        // Kode QR kartu siswa tidak pernah "dicerminkan", jadi percobaan decode versi flip
-        // (mirror) tiap frame cuma buang-buang waktu — matikan supaya tiap frame lebih cepat.
-        disableFlip: true,
-        // Kalau browser/HP mendukung BarcodeDetector bawaan (Chrome Android umumnya iya), ini
-        // dipakai otomatis — jauh lebih cepat karena decode-nya pakai mesin native, bukan JS.
-        experimentalFeatures: { useBarCodeDetectorIfSupported: true },
-        // Batasi resolusi kamera secukupnya: resolusi terlalu tinggi bikin tiap frame lebih
-        // berat untuk diproses/di-decode, padahal untuk QR kartu (bukan objek kecil dari jauh)
-        // resolusi segini sudah lebih dari cukup.
-        videoConstraints: {
-          width: { ideal: 720 },
-          height: { ideal: 720 }
         }
       },
       (decodedText) => handleHasilScan(decodedText),
@@ -898,34 +885,20 @@ function mulaiScanner(){
 async function handleHasilScan(nis){
   if (sedangMemproses) return;
   sedangMemproses = true;
-  try {
-    await prosesAbsen(nis);
-  } finally {
-    setTimeout(()=>{ sedangMemproses = false; }, 1800);
-  }
+  html5QrCode.pause(true);
+  await prosesAbsen(nis);
+  setTimeout(()=>{
+    sedangMemproses = false;
+    try{ html5QrCode.resume(); }catch(e){}
+  }, 1800);
 }
 
 async function prosesAbsen(nis){
   const kotak = el('hasil-scan');
+  const res = await apiPost('scan', { nis: nis });
+  kotak.style.display = 'flex';
   const labelTipe = el('tipe-scan-label');
   const fotoBox = el('foto-siswa');
-  let res;
-  try {
-    res = await apiPost('scan', { nis: nis });
-  } catch (e) {
-    // Kalau koneksi terputus / server tidak merespons, kartu tetap harus diperbarui (jangan
-    // dibiarkan menampilkan hasil scan sebelumnya) supaya admin tahu scan ini gagal dan bisa
-    // mencoba lagi, bukannya mengira absen sudah tercatat padahal belum.
-    kotak.style.display = 'flex';
-    kotak.className = 'hasil-scan gagal';
-    labelTipe.classList.add('hidden');
-    el('hasil-nama').textContent = 'Absen Gagal';
-    el('hasil-detail').textContent = 'Tidak bisa terhubung ke server. Periksa koneksi internet lalu coba lagi.';
-    fotoBox.textContent = '!';
-    fotoBox.style.background = 'var(--merah-muda)';
-    return;
-  }
-  kotak.style.display = 'flex';
 
   if (res.success) {
     kotak.className = 'hasil-scan sukses';
@@ -948,6 +921,7 @@ async function prosesAbsen(nis){
       fotoBox.textContent = inisial(res.data.nama);
       fotoBox.style.background = 'var(--emas-terang)';
     }
+    muatRekap();
   } else {
     kotak.className = 'hasil-scan gagal';
     labelTipe.classList.add('hidden');
