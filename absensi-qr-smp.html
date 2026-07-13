@@ -12,6 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
   /* ===== DESIGN TOKENS ===== */
   :root{
@@ -704,7 +705,7 @@
         </div>
         <div class="filter-row">
           <button class="btn btn-primer btn-kecil" id="btn-tampilkan-periode">Tampilkan</button>
-          <button class="btn btn-ghost btn-kecil" id="btn-periode-csv">⬇ CSV</button>
+          <button class="btn btn-ghost btn-kecil" id="btn-periode-csv">⬇ Excel</button>
           <button class="btn btn-ghost btn-kecil" id="btn-periode-pdf">⬇ PDF</button>
         </div>
         <div id="periode-wadah">
@@ -830,6 +831,7 @@ let html5QrCode = null;
 let sedangMemproses = false;
 let rekapCache = [];
 let periodeCache = [];
+let periodeKolomTanggal = [];
 
 const el = (id) => document.getElementById(id);
 
@@ -1209,6 +1211,7 @@ async function muatRekapPeriode(){
   const res = await apiPost('getRekapPeriode', { awal, akhir });
   if (!res.success) { el('periode-wadah').innerHTML = '<div class="kosong">'+res.message+'</div>'; return; }
   periodeCache = res.data;
+  periodeKolomTanggal = res.kolomTanggal || [];
   renderPeriodeDenganFilter();
 }
 
@@ -1236,13 +1239,83 @@ function renderPeriodeDenganFilter(){
   el('periode-wadah').innerHTML = html;
 }
 
-el('btn-periode-csv').addEventListener('click', ()=>{
+el('btn-periode-csv').addEventListener('click', async ()=>{
   const kelasFilter = el('periode-kelas').value;
   const data = kelasFilter ? periodeCache.filter(r=>r.kelas===kelasFilter) : periodeCache;
   if (!data.length) { tampilkanToast('Tidak ada data untuk diunduh.'); return; }
-  let csv = 'Nama,Kelas,Hadir,Terlambat,Sakit,Izin,Alpa,Persentase\n';
-  data.forEach(r=>{ csv += `"${r.nama}",${r.kelas},${r.hadir},${r.terlambat},${r.sakit},${r.izin},${r.alpa},${r.persentase}%\n`; });
-  unduhBlob(csv, 'rekap-periode-' + el('periode-awal').value + '_' + el('periode-akhir').value + '.csv', 'text/csv;charset=utf-8;');
+
+  const btn = el('btn-periode-csv');
+  const teksAsli = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Memproses...';
+
+  try {
+    // Tentukan apakah rentang tanggal berada dalam satu bulan yang sama.
+    // Jika ya, header kolom harian cukup angka tanggal (1, 2, 3, ...) seperti buku absen biasa.
+    // Jika rentang melewati beberapa bulan, header dibuat "dd/mm" agar tidak ambigu.
+    const bulanSama = periodeKolomTanggal.length > 0 &&
+      periodeKolomTanggal[0].slice(0,7) === periodeKolomTanggal[periodeKolomTanggal.length-1].slice(0,7);
+    const labelKolom = (tgl) => bulanSama ? String(parseInt(tgl.slice(8,10),10)) : tgl.slice(8,10)+'/'+tgl.slice(5,7);
+
+    const wb = new ExcelJS.Workbook();
+    const ws = wb.addWorksheet('Rekap Absensi');
+
+    const headerAtas = ['NO','NIS','Nama', ...periodeKolomTanggal.map(labelKolom), 'Hadir','Izin','Sakit','Alpa','Persentase Kehadiran'];
+    ws.addRow([]);
+    ws.addRow([appNamaSekolah]);
+    ws.addRow(['Rekap Kehadiran Periode ' + el('periode-awal').value + ' s/d ' + el('periode-akhir').value + (kelasFilter ? (' — Kelas ' + kelasFilter) : '')]);
+    ws.addRow([]);
+    const barisHeader = ws.addRow(headerAtas);
+
+    data.forEach((r, idx) => {
+      const barisHarian = periodeKolomTanggal.map(tgl => (r.harian && r.harian[tgl]) ? r.harian[tgl] : '');
+      const hadirGabung = r.hadir + r.terlambat;
+      const baris = ws.addRow([idx+1, r.nis, r.nama, ...barisHarian, hadirGabung, r.izin, r.sakit, r.alpa, (r.persentase + '%')]);
+      baris.eachCell(c => { c.alignment = { vertical:'middle', horizontal:'center' }; });
+      baris.getCell(3).alignment = { vertical:'middle', horizontal:'left' };
+    });
+
+    // Styling: border tipis di semua sel tabel + header tebal berwarna
+    const totalKolom = headerAtas.length;
+    const barisAwalTabel = 5, barisAkhirTabel = 4 + data.length;
+    for (let br = barisAwalTabel; br <= barisAkhirTabel; br++) {
+      for (let kol = 1; kol <= totalKolom; kol++) {
+        const cell = ws.getCell(br, kol);
+        cell.border = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+      }
+    }
+    barisHeader.font = { bold:true };
+    barisHeader.eachCell(c => {
+      c.fill = { type:'pattern', pattern:'solid', fgColor:{ argb:'FFE4CF8B' } };
+      c.alignment = { vertical:'middle', horizontal:'center', wrapText:true };
+    });
+    ws.getRow(2).font = { bold:true, size:13 };
+    ws.getRow(3).font = { italic:true, size:10 };
+    ws.mergeCells(2,1,2,3);
+    ws.mergeCells(3,1,3,3);
+
+    ws.getColumn(1).width = 5;
+    ws.getColumn(2).width = 13;
+    ws.getColumn(3).width = 26;
+    for (let k = 0; k < periodeKolomTanggal.length; k++) ws.getColumn(4+k).width = 4;
+    const kBase = 4 + periodeKolomTanggal.length;
+    ws.getColumn(kBase).width = 8;
+    ws.getColumn(kBase+1).width = 8;
+    ws.getColumn(kBase+2).width = 8;
+    ws.getColumn(kBase+3).width = 8;
+    ws.getColumn(kBase+4).width = 18;
+
+    const buffer = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'rekap-periode-' + el('periode-awal').value + '_' + el('periode-akhir').value + '.xlsx';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  } catch(err){
+    tampilkanToast('Gagal membuat file Excel.');
+  } finally {
+    btn.disabled = false; btn.textContent = teksAsli;
+  }
 });
 
 el('btn-periode-pdf').addEventListener('click', ()=>{
@@ -1399,6 +1472,34 @@ el('btn-simpan-libur').addEventListener('click', async ()=>{
 });
 
 /* ================= KARTU ABSEN (ID CARD) PER SISWA ================= */
+
+// html2canvas (library pembuat JPG) tidak mendukung object-fit/background-size:cover
+// dengan benar -- foto jadi terlihat "stretch" (melar) saat di-capture, walau tampilannya
+// normal di layar (karena browser sendiri MENDUKUNG object-fit). Solusinya: sebelum
+// membuat JPG, hitung manual ukuran & posisi ala "cover" lalu terapkan sebagai
+// width/height/left/top eksplisit (bukan object-fit) -- ini yang benar-benar dipahami
+// html2canvas. Setelah selesai capture, style ini dikembalikan agar tampilan di layar
+// tetap memakai CSS object-fit seperti semula.
+function terapkanCoverManual(imgEl, boxW, boxH){
+  return new Promise((resolve)=>{
+    function hitung(){
+      const nw = imgEl.naturalWidth, nh = imgEl.naturalHeight;
+      if (!nw || !nh) { resolve(); return; }
+      const skala = Math.max(boxW / nw, boxH / nh);
+      const w = nw * skala, h = nh * skala;
+      imgEl.style.position = 'absolute';
+      imgEl.style.width = w + 'px';
+      imgEl.style.height = h + 'px';
+      imgEl.style.maxWidth = 'none';
+      imgEl.style.left = ((boxW - w) / 2) + 'px';
+      imgEl.style.top = ((boxH - h) / 2) + 'px';
+      resolve();
+    }
+    if (imgEl.complete && imgEl.naturalWidth) hitung();
+    else { imgEl.onload = hitung; imgEl.onerror = ()=>resolve(); }
+  });
+}
+
 function bukaKartuAbsen(nis){
   const s = daftarSiswaCache.find(x => String(x.nis) === String(nis));
   if (!s) { tampilkanToast('Data siswa tidak ditemukan.'); return; }
@@ -1438,7 +1539,20 @@ el('btn-unduh-kartu-absen').addEventListener('click', async ()=>{
   btn.disabled = true; btn.textContent = 'Memproses...';
   try {
     const kartu = el('id-card-preview');
+    const fotoBg = kartu.querySelector('.id-card-bg');
+    const fotoWrap = kartu.querySelector('.id-card-foto-wrap');
+    const fotoSiswa = fotoWrap ? fotoWrap.querySelector('img') : null;
+
+    // Hitung manual "cover" untuk foto latar & foto siswa agar tidak stretch saat di-capture
+    await terapkanCoverManual(fotoBg, kartu.offsetWidth, kartu.offsetHeight);
+    if (fotoSiswa) await terapkanCoverManual(fotoSiswa, fotoWrap.offsetWidth, fotoWrap.offsetHeight);
+
     const canvas = await html2canvas(kartu, { scale: 3, useCORS: true, backgroundColor: '#ffffff' });
+
+    // Kembalikan ke CSS object-fit semula untuk tampilan di layar
+    fotoBg.style.cssText = '';
+    if (fotoSiswa) fotoSiswa.style.cssText = '';
+
     const namaFile = 'kartu-absen-' + el('id-card-nama').textContent.trim().replace(/\s+/g,'_') + '.jpg';
     canvas.toBlob((blob)=>{
       const url = URL.createObjectURL(blob);
