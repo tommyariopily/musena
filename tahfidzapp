@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tahfidz - SMP Muhammadiyah 9 Nagreg</title>
+<link rel="icon" href="https://i.ibb.co.com/5Xb4Crkq/Logo-Sekolah-01.png">
+<style>
+  :root{
+    --sage:#6b8f7f;
+    --sage-dark:#4f6f61;
+    --sage-light:#e8efe9;
+    --gold:#c9a24b;
+    --cream:#faf8f3;
+    --ink:#2c332e;
+    --muted:#7c8a82;
+    --card:#ffffff;
+    --radius:20px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex; justify-content:center;
+  }
+  #app{
+    width:100%; max-width:480px; min-height:100vh;
+    background:var(--cream);
+    position:relative;
+    display:flex; flex-direction:column;
+    box-shadow:0 0 40px rgba(0,0,0,0.06);
+  }
+  .screen{ display:none; flex-direction:column; flex:1; padding-bottom:90px; }
+  .screen.active{ display:flex; }
+
+  /* ---------- LOGIN ---------- */
+  #screen-login{
+    justify-content:center; align-items:center; padding:32px; gap:18px;
+    background:radial-gradient(circle at 20% 10%, var(--sage-light), var(--cream) 60%);
+  }
+  #screen-login img.logo{ width:88px; height:88px; object-fit:contain; margin-bottom:6px; filter:drop-shadow(0 4px 10px rgba(0,0,0,.1)); }
+  #screen-login h1{ font-size:20px; text-align:center; color:var(--sage-dark); }
+  #screen-login p.sub{ text-align:center; color:var(--muted); font-size:13px; margin-bottom:8px; }
+  .role-toggle{ display:flex; background:var(--sage-light); border-radius:12px; padding:4px; width:100%; }
+  .role-toggle button{ flex:1; border:none; background:transparent; padding:10px; border-radius:9px; font-weight:600; color:var(--sage-dark); cursor:pointer; font-size:14px; }
+  .role-toggle button.active{ background:var(--sage); color:#fff; }
+  .login-form{ width:100%; display:flex; flex-direction:column; gap:12px; }
+  .login-form input{
+    width:100%; padding:14px 16px; border-radius:14px; border:1px solid #dfe6e1;
+    background:#fff; font-size:15px; outline:none;
+  }
+  .login-form input:focus{ border-color:var(--sage); }
+  .btn-primary{
+    background:var(--sage); color:#fff; border:none; padding:14px; border-radius:14px;
+    font-size:15px; font-weight:600; cursor:pointer; width:100%;
+  }
+  .btn-primary:active{ background:var(--sage-dark); }
+  .login-error{ color:#b5473d; font-size:13px; text-align:center; min-height:16px; }
+  .hint{ font-size:11px; color:var(--muted); text-align:center; margin-top:6px; }
+
+  /* ---------- HEADER (dashboard) ---------- */
+  .header-hero{
+    background:linear-gradient(135deg, var(--sage), var(--sage-dark));
+    color:#fff; padding:22px 20px 30px; border-radius:0 0 28px 28px;
+    position:relative; overflow:hidden;
+  }
+  .header-hero::after{
+    content:''; position:absolute; right:-30px; top:-30px; width:160px; height:160px;
+    background:radial-gradient(circle, rgba(255,255,255,.12), transparent 70%);
+  }
+  .header-top{ display:flex; justify-content:space-between; align-items:center; }
+  .header-user{ display:flex; align-items:center; gap:10px; }
+  .header-user img{ width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.6); background:#fff; }
+  .header-user .greet{ font-size:13px; opacity:.9; }
+  .header-user .name{ font-weight:700; font-size:15px; }
+  .bell{ width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; }
+  .header-title{ font-size:24px; font-weight:800; margin-top:16px; }
+
+  .content{ padding:18px 20px; display:flex; flex-direction:column; gap:20px; flex:1; }
+
+  /* ---------- CARD: target hari ini ---------- */
+  .card{ background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:0 6px 18px rgba(43,60,50,.06); }
+  .target-card{ display:flex; justify-content:space-between; align-items:center; gap:14px; margin-top:-42px; position:relative; z-index:2; }
+  .target-card .label{ font-size:13px; color:var(--muted); margin-bottom:4px; }
+  .target-card .value{ font-weight:700; font-size:16px; line-height:1.3; }
+  .progress-track{ height:6px; background:#eee1c2; border-radius:6px; margin-top:12px; overflow:hidden; }
+  .progress-fill{ height:100%; background:var(--gold); border-radius:6px; transition:width .4s; }
+  .ring{ position:relative; width:70px; height:70px; flex-shrink:0; }
+  .ring svg{ transform:rotate(-90deg); }
+  .ring .pct{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; }
+
+  h2.section-title{ font-size:16px; font-weight:700; }
+
+  .surah-card{
+    background:linear-gradient(135deg, var(--sage), var(--sage-dark)); color:#fff;
+    border-radius:var(--radius); padding:20px; display:flex; flex-direction:column; gap:12px;
+    position:relative; overflow:hidden;
+  }
+  .surah-card .tag{ font-size:12px; opacity:.85; }
+  .surah-card .surah-name{ font-size:22px; font-weight:800; }
+  .play-row{ display:flex; align-items:center; gap:10px; }
+  .play-btn{ background:#fff; color:var(--sage-dark); border:none; padding:9px 16px; border-radius:20px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:6px; }
+  .empty-note{ color:var(--muted); font-size:13px; text-align:center; padding:14px 0; }
+
+  /* ---------- BOTTOM NAV ---------- */
+  .bottom-nav{
+    position:fixed; bottom:0; width:100%; max-width:480px; background:#fff;
+    border-top:1px solid #eee; display:flex; padding:8px 0 max(8px, env(safe-area-inset-bottom));
+    box-shadow:0 -4px 16px rgba(0,0,0,.04); z-index:50;
+  }
+  .nav-btn{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:var(--muted); font-size:11px; cursor:pointer; padding:4px; }
+  .nav-btn.active{ color:var(--sage); font-weight:700; }
+  .nav-btn .icon{ font-size:20px; }
+
+  /* ---------- MUTABAAH ---------- */
+  .page-header{ display:flex; align-items:center; gap:12px; padding:18px 20px 6px; }
+  .back-btn{ background:none; border:none; font-size:20px; cursor:pointer; color:var(--ink); }
+  .page-header h1{ font-size:19px; font-weight:800; }
+
+  .donut-wrap{ display:flex; flex-direction:column; align-items:center; padding:10px 0 4px; }
+  .donut{ position:relative; width:190px; height:190px; }
+  .donut svg{ transform:rotate(-90deg); }
+  .donut-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .donut-center .label{ font-size:13px; color:var(--muted); }
+  .donut-center .value{ font-size:26px; font-weight:800; color:var(--sage-dark); }
+
+  .legend{ display:grid; grid-template-columns:1fr 1fr; gap:8px 14px; padding:10px 4px; font-size:13px; }
+  .legend-item{ display:flex; align-items:center; gap:6px; color:var(--ink); }
+  .dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+
+  .calendar{ background:var(--card); border-radius:var(--radius); padding:16px; box-shadow:0 6px 18px rgba(43,60,50,.06); }
+  .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; text-align:center; }
+  .cal-grid .dow{ font-size:11px; color:var(--muted); font-weight:600; padding-bottom:4px; }
+  .cal-day{ aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:50%; font-size:13px; color:var(--ink); }
+  .cal-day.empty{ visibility:hidden; }
+  .cal-day.has-setoran{ background:var(--sage); color:#fff; font-weight:700; }
+  .cal-day.today{ border:2px solid var(--gold); }
+
+  .note-box{ background:#fff; border-radius:16px; padding:14px 16px; font-size:13.5px; line-height:1.5; box-shadow:0 6px 18px rgba(43,60,50,.06); }
+  .note-box b{ color:var(--sage-dark); }
+
+  /* ---------- PROFIL ---------- */
+  .profile-hero{ display:flex; flex-direction:column; align-items:center; gap:10px; padding:30px 20px 10px; }
+  .profile-hero img{ width:84px; height:84px; border-radius:50%; object-fit:cover; border:3px solid var(--sage-light); }
+  .profile-hero .pname{ font-size:18px; font-weight:800; }
+  .profile-hero .pmeta{ color:var(--muted); font-size:13px; }
+  .list-item{ background:#fff; border-radius:16px; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; font-size:14px; box-shadow:0 4px 12px rgba(43,60,50,.05); }
+  .logout-btn{ color:#b5473d; background:#fdecea; border:none; padding:13px; border-radius:14px; font-weight:700; font-size:14px; cursor:pointer; width:100%; }
+
+  /* ---------- MUSHAF (placeholder ringan) ---------- */
+  .surah-list-item{ background:#fff; border-radius:14px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 3px 10px rgba(43,60,50,.05); font-size:14px; text-decoration:none; color:var(--ink); }
+  .surah-list-item .num{ width:26px; height:26px; border-radius:50%; background:var(--sage-light); color:var(--sage-dark); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; margin-right:10px; flex-shrink:0; }
+  .surah-list-item .sinfo{ display:flex; flex-direction:column; }
+  .surah-list-item .sarti{ font-size:11.5px; color:var(--muted); }
+  .surah-row{ display:flex; align-items:center; }
+
+  /* ---------- GURU PANEL ---------- */
+  .guru-select{ width:100%; padding:13px 14px; border-radius:12px; border:1px solid #dfe6e1; font-size:14px; background:#fff; }
+  .form-group{ display:flex; flex-direction:column; gap:6px; }
+  .form-group label{ font-size:12.5px; color:var(--muted); font-weight:600; }
+  .form-row{ display:flex; gap:10px; }
+  .form-row .form-group{ flex:1; }
+  .siswa-pill{ display:flex; align-items:center; gap:10px; background:#fff; padding:10px 14px; border-radius:14px; box-shadow:0 4px 12px rgba(43,60,50,.05); cursor:pointer; }
+  .siswa-pill img{ width:36px; height:36px; border-radius:50%; object-fit:cover; background:var(--sage-light); }
+  .siswa-pill.selected{ outline:2px solid var(--sage); }
+  .toast{
+    position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:var(--sage-dark); color:#fff;
+    padding:10px 18px; border-radius:30px; font-size:13px; z-index:100; opacity:0; transition:opacity .3s, transform .3s;
+    pointer-events:none; white-space:nowrap;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
+
+  .loading{ text-align:center; padding:30px; color:var(--muted); font-size:13px; }
+
+  /* ---------- REKAP (GURU) ---------- */
+  .rekap-item{ background:#fff; border-radius:16px; padding:12px 14px; display:flex; align-items:center; gap:12px; box-shadow:0 4px 12px rgba(43,60,50,.05); }
+  .rekap-item img{ width:40px; height:40px; border-radius:50%; object-fit:cover; background:var(--sage-light); }
+  .rekap-item .rname{ font-weight:700; font-size:14px; }
+  .rekap-item .rmeta{ font-size:12px; color:var(--muted); }
+  .rekap-item .rjuz{ margin-left:auto; text-align:center; background:var(--sage-light); color:var(--sage-dark); font-weight:800; font-size:13px; padding:6px 10px; border-radius:10px; }
+
+  /* ---------- MUSHAF DETAIL ---------- */
+  .ayat-card{ background:#fff; border-radius:16px; padding:16px; box-shadow:0 4px 12px rgba(43,60,50,.05); display:flex; flex-direction:column; gap:10px; }
+  .ayat-top{ display:flex; justify-content:space-between; align-items:center; }
+  .ayat-num{ width:28px; height:28px; border-radius:50%; background:var(--sage-light); color:var(--sage-dark); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; }
+  .ayat-playbtn{ background:var(--sage-light); color:var(--sage-dark); border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:13px; }
+  .ayat-playbtn.playing{ background:var(--sage); color:#fff; }
+  .ayat-arab{ direction:rtl; text-align:right; font-size:24px; line-height:2.1; color:var(--ink); }
+  .ayat-terjemah{ font-size:13px; color:var(--muted); line-height:1.5; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===================== LOGIN ===================== -->
+  <div class="screen active" id="screen-login">
+    <img class="logo" src="https://i.ibb.co.com/5Xb4Crkq/Logo-Sekolah-01.png" alt="Logo">
+    <h1>Tahfidz SMP Muhammadiyah 9 Nagreg</h1>
+    <p class="sub">Masuk untuk melihat progres hafalanmu</p>
+
+    <div class="role-toggle">
+      <button id="tab-siswa" class="active" onclick="switchLoginTab('siswa')">Siswa</button>
+      <button id="tab-guru" onclick="switchLoginTab('guru')">Guru</button>
+    </div>
+
+    <form class="login-form" id="form-login" onsubmit="return handleLogin(event)">
+      <input type="text" id="login-id" placeholder="NISN" required>
+      <input type="password" id="login-pw" placeholder="Password" required>
+      <button type="submit" class="btn-primary">Masuk</button>
+      <div class="login-error" id="login-error"></div>
+    </form>
+    <div class="hint">Contoh siswa: NISN 0012345678 / siswa123<br>Contoh guru: NIP 1234567890 / guru123</div>
+  </div>
+
+  <!-- ===================== BERANDA (SISWA) ===================== -->
+  <div class="screen" id="screen-beranda">
+    <div class="header-hero">
+      <div class="header-top">
+        <div class="header-user">
+          <img id="beranda-foto" src="https://i.ibb.co.com/5Xb4Crkq/Logo-Sekolah-01.png">
+          <div>
+            <div class="greet">Assalamu'alaikum,</div>
+            <div class="name" id="beranda-nama">Siswa!</div>
+          </div>
+        </div>
+        <div class="bell">🔔</div>
+      </div>
+      <div class="header-title">Dashboard</div>
+    </div>
+
+    <div class="content">
+      <div class="card target-card" id="target-card">
+        <div>
+          <div class="label">Target Hari Ini</div>
+          <div class="value" id="target-value">Belum ada target</div>
+          <div class="progress-track"><div class="progress-fill" id="target-bar" style="width:0%"></div></div>
+        </div>
+        <div class="ring">
+          <svg width="70" height="70">
+            <circle cx="35" cy="35" r="30" stroke="#eee1c2" stroke-width="7" fill="none"/>
+            <circle id="target-ring" cx="35" cy="35" r="30" stroke="#c9a24b" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="188" stroke-dashoffset="188"/>
+          </svg>
+          <div class="pct" id="target-pct">0%</div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="section-title" style="margin-bottom:10px;">Lanjutkan Hafalan</h2>
+        <div class="surah-card" id="lanjutkan-card">
+          <div class="tag">Surah</div>
+          <div class="surah-name" id="lanjutkan-surah">-</div>
+          <div class="play-row">
+            <button class="play-btn">▶ Play</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MUSHAF (placeholder) ===================== -->
+  <div class="screen" id="screen-mushaf">
+    <div class="page-header"><h1>Mushaf</h1></div>
+    <div class="content" style="gap:12px;">
+      <input type="text" class="guru-select" id="mushaf-search" placeholder="Cari surah..." oninput="renderMushafList()">
+      <div id="mushaf-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ===================== MUSHAF DETAIL (baca surah) ===================== -->
+  <div class="screen" id="screen-mushaf-detail">
+    <div class="page-header">
+      <button class="back-btn" onclick="showScreen('screen-mushaf')">←</button>
+      <h1 id="detail-surah-title">Surah</h1>
+    </div>
+    <div class="content" style="gap:14px;">
+      <div class="surah-card" id="detail-hero">
+        <div class="tag" id="detail-meta">-</div>
+        <div class="surah-name" id="detail-nama-arab" style="direction:rtl;">-</div>
+        <div class="play-row">
+          <button class="play-btn" id="detail-play-full" onclick="toggleFullAudio()">▶ Play Semua Ayat</button>
+          <select id="detail-qari" class="guru-select" style="width:auto; padding:9px 10px; font-size:12px;" onchange="onQariChange()"></select>
+        </div>
+      </div>
+      <div id="ayat-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+    </div>
+  </div>
+
+  <!-- ===================== MUTABA'AH (SISWA) ===================== -->
+  <div class="screen" id="screen-mutabaah">
+    <div class="page-header">
+      <h1>Laporan Mutaba'ah</h1>
+    </div>
+    <div class="content">
+      <div class="donut-wrap">
+        <div class="donut">
+          <svg width="190" height="190">
+            <circle cx="95" cy="95" r="80" stroke="#e6e0d0" stroke-width="16" fill="none"/>
+            <circle id="donut-ring" cx="95" cy="95" r="80" stroke="#6b8f7f" stroke-width="16" fill="none" stroke-linecap="round" stroke-dasharray="502" stroke-dashoffset="502"/>
+          </svg>
+          <div class="donut-center">
+            <div class="label">Total Hafalan:</div>
+            <div class="value" id="donut-value">0 Juz</div>
+          </div>
+        </div>
+        <div class="legend" id="juz-legend"></div>
+      </div>
+
+      <div class="calendar">
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+
+      <div class="note-box" id="note-box">Belum ada catatan.</div>
+    </div>
+  </div>
+
+  <!-- ===================== PROFIL ===================== -->
+  <div class="screen" id="screen-profil">
+    <div class="profile-hero">
+      <img id="profil-foto" src="https://i.ibb.co.com/5Xb4Crkq/Logo-Sekolah-01.png">
+      <div class="pname" id="profil-nama">-</div>
+      <div class="pmeta" id="profil-meta">-</div>
+    </div>
+    <div class="content">
+      <div class="list-item"><span>Sekolah</span><span>SMP Muhammadiyah 9 Nagreg</span></div>
+      <div class="list-item"><span>Versi Aplikasi</span><span>1.0</span></div>
+      <button class="logout-btn" onclick="logout()">Keluar</button>
+    </div>
+  </div>
+
+  <!-- ===================== GURU: PILIH KELAS/SISWA ===================== -->
+  <div class="screen" id="screen-guru-home">
+    <div class="header-hero">
+      <div class="header-top">
+        <div class="header-user">
+          <div class="bell" style="background:rgba(255,255,255,.25);">👳</div>
+          <div>
+            <div class="greet">Assalamu'alaikum,</div>
+            <div class="name" id="guru-nama">Guru!</div>
+          </div>
+        </div>
+      </div>
+      <div class="header-title">Input Setoran</div>
+    </div>
+    <div class="content">
+      <div class="form-group">
+        <label>Pilih Kelas</label>
+        <select class="guru-select" id="select-kelas" onchange="loadSiswaKelas()"></select>
+      </div>
+      <div id="siswa-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ===================== GURU: REKAP KELAS ===================== -->
+  <div class="screen" id="screen-guru-rekap">
+    <div class="page-header"><h1>Rekap Kelas</h1></div>
+    <div class="content">
+      <div class="form-group">
+        <label>Pilih Kelas</label>
+        <select class="guru-select" id="select-kelas-rekap" onchange="loadRekapKelas()"></select>
+      </div>
+      <div id="rekap-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ===================== GURU: PROFIL ===================== -->
+  <div class="screen" id="screen-guru-profil">
+    <div class="profile-hero">
+      <div class="bell" style="width:84px; height:84px; font-size:36px; background:var(--sage-light);">👳</div>
+      <div class="pname" id="guru-profil-nama">-</div>
+      <div class="pmeta">Guru Tahfidz</div>
+    </div>
+    <div class="content">
+      <div class="list-item"><span>Sekolah</span><span>SMP Muhammadiyah 9 Nagreg</span></div>
+      <div class="list-item"><span>Versi Aplikasi</span><span>1.0</span></div>
+      <button class="logout-btn" onclick="logout()">Keluar</button>
+    </div>
+  </div>
+
+  <!-- ===================== GURU: FORM SETORAN ===================== -->
+  <div class="screen" id="screen-guru-form">
+    <div class="page-header">
+      <button class="back-btn" onclick="showScreen('screen-guru-home')">←</button>
+      <h1 id="form-siswa-nama">Input Setoran</h1>
+    </div>
+    <div class="content">
+      <form onsubmit="return submitSetoran(event)" style="display:flex; flex-direction:column; gap:14px;">
+        <div class="form-group">
+          <label>Nama Surah</label>
+          <input class="guru-select" id="f-surah" placeholder="Contoh: Al-Mulk" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Ayat Mulai</label><input class="guru-select" type="number" id="f-ayat-mulai" required></div>
+          <div class="form-group"><label>Ayat Akhir</label><input class="guru-select" type="number" id="f-ayat-akhir" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Juz</label><input class="guru-select" type="number" id="f-juz" placeholder="Auto jika kosong"></div>
+          <div class="form-group"><label>Capaian Juz (%)</label><input class="guru-select" type="number" id="f-persentase" min="0" max="100" required></div>
+        </div>
+        <div class="form-group">
+          <label>Nilai</label>
+          <input class="guru-select" id="f-nilai" placeholder="Contoh: A / 90">
+        </div>
+        <div class="form-group">
+          <label>Catatan</label>
+          <textarea class="guru-select" id="f-catatan" rows="3" placeholder="Contoh: Bagus, tajwid perlu diperbaiki sedikit."></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Simpan Setoran</button>
+      </form>
+      <h2 class="section-title" style="margin-top:20px;">Riwayat Terakhir</h2>
+      <div id="riwayat-list" style="display:flex; flex-direction:column; gap:8px; margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- ===================== BOTTOM NAV (SISWA) ===================== -->
+  <div class="bottom-nav" id="nav-siswa">
+    <button class="nav-btn active" onclick="goTab('beranda')"><span class="icon">🏠</span>Beranda</button>
+    <button class="nav-btn" onclick="goTab('mushaf')"><span class="icon">📖</span>Mushaf</button>
+    <button class="nav-btn" onclick="goTab('mutabaah')"><span class="icon">📈</span>Mutaba'ah</button>
+    <button class="nav-btn" onclick="goTab('profil')"><span class="icon">👤</span>Profil</button>
+  </div>
+
+  <!-- ===================== BOTTOM NAV (GURU) ===================== -->
+  <div class="bottom-nav" id="nav-guru" style="display:none;">
+    <button class="nav-btn active" onclick="goTabGuru('home')"><span class="icon">🏠</span>Beranda</button>
+    <button class="nav-btn" onclick="goTabGuru('rekap')"><span class="icon">📊</span>Rekap</button>
+    <button class="nav-btn" onclick="goTabGuru('profil')"><span class="icon">👤</span>Profil</button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* =====================================================================
+   KONFIGURASI - GANTI DENGAN URL WEB APP GAS KAMU SETELAH DEPLOY
+   ===================================================================== */
+const CONFIG = {
+  API_URL: 'https://script.google.com/macros/s/AKfycbzk_DQVTaMff7xsSuKDj5l_dvz9M-QUDG1zw58UFkwD3vRpHXpIHCJ_u-rQi2-cVAph/exec'
+};
+
+let SESSION = JSON.parse(localStorage.getItem('tahfidz_session') || 'null');
+let currentRole = 'siswa'; // untuk toggle login
+let selectedSiswaForGuru = null;
+
+/* ---------------- API HELPER ---------------- */
+async function callApi(action, payload = {}) {
+  const res = await fetch(CONFIG.API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // hindari CORS preflight GAS
+    body: JSON.stringify({ action, ...payload })
+  });
+  return res.json();
+}
+
+/* ---------------- NAVIGASI ANTAR SCREEN ---------------- */
+const SISWA_TAB_SCREENS = ['screen-beranda','screen-mushaf','screen-mutabaah','screen-profil'];
+const GURU_TAB_SCREENS = ['screen-guru-home','screen-guru-rekap','screen-guru-profil'];
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('nav-siswa').style.display = SISWA_TAB_SCREENS.includes(id) ? 'flex' : 'none';
+  document.getElementById('nav-guru').style.display = GURU_TAB_SCREENS.includes(id) ? 'flex' : 'none';
+}
+
+function goTab(tab) {
+  document.querySelectorAll('#nav-siswa .nav-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  showScreen('screen-' + tab);
+  if (tab === 'beranda') loadBeranda();
+  if (tab === 'mutabaah') loadMutabaah();
+  if (tab === 'mushaf') loadMushaf();
+  if (tab === 'profil') loadProfil();
+}
+
+function goTabGuru(tab) {
+  document.querySelectorAll('#nav-guru .nav-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  showScreen('screen-guru-' + tab);
+  if (tab === 'home') loadGuruHome();
+  if (tab === 'rekap') loadRekapTab();
+  if (tab === 'profil') loadGuruProfil();
+}
+
+/* ---------------- LOGIN ---------------- */
+function switchLoginTab(role) {
+  currentRole = role;
+  document.getElementById('tab-siswa').classList.toggle('active', role === 'siswa');
+  document.getElementById('tab-guru').classList.toggle('active', role === 'guru');
+  document.getElementById('login-id').placeholder = role === 'siswa' ? 'NISN' : 'NIP';
+  document.getElementById('login-error').textContent = '';
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const id = document.getElementById('login-id').value.trim();
+  const pw = document.getElementById('login-pw').value.trim();
+  const errBox = document.getElementById('login-error');
+  errBox.textContent = 'Memuat...';
+
+  try {
+    if (currentRole === 'siswa') {
+      const res = await callApi('loginSiswa', { nisn: id, password: pw });
+      if (!res.success) { errBox.textContent = res.message; return false; }
+      SESSION = { role: 'siswa', data: res.siswa };
+      localStorage.setItem('tahfidz_session', JSON.stringify(SESSION));
+      enterSiswaApp();
+    } else {
+      const res = await callApi('loginGuru', { nip: id, password: pw });
+      if (!res.success) { errBox.textContent = res.message; return false; }
+      SESSION = { role: 'guru', data: res.guru };
+      localStorage.setItem('tahfidz_session', JSON.stringify(SESSION));
+      enterGuruApp();
+    }
+  } catch (err) {
+    errBox.textContent = 'Gagal terhubung ke server. Cek koneksi / URL API.';
+  }
+  return false;
+}
+
+function logout() {
+  localStorage.removeItem('tahfidz_session');
+  SESSION = null;
+  document.getElementById('login-id').value = '';
+  document.getElementById('login-pw').value = '';
+  showScreen('screen-login');
+}
+
+/* ---------------- SISWA APP ---------------- */
+function enterSiswaApp() {
+  document.getElementById('beranda-nama').textContent = SESSION.data.Nama + '!';
+  document.getElementById('beranda-foto').src = SESSION.data.FotoURL || 'https://i.ibb.co.com/5Xb4Crkq/Logo-Sekolah-01.png';
+  showScreen('screen-beranda');
+  document.getElementById('nav-siswa').style.display = 'flex';
+  loadBeranda();
+}
+
+async function loadBeranda() {
+  const res = await callApi('getDashboardSiswa', { siswaId: SESSION.data.ID });
+  if (!res.success) return;
+
+  if (res.targetHariIni) {
+    const t = res.targetHariIni;
+    document.getElementById('target-value').textContent = `Surah ${t.surah}, Ayat ${t.ayatMulai}-${t.ayatAkhir}`;
+    const pct = Math.min(100, Number(t.persentase) || 0);
+    document.getElementById('target-bar').style.width = pct + '%';
+    document.getElementById('target-pct').textContent = pct + '%';
+    const circumference = 188;
+    document.getElementById('target-ring').style.strokeDashoffset = circumference - (circumference * pct / 100);
+  } else {
+    document.getElementById('target-value').textContent = 'Belum ada target hari ini';
+  }
+
+  if (res.lanjutkanHafalan) {
+    const l = res.lanjutkanHafalan;
+    document.getElementById('lanjutkan-surah').textContent = "'" + l.surah + "'";
+    document.getElementById('lanjutkan-card').querySelector('.tag').textContent = `Ayat ${l.ayatMulai}-${l.ayatAkhir}`;
+  } else {
+    document.getElementById('lanjutkan-surah').textContent = 'Belum ada setoran';
+  }
+}
+
+async function loadMutabaah() {
+  const res = await callApi('getMutabaah', { siswaId: SESSION.data.ID });
+  if (!res.success) return;
+
+  document.getElementById('donut-value').textContent = res.totalHafalanJuz + ' Juz';
+  const circumference = 502;
+  const pct = Math.min(100, (res.totalHafalanJuz / 30) * 100);
+  document.getElementById('donut-ring').style.strokeDashoffset = circumference - (circumference * pct / 100);
+
+  const colors = ['#6b8f7f','#8aab9a','#a9c7b8','#c9a24b','#d9bd7d','#e8efe9'];
+  const legendEl = document.getElementById('juz-legend');
+  legendEl.innerHTML = res.juzList.length ? res.juzList.map((j, i) =>
+    `<div class="legend-item"><span class="dot" style="background:${colors[i % colors.length]}"></span>Juz ${j.juz}: ${j.persentase}%</div>`
+  ).join('') : '<div class="empty-note">Belum ada setoran tercatat.</div>';
+
+  renderCalendar(res.tanggalSetoran);
+
+  if (res.riwayat.length) {
+    const r = res.riwayat[0];
+    const tgl = new Date(r.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'long' });
+    document.getElementById('note-box').innerHTML =
+      `<b>${tgl}: ${r.surah}, Ayat ${r.ayatMulai}-${r.ayatAkhir}</b><br>${r.catatan || 'Tidak ada catatan.'}`;
+  }
+}
+
+function renderCalendar(tanggalSetoran) {
+  const now = new Date();
+  const year = now.getFullYear(), month = now.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const totalDays = new Date(year, month + 1, 0).getDate();
+  const todayStr = now.toISOString().slice(0,10);
+  const setoranSet = new Set(tanggalSetoran.map(d => new Date(d).toISOString().slice(0,10)));
+
+  const dows = ['S','M','T','W','T','F','S'];
+  let html = dows.map(d => `<div class="dow">${d}</div>`).join('');
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day empty"></div>`;
+  for (let d = 1; d <= totalDays; d++) {
+    const dateStr = new Date(year, month, d).toISOString().slice(0,10);
+    let cls = 'cal-day';
+    if (setoranSet.has(dateStr)) cls += ' has-setoran';
+    if (dateStr === todayStr) cls += ' today';
+    html += `<div class="${cls}">${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+function loadProfil() {
+  document.getElementById('profil-nama').textContent = SESSION.data.Nama;
+  document.getElementById('profil-meta').textContent = 'Kelas ' + SESSION.data.Kelas;
+  document.getElementById('profil-foto').src = SESSION.data.FotoURL || 'https://i.ibb.co.com/5Xb4Crkq/Logo-Sekolah-01.png';
+}
+
+const DAFTAR_SURAH = [
+  [1,"Al-Fatihah","Pembukaan","al-fatihah"],[2,"Al-Baqarah","Sapi","al-baqarah"],[3,"Ali 'Imran","Keluarga Imran","ali-imran"],
+  [4,"An-Nisa'","Wanita","an-nisa"],[5,"Al-Ma'idah","Hidangan","al-maidah"],[6,"Al-An'am","Binatang Ternak","al-anam"],
+  [7,"Al-A'raf","Tempat Tertinggi","al-araf"],[8,"Al-Anfal","Rampasan Perang","al-anfal"],[9,"At-Taubah","Pengampunan","at-taubah"],
+  [10,"Yunus","Yunus","yunus"],[11,"Hud","Hud","hud"],[12,"Yusuf","Yusuf","yusuf"],[13,"Ar-Ra'd","Guruh","ar-rad"],
+  [14,"Ibrahim","Ibrahim","ibrahim"],[15,"Al-Hijr","Hijr","al-hijr"],[16,"An-Nahl","Lebah","an-nahl"],
+  [17,"Al-Isra'","Memperjalankan Malam Hari","al-isra"],[18,"Al-Kahf","Goa","al-kahf"],[19,"Maryam","Maryam","maryam"],
+  [20,"Taha","Taha","taha"],[21,"Al-Anbiya'","Para Nabi","al-anbiya"],[22,"Al-Hajj","Haji","al-hajj"],
+  [23,"Al-Mu'minun","Orang-Orang Mukmin","al-muminun"],[24,"An-Nur","Cahaya","an-nur"],[25,"Al-Furqan","Pembeda","al-furqan"],
+  [26,"Asy-Syu'ara'","Para Penyair","asy-syuara"],[27,"An-Naml","Semut-semut","an-naml"],[28,"Al-Qasas","Kisah-Kisah","al-qasas"],
+  [29,"Al-'Ankabut","Laba-Laba","al-ankabut"],[30,"Ar-Rum","Romawi","ar-rum"],[31,"Luqman","Luqman","luqman"],
+  [32,"As-Sajdah","Sajdah","as-sajdah"],[33,"Al-Ahzab","Golongan Yang Bersekutu","al-ahzab"],[34,"Saba'","Saba'","saba"],
+  [35,"Fatir","Maha Pencipta","fatir"],[36,"Yasin","Yasin","yasin"],[37,"As-Saffat","Barisan-Barisan","as-saffat"],
+  [38,"Sad","Sad","sad"],[39,"Az-Zumar","Rombongan","az-zumar"],[40,"Ghafir","Maha Pengampun","ghafir"],
+  [41,"Fussilat","Yang Dijelaskan","fussilat"],[42,"Asy-Syura","Musyawarah","asy-syura"],[43,"Az-Zukhruf","Perhiasan","az-zukhruf"],
+  [44,"Ad-Dukhan","Kabut","ad-dukhan"],[45,"Al-Jasiyah","Berlutut","al-jasiyah"],[46,"Al-Ahqaf","Bukit Pasir","al-ahqaf"],
+  [47,"Muhammad","Muhammad","muhammad"],[48,"Al-Fath","Kemenangan","al-fath"],[49,"Al-Hujurat","Kamar-Kamar","al-hujurat"],
+  [50,"Qaf","Qaf","qaf"],[51,"Az-Zariyat","Angin yang Menerbangkan","az-zariyat"],[52,"At-Tur","Bukit Tursina","at-tur"],
+  [53,"An-Najm","Bintang","an-najm"],[54,"Al-Qamar","Bulan","al-qamar"],[55,"Ar-Rahman","Maha Pengasih","ar-rahman"],
+  [56,"Al-Waqi'ah","Hari Kiamat","al-waqiah"],[57,"Al-Hadid","Besi","al-hadid"],[58,"Al-Mujadilah","Gugatan","al-mujadilah"],
+  [59,"Al-Hasyr","Pengusiran","al-hasyr"],[60,"Al-Mumtahanah","Wanita Yang Diuji","al-mumtahanah"],[61,"As-Saff","Barisan","as-saff"],
+  [62,"Al-Jumu'ah","Jumat","al-jumuah"],[63,"Al-Munafiqun","Orang-Orang Munafik","al-munafiqun"],[64,"At-Tagabun","Pengungkapan Kesalahan","at-tagabun"],
+  [65,"At-Talaq","Talak","at-talaq"],[66,"At-Tahrim","Pengharaman","at-tahrim"],[67,"Al-Mulk","Kerajaan","al-mulk"],
+  [68,"Al-Qalam","Pena","al-qalam"],[69,"Al-Haqqah","Hari Kiamat","al-haqqah"],[70,"Al-Ma'arij","Tempat Naik","al-maarij"],
+  [71,"Nuh","Nuh","nuh"],[72,"Al-Jinn","Jin","al-jinn"],[73,"Al-Muzzammil","Orang Yang Berselimut","al-muzzammil"],
+  [74,"Al-Muddassir","Orang Yang Berkemul","al-muddassir"],[75,"Al-Qiyamah","Hari Kiamat","al-qiyamah"],[76,"Al-Insan","Manusia","al-insan"],
+  [77,"Al-Mursalat","Malaikat Yang Diutus","al-mursalat"],[78,"An-Naba'","Berita Besar","an-naba"],[79,"An-Nazi'at","Malaikat Yang Mencabut","an-naziat"],
+  [80,"'Abasa","Bermuka Masam","abasa"],[81,"At-Takwir","Penggulungan","at-takwir"],[82,"Al-Infitar","Terbelah","al-infitar"],
+  [83,"Al-Mutaffifin","Orang-Orang Curang","al-mutaffifin"],[84,"Al-Insyiqaq","Terbelah","al-insyiqaq"],[85,"Al-Buruj","Gugusan Bintang","al-buruj"],
+  [86,"At-Tariq","Yang Datang Di Malam Hari","at-tariq"],[87,"Al-A'la","Maha Tinggi","al-ala"],[88,"Al-Gasyiyah","Hari Kiamat","al-gasyiyah"],
+  [89,"Al-Fajr","Fajar","al-fajr"],[90,"Al-Balad","Negeri","al-balad"],[91,"Asy-Syams","Matahari","asy-syams"],
+  [92,"Al-Lail","Malam","al-lail"],[93,"Ad-Duha","Duha","ad-duha"],[94,"Al-Insyirah","Lapang","al-insyirah"],
+  [95,"At-Tin","Buah Tin","at-tin"],[96,"Al-'Alaq","Segumpal Darah","al-alaq"],[97,"Al-Qadr","Kemuliaan","al-qadr"],
+  [98,"Al-Bayyinah","Bukti Nyata","al-bayyinah"],[99,"Az-Zalzalah","Guncangan","az-zalzalah"],[100,"Al-'Adiyat","Kuda Yang Berlari Kencang","al-adiyat"],
+  [101,"Al-Qari'ah","Hari Kiamat","al-qariah"],[102,"At-Takasur","Bermegah-Megahan","at-takasur"],[103,"Al-'Asr","Masa","al-asr"],
+  [104,"Al-Humazah","Pengumpat","al-humazah"],[105,"Al-Fil","Gajah","al-fil"],[106,"Quraisy","Quraisy","quraisy"],
+  [107,"Al-Ma'un","Barang Yang Berguna","al-maun"],[108,"Al-Kausar","Pemberian Yang Banyak","al-kausar"],[109,"Al-Kafirun","Orang-Orang kafir","al-kafirun"],
+  [110,"An-Nasr","Pertolongan","an-nasr"],[111,"Al-Lahab","Api Yang Bergejolak","al-lahab"],[112,"Al-Ikhlas","Ikhlas","al-ikhlas"],
+  [113,"Al-Falaq","Subuh","al-falaq"],[114,"An-Nas","Manusia","an-nas"]
+];
+const QURANMU_BASE = 'https://quran.muhammadiyah.or.id/'; // fallback link kalau API bermasalah
+
+function loadMushaf() { renderMushafList(); }
+
+function renderMushafList() {
+  const q = (document.getElementById('mushaf-search').value || '').toLowerCase();
+  const filtered = DAFTAR_SURAH.filter(s => s[1].toLowerCase().includes(q) || s[2].toLowerCase().includes(q));
+  document.getElementById('mushaf-list').innerHTML = filtered.length ? filtered.map(s =>
+    `<div class="surah-list-item" style="cursor:pointer;" onclick="openSurahDetail(${s[0]})">
+      <div class="surah-row"><span class="num">${s[0]}</span>
+        <div class="sinfo"><span>${s[1]}</span><span class="sarti">${s[2]}</span></div>
+      </div>
+      <span>›</span>
+    </div>`
+  ).join('') : '<div class="empty-note">Surah tidak ditemukan.</div>';
+}
+
+/* ---------------- MUSHAF DETAIL (equran.id API v2) ---------------- */
+const QARI_LIST = [
+  { id: '01', nama: 'Abdullah Al-Juhany' },
+  { id: '02', nama: 'Abdul Muhsin Al-Qasim' },
+  { id: '03', nama: 'Abdurrahman As-Sudais' },
+  { id: '04', nama: 'Ibrahim Al-Dossari' },
+  { id: '05', nama: 'Misyari Rasyid Al-Afasy' },
+  { id: '06', nama: 'Yasser Al-Dosari' }
+];
+let currentSurahData = null;
+let currentAudio = null;
+let currentPlayingBtn = null;
+
+async function openSurahDetail(nomor) {
+  showScreen('screen-mushaf-detail');
+  document.getElementById('detail-surah-title').textContent = 'Memuat...';
+  document.getElementById('ayat-list').innerHTML = '<div class="loading">Memuat ayat...</div>';
+  stopAudio();
+
+  try {
+    const res = await fetch(`https://equran.id/api/v2/surat/${nomor}`);
+    const json = await res.json();
+    const data = json.data || json;
+    currentSurahData = data;
+
+    const namaLatin = data.namaLatin || data.nama_latin || '';
+    const namaArab = data.nama || '';
+    const arti = data.arti || '';
+    const tempat = data.tempatTurun || data.tempat_turun || '';
+    const jumlah = data.jumlahAyat || data.jumlah_ayat || (data.ayat ? data.ayat.length : '');
+
+    document.getElementById('detail-surah-title').textContent = namaLatin;
+    document.getElementById('detail-nama-arab').textContent = namaArab;
+    document.getElementById('detail-meta').textContent = `${tempat} • ${jumlah} Ayat • "${arti}"`;
+
+    const qariSel = document.getElementById('detail-qari');
+    qariSel.innerHTML = QARI_LIST.map(q => `<option value="${q.id}">${q.nama}</option>`).join('');
+    qariSel.value = '05';
+
+    renderAyatList(data.ayat || []);
+  } catch (err) {
+    document.getElementById('detail-surah-title').textContent = 'Gagal memuat';
+    document.getElementById('ayat-list').innerHTML =
+      `<div class="empty-note">Tidak bisa memuat data dari equran.id. Coba lagi, atau <a href="${QURANMU_BASE}" target="_blank" rel="noopener">buka Mushaf di quran.muhammadiyah.or.id</a>.</div>`;
+  }
+}
+
+function renderAyatList(ayatArr) {
+  const list = document.getElementById('ayat-list');
+  list.innerHTML = ayatArr.map(a => {
+    const no = a.nomorAyat || a.nomor_ayat;
+    const arab = a.teksArab || a.teks_arab || '';
+    const terjemah = a.teksIndonesia || a.teks_indonesia || a.teksInd || '';
+    return `<div class="ayat-card">
+      <div class="ayat-top">
+        <span class="ayat-num">${no}</span>
+        <button class="ayat-playbtn" id="ayat-btn-${no}" onclick="playAyat(${no})">▶</button>
+      </div>
+      <div class="ayat-arab">${arab}</div>
+      <div class="ayat-terjemah">${terjemah}</div>
+    </div>`;
+  }).join('');
+}
+
+function getSelectedQari() {
+  return document.getElementById('detail-qari').value || '05';
+}
+
+function onQariChange() { stopAudio(); }
+
+function stopAudio() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (currentPlayingBtn) { currentPlayingBtn.classList.remove('playing'); currentPlayingBtn.textContent = '▶'; currentPlayingBtn = null; }
+  const fullBtn = document.getElementById('detail-play-full');
+  if (fullBtn) fullBtn.textContent = '▶ Play Semua Ayat';
+}
+
+function playAyat(nomorAyat) {
+  if (!currentSurahData) return;
+  const ayat = (currentSurahData.ayat || []).find(a => (a.nomorAyat || a.nomor_ayat) === nomorAyat);
+  if (!ayat) return;
+  const qari = getSelectedQari();
+  const audioMap = ayat.audio || {};
+  const url = audioMap[qari] || Object.values(audioMap)[0];
+  if (!url) { showToast('Audio ayat ini tidak tersedia.'); return; }
+
+  const btn = document.getElementById('ayat-btn-' + nomorAyat);
+  const wasPlayingThis = currentPlayingBtn === btn;
+  stopAudio();
+  if (wasPlayingThis) return; // klik lagi untuk stop
+
+  currentAudio = new Audio(url);
+  currentAudio.play();
+  currentAudio.onended = stopAudio;
+  btn.classList.add('playing');
+  btn.textContent = '⏸';
+  currentPlayingBtn = btn;
+}
+
+function toggleFullAudio() {
+  if (!currentSurahData) return;
+  const fullBtn = document.getElementById('detail-play-full');
+  const qari = getSelectedQari();
+  const audioFullMap = currentSurahData.audioFull || currentSurahData.audio_full || {};
+  const url = audioFullMap[qari] || Object.values(audioFullMap)[0];
+
+  if (currentAudio && fullBtn.textContent.includes('⏸')) { stopAudio(); return; }
+  if (!url) { showToast('Audio lengkap surah ini tidak tersedia.'); return; }
+
+  stopAudio();
+  currentAudio = new Audio(url);
+  currentAudio.play();
+  currentAudio.onended = stopAudio;
+  fullBtn.textContent = '⏸ Berhenti';
+}
+
+/* ---------------- GURU APP ---------------- */
+let DAFTAR_KELAS_CACHE = null;
+
+async function enterGuruApp() {
+  document.getElementById('guru-nama').textContent = SESSION.data.Nama + '!';
+  showScreen('screen-guru-home');
+  document.getElementById('nav-guru').style.display = 'flex';
+  await loadGuruHome();
+}
+
+async function loadGuruHome() {
+  if (!DAFTAR_KELAS_CACHE) {
+    const res = await callApi('getDaftarKelas');
+    DAFTAR_KELAS_CACHE = res.kelas;
+  }
+  const sel = document.getElementById('select-kelas');
+  sel.innerHTML = DAFTAR_KELAS_CACHE.map(k => `<option value="${k.NamaKelas}">${k.NamaKelas}</option>`).join('');
+  loadSiswaKelas();
+}
+
+async function loadRekapTab() {
+  if (!DAFTAR_KELAS_CACHE) {
+    const res = await callApi('getDaftarKelas');
+    DAFTAR_KELAS_CACHE = res.kelas;
+  }
+  const sel = document.getElementById('select-kelas-rekap');
+  sel.innerHTML = DAFTAR_KELAS_CACHE.map(k => `<option value="${k.NamaKelas}">${k.NamaKelas}</option>`).join('');
+  loadRekapKelas();
+}
+
+async function loadRekapKelas() {
+  const kelas = document.getElementById('select-kelas-rekap').value;
+  const listEl = document.getElementById('rekap-list');
+  listEl.innerHTML = '<div class="loading">Memuat...</div>';
+  const res = await callApi('getRekapKelas', { kelas });
+  listEl.innerHTML = res.rekap.length ? res.rekap.map(r => {
+    const tgl = r.tanggalTerakhir ? new Date(r.tanggalTerakhir).toLocaleDateString('id-ID', { day:'numeric', month:'short' }) : 'Belum ada setoran';
+    return `<div class="rekap-item">
+      <img src="${r.fotoUrl || 'https://i.ibb.co.com/5Xb4Crkq/Logo-Sekolah-01.png'}">
+      <div>
+        <div class="rname">${r.nama}</div>
+        <div class="rmeta">Terakhir: ${tgl}${r.surahTerakhir ? ' • ' + r.surahTerakhir : ''}</div>
+      </div>
+      <div class="rjuz">${r.totalHafalanJuz} Juz</div>
+    </div>`;
+  }).join('') : '<div class="empty-note">Belum ada siswa di kelas ini.</div>';
+}
+
+function loadGuruProfil() {
+  document.getElementById('guru-profil-nama').textContent = SESSION.data.Nama;
+}
+
+async function loadSiswaKelas() {
+  const kelas = document.getElementById('select-kelas').value;
+  const res = await callApi('getDaftarSiswa', { kelas });
+  const listEl = document.getElementById('siswa-list');
+  listEl.innerHTML = res.siswa.length ? res.siswa.map(s =>
+    `<div class="siswa-pill" onclick='openFormSetoran(${JSON.stringify(s)})'>
+      <img src="${s.FotoURL || 'https://i.ibb.co.com/5Xb4Crkq/Logo-Sekolah-01.png'}">
+      <div><div style="font-weight:600;">${s.Nama}</div><div style="font-size:12px;color:var(--muted)">NISN ${s.NISN}</div></div>
+    </div>`
+  ).join('') : '<div class="empty-note">Belum ada siswa di kelas ini.</div>';
+}
+
+async function openFormSetoran(siswa) {
+  selectedSiswaForGuru = siswa;
+  document.getElementById('form-siswa-nama').textContent = 'Setoran - ' + siswa.Nama;
+  document.querySelector('#screen-guru-form form').reset();
+  showScreen('screen-guru-form');
+  loadRiwayatGuru();
+}
+
+async function loadRiwayatGuru() {
+  const res = await callApi('getRiwayatSetoran', { siswaId: selectedSiswaForGuru.ID });
+  const el = document.getElementById('riwayat-list');
+  el.innerHTML = res.riwayat.length ? res.riwayat.slice(0,10).map(r => {
+    const tgl = new Date(r.Tanggal).toLocaleDateString('id-ID', { day:'numeric', month:'short' });
+    return `<div class="list-item" style="flex-direction:column; align-items:flex-start; gap:2px;">
+      <b>${tgl} - ${r.Surah} (${r.AyatMulai}-${r.AyatAkhir})</b>
+      <span style="color:var(--muted); font-size:12px;">Juz ${r.Juz} • ${r.Persentase}% • ${r.Catatan || '-'}</span>
+    </div>`;
+  }).join('') : '<div class="empty-note">Belum ada riwayat.</div>';
+}
+
+async function submitSetoran(e) {
+  e.preventDefault();
+  const payload = {
+    siswaId: selectedSiswaForGuru.ID,
+    guruId: SESSION.data.ID,
+    surah: document.getElementById('f-surah').value,
+    ayatMulai: document.getElementById('f-ayat-mulai').value,
+    ayatAkhir: document.getElementById('f-ayat-akhir').value,
+    juz: document.getElementById('f-juz').value,
+    persentase: document.getElementById('f-persentase').value,
+    nilai: document.getElementById('f-nilai').value,
+    catatan: document.getElementById('f-catatan').value
+  };
+  const res = await callApi('tambahSetoran', payload);
+  showToast(res.success ? 'Setoran tersimpan ✓' : 'Gagal: ' + res.message);
+  if (res.success) {
+    document.querySelector('#screen-guru-form form').reset();
+    loadRiwayatGuru();
+  }
+  return false;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ---------------- INIT ---------------- */
+window.onload = () => {
+  if (SESSION && SESSION.role === 'siswa') enterSiswaApp();
+  else if (SESSION && SESSION.role === 'guru') enterGuruApp();
+};
+</script>
+</body>
+</html>
