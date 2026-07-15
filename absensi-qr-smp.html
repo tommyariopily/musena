@@ -11,7 +11,6 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
   /* ===== DESIGN TOKENS ===== */
@@ -464,6 +463,21 @@
     .id-card *{
       -webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important;
     }
+
+    /* Lembar cetak F4 (21.5 x 33 cm), 10 kartu absensi (5 kolom x 2 baris) per halaman */
+    .lembar-halaman{
+      width:314mm;height:199mm;margin:0 auto;
+      display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(2,1fr);
+      gap:5mm;page-break-after:always;
+    }
+    .lembar-halaman:last-child{page-break-after:auto;}
+    .sel-kartu{position:relative;width:100%;height:100%;}
+    .sel-kartu img{width:100%;height:100%;display:block;object-fit:contain;}
+    .sel-kartu .tanda{position:absolute;width:3.5mm;height:3.5mm;}
+    .sel-kartu .tanda-ka{top:-2.5mm;left:-2.5mm;border-top:0.3mm solid #999;border-left:0.3mm solid #999;}
+    .sel-kartu .tanda-ku{top:-2.5mm;right:-2.5mm;border-top:0.3mm solid #999;border-right:0.3mm solid #999;}
+    .sel-kartu .tanda-kb{bottom:-2.5mm;left:-2.5mm;border-bottom:0.3mm solid #999;border-left:0.3mm solid #999;}
+    .sel-kartu .tanda-kn{bottom:-2.5mm;right:-2.5mm;border-bottom:0.3mm solid #999;border-right:0.3mm solid #999;}
   }
 
   /* ===== KARTU ABSEN (ID CARD) SISWA ===== */
@@ -727,7 +741,8 @@
         </div>
         <div class="aksi-baris">
           <button class="btn btn-ghost" id="toggle-form-tambah">+ Tambah Siswa</button>
-          <button class="btn btn-emas" id="btn-cetak-qr">🖨 Cetak Kartu QR</button>
+          <button class="btn btn-emas" id="btn-cetak-qr">🖨 Cetak Kartu Absensi (F4)</button>
+          <button class="btn btn-ghost" id="btn-unduh-f4">⬇ Unduh F4 (PDF)</button>
         </div>
         <div class="form-tambah" id="form-tambah">
           <div class="grid2">
@@ -1473,30 +1488,174 @@ el('btn-simpan-libur').addEventListener('click', async ()=>{
 
 /* ================= KARTU ABSEN (ID CARD) PER SISWA ================= */
 
-// html2canvas (library pembuat JPG) tidak mendukung object-fit/background-size:cover
-// dengan benar -- foto jadi terlihat "stretch" (melar) saat di-capture, walau tampilannya
-// normal di layar (karena browser sendiri MENDUKUNG object-fit). Solusinya: sebelum
-// membuat JPG, hitung manual ukuran & posisi ala "cover" lalu terapkan sebagai
-// width/height/left/top eksplisit (bukan object-fit) -- ini yang benar-benar dipahami
-// html2canvas. Setelah selesai capture, style ini dikembalikan agar tampilan di layar
-// tetap memakai CSS object-fit seperti semula.
-function terapkanCoverManual(imgEl, boxW, boxH){
+// Catatan teknis: html2canvas (capture DOM -> gambar) ternyata tidak cukup andal untuk
+// kasus ini -- percobaan sebelumnya masih menyisakan foto tidak center. Solusi final:
+// gambar kartu SEPENUHNYA lewat Canvas 2D API secara manual (bukan capture DOM), jadi
+// posisi & ukuran setiap elemen kita hitung & gambar sendiri -- hasilnya presisi dan
+// konsisten, tidak bergantung pada bagaimana html2canvas menafsirkan CSS.
+
+function muatGambar(src, crossOrigin){
   return new Promise((resolve)=>{
-    function hitung(){
-      const nw = imgEl.naturalWidth, nh = imgEl.naturalHeight;
-      if (!nw || !nh) { resolve(); return; }
-      const skala = Math.max(boxW / nw, boxH / nh);
-      const w = nw * skala, h = nh * skala;
-      imgEl.style.position = 'absolute';
-      imgEl.style.width = w + 'px';
-      imgEl.style.height = h + 'px';
-      imgEl.style.maxWidth = 'none';
-      imgEl.style.left = ((boxW - w) / 2) + 'px';
-      imgEl.style.top = ((boxH - h) / 2) + 'px';
-      resolve();
-    }
-    if (imgEl.complete && imgEl.naturalWidth) hitung();
-    else { imgEl.onload = hitung; imgEl.onerror = ()=>resolve(); }
+    const img = new Image();
+    if (crossOrigin) img.crossOrigin = 'anonymous';
+    img.onload = ()=> resolve(img);
+    img.onerror = ()=> resolve(null);
+    img.src = src;
+  });
+}
+function gambarCover(ctx, img, dx, dy, dw, dh){
+  const iw = img.naturalWidth, ih = img.naturalHeight;
+  const skala = Math.max(dw / iw, dh / ih);
+  const sw = dw / skala, sh = dh / skala;
+  const sx = (iw - sw) / 2, sy = (ih - sh) / 2;
+  ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+}
+function gambarContain(ctx, img, dx, dy, dw, dh){
+  const iw = img.naturalWidth, ih = img.naturalHeight;
+  const skala = Math.min(dw / iw, dh / ih);
+  const w = iw * skala, h = ih * skala;
+  ctx.drawImage(img, dx + (dw - w) / 2, dy + (dh - h) / 2, w, h);
+}
+function jalurRoundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function bungkusTeks(ctx, teks, lebarMax){
+  const kata = teks.split(' ');
+  const baris = [];
+  let sekarang = '';
+  kata.forEach(k=>{
+    const coba = sekarang ? sekarang + ' ' + k : k;
+    if (ctx.measureText(coba).width > lebarMax && sekarang) { baris.push(sekarang); sekarang = k; }
+    else sekarang = coba;
+  });
+  if (sekarang) baris.push(sekarang);
+  return baris;
+}
+
+// Menggambar satu kartu absen penuh ke sebuah canvas baru, lalu mengembalikan canvas itu.
+// skala: faktor resolusi (3 = ukuran file lebih tajam untuk dicetak/disimpan).
+async function gambarKartuAbsenKeCanvas(s, skala){
+  const W = 260, H = 410;
+  const canvas = document.createElement('canvas');
+  canvas.width = W * skala; canvas.height = H * skala;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(skala, skala);
+
+  const [bgImg, logoImg, fotoImg, qrImg] = await Promise.all([
+    muatGambar('https://lh3.googleusercontent.com/d/1SqjWGqlUKBtia_bHGI9xwyXdyQYV-CNy', true),
+    muatGambar(appLogoUrl, true),
+    s.foto ? muatGambar(s.foto, true) : Promise.resolve(null),
+    buatQrDataURL(String(s.nis), 240)
+  ]);
+
+  jalurRoundRect(ctx, 0, 0, W, H, 16);
+  ctx.save();
+  ctx.clip();
+
+  ctx.fillStyle = '#0f4c33';
+  ctx.fillRect(0, 0, W, H);
+  if (bgImg) gambarCover(ctx, bgImg, 0, 0, W, H);
+
+  // Logo (kotak putih membulat di tengah atas)
+  const logoBoxSize = 42, logoBoxX = (W - logoBoxSize) / 2, logoBoxY = 14;
+  jalurRoundRect(ctx, logoBoxX, logoBoxY, logoBoxSize, logoBoxSize, 9);
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.fill();
+  if (logoImg) gambarContain(ctx, logoImg, logoBoxX + 5, logoBoxY + 5, logoBoxSize - 10, logoBoxSize - 10);
+
+  // Foto siswa (lingkaran, selalu center & tidak stretch karena pakai gambarCover manual)
+  const fotoD = 92, fotoX = (W - fotoD) / 2, fotoY = logoBoxY + logoBoxSize + 16;
+  ctx.beginPath();
+  ctx.arc(fotoX + fotoD / 2, fotoY + fotoD / 2, fotoD / 2 + 4, 0, Math.PI * 2);
+  ctx.fillStyle = '#fff';
+  ctx.fill();
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(fotoX + fotoD / 2, fotoY + fotoD / 2, fotoD / 2, 0, Math.PI * 2);
+  ctx.clip();
+  if (fotoImg) {
+    gambarCover(ctx, fotoImg, fotoX, fotoY, fotoD, fotoD);
+  } else {
+    ctx.fillStyle = '#f4d47a';
+    ctx.fillRect(fotoX, fotoY, fotoD, fotoD);
+    ctx.fillStyle = '#0f4c33';
+    ctx.font = '700 30px Poppins, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(inisial(s.nama), fotoX + fotoD / 2, fotoY + fotoD / 2 + 2);
+  }
+  ctx.restore();
+
+  // ==== Panel bawah: nama, NIS, kelas, QR (rata bawah kartu, seperti desain aslinya) ====
+  ctx.font = '700 15px Poppins, sans-serif';
+  const namaBaris = bungkusTeks(ctx, s.nama.toUpperCase(), W - 32);
+  const tinggiBarisNama = 19;
+
+  const padAtas = 16, padBawah = 18;
+  const tinggiNis = 14, gapNis = 5;
+  const tinggiKelas = 22, gapKelas = 8;
+  const ukuranQr = 82, gapQr = 10;
+  const tinggiPanel = padAtas + (namaBaris.length * tinggiBarisNama) + gapNis + tinggiNis + gapKelas + tinggiKelas + gapQr + ukuranQr + padBawah;
+  const yPanel = H - tinggiPanel;
+
+  let cursor = yPanel + padAtas;
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = 'rgba(0,0,0,0.75)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 1;
+  ctx.textBaseline = 'top';
+  ctx.font = '700 15px Poppins, sans-serif';
+  namaBaris.forEach((baris, i)=> ctx.fillText(baris, W / 2, cursor + i * tinggiBarisNama));
+  cursor += namaBaris.length * tinggiBarisNama + gapNis;
+
+  ctx.font = '400 11.5px "Roboto Mono", monospace';
+  ctx.fillStyle = '#f4d47a';
+  ctx.shadowBlur = 4;
+  ctx.fillText('NIS. ' + s.nis, W / 2, cursor);
+  cursor += tinggiNis + gapKelas;
+
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+  ctx.font = '600 11px Poppins, sans-serif';
+  const teksKelas = s.kelas || '-';
+  const lebarTeksKelas = ctx.measureText(teksKelas).width;
+  const lebarPil = lebarTeksKelas + 26;
+  jalurRoundRect(ctx, W / 2 - lebarPil / 2, cursor, lebarPil, tinggiKelas, tinggiKelas / 2);
+  ctx.fillStyle = '#c9a227';
+  ctx.fill();
+  ctx.fillStyle = '#3a2c07';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(teksKelas, W / 2, cursor + tinggiKelas / 2 + 1);
+  cursor += tinggiKelas + gapQr;
+
+  jalurRoundRect(ctx, W / 2 - ukuranQr / 2, cursor, ukuranQr, ukuranQr, 8);
+  ctx.fillStyle = '#fff';
+  ctx.fill();
+  if (qrImg) ctx.drawImage(qrImg, W / 2 - ukuranQr / 2 + 6, cursor + 6, ukuranQr - 12, ukuranQr - 12);
+
+  ctx.restore(); // lepas clip rounded-corner kartu
+  return canvas;
+}
+
+// Membuat QR code sebagai <img> (dataURL) tanpa perlu menempel ke DOM -- dipakai untuk
+// digambar langsung ke canvas kartu.
+function buatQrDataURL(teks, ukuranPx){
+  return new Promise((resolve)=>{
+    const tmp = document.createElement('div');
+    tmp.style.position = 'fixed'; tmp.style.left = '-9999px';
+    document.body.appendChild(tmp);
+    new QRCode(tmp, { text: teks, width: ukuranPx, height: ukuranPx });
+    setTimeout(()=>{
+      const sumber = tmp.querySelector('canvas') || tmp.querySelector('img');
+      if (!sumber) { document.body.removeChild(tmp); resolve(null); return; }
+      const img = new Image();
+      img.onload = ()=> { document.body.removeChild(tmp); resolve(img); };
+      img.onerror = ()=> { document.body.removeChild(tmp); resolve(null); };
+      img.src = sumber.tagName === 'CANVAS' ? sumber.toDataURL('image/png') : sumber.src;
+    }, 30);
   });
 }
 
@@ -1518,6 +1677,7 @@ function bukaKartuAbsen(nis){
   qrWrap.innerHTML = '';
   new QRCode(qrWrap, { text: String(s.nis), width: 78, height: 78 });
 
+  el('modal-kartu').dataset.nis = s.nis;
   el('modal-kartu').classList.remove('hidden');
 }
 
@@ -1538,22 +1698,10 @@ el('btn-unduh-kartu-absen').addEventListener('click', async ()=>{
   const teksAsli = btn.textContent;
   btn.disabled = true; btn.textContent = 'Memproses...';
   try {
-    const kartu = el('id-card-preview');
-    const fotoBg = kartu.querySelector('.id-card-bg');
-    const fotoWrap = kartu.querySelector('.id-card-foto-wrap');
-    const fotoSiswa = fotoWrap ? fotoWrap.querySelector('img') : null;
-
-    // Hitung manual "cover" untuk foto latar & foto siswa agar tidak stretch saat di-capture
-    await terapkanCoverManual(fotoBg, kartu.offsetWidth, kartu.offsetHeight);
-    if (fotoSiswa) await terapkanCoverManual(fotoSiswa, fotoWrap.offsetWidth, fotoWrap.offsetHeight);
-
-    const canvas = await html2canvas(kartu, { scale: 3, useCORS: true, backgroundColor: '#ffffff' });
-
-    // Kembalikan ke CSS object-fit semula untuk tampilan di layar
-    fotoBg.style.cssText = '';
-    if (fotoSiswa) fotoSiswa.style.cssText = '';
-
-    const namaFile = 'kartu-absen-' + el('id-card-nama').textContent.trim().replace(/\s+/g,'_') + '.jpg';
+    const nis = el('modal-kartu').dataset.nis;
+    const s = daftarSiswaCache.find(x => String(x.nis) === String(nis));
+    const canvas = await gambarKartuAbsenKeCanvas(s, 3);
+    const namaFile = 'kartu-absen-' + s.nama.trim().replace(/\s+/g,'_') + '.jpg';
     canvas.toBlob((blob)=>{
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1568,23 +1716,98 @@ el('btn-unduh-kartu-absen').addEventListener('click', async ()=>{
   }
 });
 
-/* ================= CETAK KARTU QR ================= */
-el('btn-cetak-qr').addEventListener('click', ()=>{
+
+el('btn-unduh-f4').addEventListener('click', async ()=>{
+  if (!daftarSiswaCache.length) { tampilkanToast('Belum ada data siswa untuk diunduh.'); return; }
+
+  const btn = el('btn-unduh-f4');
+  const teksAsli = btn.textContent;
+  btn.disabled = true;
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [330, 215] });
+
+    const marginX = 8, marginY = 8, gap = 5, kolom = 5, baris = 2;
+    const cardW = (330 - 2 * marginX - (kolom - 1) * gap) / kolom;
+    const cardH = (215 - 2 * marginY - (baris - 1) * gap) / baris;
+    const m = 2.5; // panjang tanda potong (mm)
+
+    for (let i = 0; i < daftarSiswaCache.length; i++) {
+      btn.textContent = 'Memproses ' + (i + 1) + ' / ' + daftarSiswaCache.length + '...';
+      const posDalamHalaman = i % (kolom * baris);
+      if (posDalamHalaman === 0 && i !== 0) doc.addPage([330, 215], 'landscape');
+
+      const canvas = await gambarKartuAbsenKeCanvas(daftarSiswaCache[i], 2);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+      const kol = posDalamHalaman % kolom, br = Math.floor(posDalamHalaman / kolom);
+      const x = marginX + kol * (cardW + gap);
+      const y = marginY + br * (cardH + gap);
+
+      doc.addImage(dataUrl, 'JPEG', x, y, cardW, cardH);
+
+      // Tanda potong di 4 sudut kartu
+      doc.setDrawColor(150); doc.setLineWidth(0.15);
+      doc.line(x - m, y, x, y); doc.line(x, y - m, x, y);                                   // kiri-atas
+      doc.line(x + cardW, y, x + cardW + m, y); doc.line(x + cardW, y - m, x + cardW, y);   // kanan-atas
+      doc.line(x - m, y + cardH, x, y + cardH); doc.line(x, y + cardH, x, y + cardH + m);   // kiri-bawah
+      doc.line(x + cardW, y + cardH, x + cardW + m, y + cardH); doc.line(x + cardW, y + cardH, x + cardW, y + cardH + m); // kanan-bawah
+    }
+
+    doc.save('kartu-absensi-F4.pdf');
+  } catch (err) {
+    tampilkanToast('Gagal membuat file PDF.');
+  } finally {
+    btn.disabled = false; btn.textContent = teksAsli;
+  }
+});
+el('btn-cetak-qr').addEventListener('click', async ()=>{
   if (!daftarSiswaCache.length) { tampilkanToast('Belum ada data siswa untuk dicetak.'); return; }
-  const area = el('print-area');
-  area.innerHTML = '';
-  daftarSiswaCache.forEach(s=>{
-    const kartu = document.createElement('div');
-    kartu.className = 'kartu-qr';
-    const qrDiv = document.createElement('div');
-    kartu.appendChild(qrDiv);
-    const nm = document.createElement('div'); nm.className='nm'; nm.textContent = s.nama;
-    const kl = document.createElement('div'); kl.className='kl'; kl.textContent = s.nis + ' · ' + (s.kelas||'-');
-    kartu.appendChild(nm); kartu.appendChild(kl);
-    area.appendChild(kartu);
-    new QRCode(qrDiv, { text: String(s.nis), width: 90, height: 90 });
-  });
-  setTimeout(()=>window.print(), 300);
+
+  const btn = el('btn-cetak-qr');
+  const teksAsli = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Menyiapkan kartu...';
+
+  try {
+    // Gambar tiap kartu lewat fungsi Canvas yang sama dengan unduh JPG per siswa,
+    // supaya hasil cetaknya pasti konsisten (tidak stretch, foto selalu center).
+    const semuaKartuJPG = [];
+    for (const s of daftarSiswaCache) {
+      const canvas = await gambarKartuAbsenKeCanvas(s, 2);
+      semuaKartuJPG.push(canvas.toDataURL('image/jpeg', 0.92));
+    }
+
+    // Bagi jadi kelompok 10 kartu (5 kolom x 2 baris) per halaman F4
+    const halamanHtml = [];
+    for (let i = 0; i < semuaKartuJPG.length; i += 10) {
+      const kelompok = semuaKartuJPG.slice(i, i + 10);
+      const selHtml = kelompok.map(src => `
+        <div class="sel-kartu">
+          <div class="tanda tanda-ka"></div><div class="tanda tanda-ku"></div>
+          <div class="tanda tanda-kb"></div><div class="tanda tanda-kn"></div>
+          <img src="${src}">
+        </div>`).join('');
+      halamanHtml.push(`<div class="lembar-halaman">${selHtml}</div>`);
+    }
+
+    const area = el('print-area');
+    area.innerHTML = halamanHtml.join('');
+
+    // Set ukuran kertas F4 landscape (33 x 21.5 cm) khusus untuk cetakan ini,
+    // lalu dibersihkan lagi setelah selesai agar tidak memengaruhi cetak lain.
+    let gaya = document.getElementById('gaya-halaman-cetak-dinamis');
+    if (!gaya) { gaya = document.createElement('style'); gaya.id = 'gaya-halaman-cetak-dinamis'; document.head.appendChild(gaya); }
+    gaya.textContent = '@page { size: 330mm 215mm; margin: 8mm; }';
+    const bersihkan = () => { gaya.textContent = ''; window.removeEventListener('afterprint', bersihkan); };
+    window.addEventListener('afterprint', bersihkan);
+
+    setTimeout(()=>window.print(), 200);
+  } catch(err){
+    tampilkanToast('Gagal menyiapkan lembar cetak.');
+  } finally {
+    btn.disabled = false; btn.textContent = teksAsli;
+  }
 });
 </script>
 </body>
